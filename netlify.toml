@@ -1,0 +1,18 @@
+[build]
+  command = "pnpm install --no-frozen-lockfile && pnpm build"
+  publish = "client/dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+  PNPM_VERSION = "9"
+
+[[redirects]]
+  from = "/api/*"
+  to = "https://echo-va-claims-api.railway.app/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
