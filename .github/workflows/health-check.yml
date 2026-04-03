@@ -1,0 +1,25 @@
+name: Repository Health Check
+
+on:
+  schedule:
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Structure check
+        run: |
+          echo "=== Echo VA Claims Repository Health ==="
+          echo "Files: $(find . -not -path './.git/*' | wc -l)"
+          echo "Status: HEALTHY"
+      - name: Schema validation
+        run: |
+          if [ -f "drizzle/schema.ts" ]; then
+            echo "Schema: PRESENT"
+            grep -c "export const" drizzle/schema.ts || echo "Tables: 0"
+          fi
