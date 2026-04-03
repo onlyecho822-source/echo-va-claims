@@ -1,36 +1,42 @@
-# Echo VA Claims
-### VA Disability Evidence Engine — Domain 1 of Art of Proof
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Echo Universe](https://img.shields.io/badge/Echo-Universe-purple)](https://github.com/onlyecho822-source)
+[![Built for Veterans](https://img.shields.io/badge/Built%20for-Veterans-green)](https://artofproof.com)
 
-**Class**: I — Live Operational (public repo)  
-**Grade**: A- · Confidence: 88%  
-**Scope**: PUBLIC  
-**Built by**: A veteran, for veterans  
+# echo-va-claims
 
----
+**VA Disability Claims Evidence Engine — standalone domain module**
 
-## What This Is
+Part of the [Art of Proof](https://artofproof.com) ecosystem. Built by a veteran for veterans.
 
-Standalone application for veterans preparing VA disability claims. This is Domain 1 of the Art of Proof evidence preparation ecosystem — extracted into its own product with its own brand and identity.
+## What This Does
 
-**Art of Proof is for everyone. Echo VA Claims is for veterans.**
+Scores VA disability claim evidence packages against the 21 documented evidence types,
+applies the 13-Point Devil Lens validation, and generates nexus letter templates.
 
-They share the same engine. They serve different people.
+## Usage
 
----
+This module is consumed by [Art of Proof](https://artofproof.com).
+For standalone use, clone and review `domains/registry/`.
 
-## What It Does
+```bash
+git clone https://github.com/onlyecho822-source/echo-va-claims.git
+cd echo-va-claims
+```
 
-- **Evidence scoring**: 21 document types, individual weights, completeness/quality/consistency scoring
-- **Condition mapping**: Every primary condition maps to secondaries. Most veterans leave money on the table.
-- **Nexus generation**: AI-generated nexus letters connecting condition to service
-- **The 13-Point Devil Lens**: Proprietary nexus validation
+## Evidence Types Covered
 
----
+Birth records, service records, DD-214, STRs, private medical records, buddy statements,
+nexus letters, IMOs, VA exam results, and 11 additional VA-recognized evidence categories.
 
 ## Docs
 
-- `docs/WHITE_PAPER.md` — Full white paper
-- `docs/ARCHITECTURE.md` — Evidence engine architecture
-- `docs/ECOSYSTEM_CONNECTION.md` — Ecosystem role
+- `docs/WHITE_PAPER.md` — system overview
+- `docs/ARCHITECTURE.md` — evidence scoring architecture
+- `docs/ECOSYSTEM_CONNECTION.md` — connection to Art of Proof
 
-*∇θ — chain sealed, truth preserved.*
+## Part of Echo Universe
+
+`echo-va-claims` → `art-of-proof` → `echo-core`
+
+---
+*Built by a veteran, for veterans. Echo Universe · ECS v1.1-hardened · ∇θ*
