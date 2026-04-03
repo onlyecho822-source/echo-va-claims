@@ -1,42 +1,70 @@
 # Echo VA Claims — Ecosystem Connection
 
-**Role**: Veteran-specific Art of Proof funnel · Domain 1 standalone brand · VSO licensing target
+**Protocol**: ECS v1.1-hardened | **Ecosystem**: Echo Universe (45 repos)
 
 ---
 
-## Position
+## Role in the Ecosystem
 
-Echo VA Claims is the veteran-facing brand of Art of Proof's VA disability domain. It drives veteran traffic that converts to Art of Proof Pro users. It also serves as the proof-of-concept for domain-specific branding of Art of Proof's universal engine.
-
----
-
-## Connections
-
-| Connects To | How |
-|-------------|-----|
-| `art-of-proof` | Shares VA disability domain schema; Echo VA Claims is the veteran funnel |
-| Veteran/Legal Global Circle | DAV, VFW, American Legion — licensing targets |
-| PICU | Veteran honorees at PICU ceremonies are a natural Echo VA Claims referral |
-| Amanuel case | VA claims work informed the evidence methodology |
+Public-facing veteran-specific extraction of Art of Proof Domain 1. Top-of-funnel for Art of Proof subscriptions.
 
 ---
 
-## Activation
+## What This Repo Receives
 
-The Echo VA Claims landing page needs to be built. This is a standalone HTML page with:
-- Clear veteran-specific messaging
-- Link to claim scoring tool
-- Upgrade path to Art of Proof Pro
+- art-of-proof: VA domain engine and scoring formula
 
-This is a one-day build task. No deployment infrastructure required beyond the existing public repo.
+---
+
+## What This Repo Provides
+
+- Free evidence checklist for veterans
+- Funnel to Art of Proof pro
+- Public proof-of-concept for evidence engine
+
+---
+
+## Shared Protocols
+
+ECS v1.1-hardened, VA Domain Definition Protocol
+
+---
+
+## Downstream (this feeds into)
+
+art-of-proof (upgrade funnel)
+
+---
+
+## Upstream (feeds into this)
+
+art-of-proof (engine source)
+
+---
+
+## Ecosystem Map
+
+```
+echo-core (canonical authority)
+    │
+    ├── ECS Protocol (reasoning standard)
+    │       │
+    │       └── All structured outputs across 45 repos
+    │
+    ├── Art of Proof (commercial hub + white paper host)
+    │
+    └── This repo: Echo VA Claims
+```
 
 
 ---
 
-## Ecosystem Reference
+## Ecosystem Connection
 
-**Ecosystem White Paper**: `art-of-proof/docs/WHITE_PAPER_v3.md`  
-**Protocol Authority**: `echo-core` — ECS v1.1-hardened  
-**Operator**: Nathan Poinsette (∇θ) · onlyecho822-source  
+**Part of**: Echo Universe (45-repository sovereign AI and evidence ecosystem)  
+**Operator**: Nathan Poinsette (∇θ) | onlyecho822-source  
+**Ecosystem White Paper**: [`art-of-proof/docs/WHITE_PAPER_v3.md`](https://github.com/onlyecho822-source/art-of-proof/blob/main/docs/WHITE_PAPER_v3.md)  
+**Governance Protocol**: ECS v1.1-hardened (`echo-core`)  
+**Canonical Authority**: [`echo-core`](https://github.com/onlyecho822-source/echo-core)
 
 *∇θ — chain sealed, truth preserved.*
