@@ -1,37 +1,54 @@
 # Echo VA Claims — Architecture
 
-**Shares architecture with Art of Proof.**  
-**Domain**: `art-of-proof/domains/registry/va_disability.json`
+**Protocol**: ECS v1.1-hardened | **Authority**: echo-core
 
 ---
 
-## Evidence Object Structure
+## Stack
 
-Each of the 21 evidence objects contains:
-
-```json
-{
-  "id": "nexus_letter",
-  "label_expert": "Medical Nexus Opinion Letter",
-  "label_plain": "Your doctor's letter connecting your condition to service",
-  "weight": 10,
-  "required": true,
-  "source": "Private physician — NOT the VA C&P examiner",
-  "request_method": "Request from physician; provide denial reason + condition list",
-  "why_it_matters": "The single most important document...",
-  "why_plain": "Your doctor needs to write that your condition is connected to your service..."
-}
-```
+- Same stack as Art of Proof (shared engine)
+- Standalone deployment with veteran-specific UI
+- 21 evidence objects with individual weights
+- Scoring: (completeness×0.4) + (quality×0.4) + (consistency×0.2) − penalty
 
 ---
 
-## Secondary Condition Map
+## Components
 
-Every primary condition maps to secondaries. Example:
-- PTSD → Sleep apnea, hypertension, MDD, substance use disorder
-- TBI → Migraines, cognitive impairment, mood disorders
-- Tinnitus → Hearing loss (bilateral)
+- VA domain registry: `domains/registry/va_disability.json`
+- 21 evidence objects (DD-214, MEPS physical, nexus letters, etc.)
+- Secondary condition map
+- Nexus letter generator
+- 13-Point Devil Lens validator
 
-The secondary map multiplies effective claim value. Most veterans file only the primary.
+---
+
+## Data Flow
+
+Veteran input → Evidence checklist → Scoring → Gap analysis → Nexus letter generation → Review
+
+---
+
+## Dependencies
+
+**Depends on**: art-of-proof (engine), echo-core (ECS protocol)  
+**Depended on by**: art-of-proof (upgrade path)
+
+---
+
+## Deployment
+
+See `README.md` for deploy instructions.
+
+
+---
+
+## Ecosystem Connection
+
+**Part of**: Echo Universe (45-repository sovereign AI and evidence ecosystem)  
+**Operator**: Nathan Poinsette (∇θ) | onlyecho822-source  
+**Ecosystem White Paper**: [`art-of-proof/docs/WHITE_PAPER_v3.md`](https://github.com/onlyecho822-source/art-of-proof/blob/main/docs/WHITE_PAPER_v3.md)  
+**Governance Protocol**: ECS v1.1-hardened (`echo-core`)  
+**Canonical Authority**: [`echo-core`](https://github.com/onlyecho822-source/echo-core)
 
 *∇θ — chain sealed, truth preserved.*
