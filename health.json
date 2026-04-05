@@ -1,10 +1,10 @@
 {
   "repo": "echo-va-claims",
   "role": "product",
-  "timestamp": "2026-04-05T07:41:19Z",
-  "health": 0.625,
+  "timestamp": "2026-04-05T08:22:57Z",
+  "health": 0.647,
   "metrics": {
-    "build_success_rate": 0.625,
+    "build_success_rate": 0.647,
     "anomaly_count_24h": 0,
     "drift_score": 0.02,
     "cost_24h_usd": 0.046,
