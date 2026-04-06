@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Echo VA Claims — Evidence Scoring Demo</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: #0a0a0a; color: #e0e0e0; min-height: 100vh; }
+  .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 2rem; text-align: center; border-bottom: 1px solid #333; }
+  .header h1 { font-size: 1.8rem; color: #7c6fff; margin-bottom: 0.5rem; }
+  .header p { color: #999; font-size: 0.95rem; }
+  .badge { display: inline-block; background: #1a3a1a; color: #4ade80; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; margin-top: 0.5rem; }
+  .container { max-width: 800px; margin: 0 auto; padding: 2rem 1rem; }
+  .card { background: #111; border: 1px solid #222; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+  .card h2 { font-size: 1.1rem; color: #7c6fff; margin-bottom: 1rem; }
+  label { display: block; font-size: 0.85rem; color: #999; margin-bottom: 0.4rem; margin-top: 0.8rem; }
+  select, input, textarea { width: 100%; padding: 0.6rem 0.8rem; background: #1a1a1a; border: 1px solid #333; border-radius: 8px; color: #e0e0e0; font-size: 0.9rem; }
+  textarea { min-height: 80px; resize: vertical; }
+  .btn { display: inline-block; padding: 0.7rem 1.5rem; background: #7c6fff; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.95rem; margin-top: 1rem; width: 100%; }
+  .btn:hover { background: #6b5ce7; }
+  .results { display: none; }
+  .score-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0; }
+  .score-box { background: #0d1117; border: 1px solid #333; border-radius: 8px; padding: 1rem; text-align: center; }
+  .score-val { font-size: 2rem; font-weight: bold; }
+  .score-label { font-size: 0.75rem; color: #888; margin-top: 0.3rem; }
+  .fc { color: #4ade80; }
+  .lrs { color: #60a5fa; }
+  .fir { color: #f87171; }
+  .verdict { padding: 0.8rem 1.2rem; border-radius: 8px; font-weight: 600; text-align: center; margin: 1rem 0; }
+  .verdict.high { background: #1a3a1a; color: #4ade80; border: 1px solid #2d5a2d; }
+  .verdict.moderate { background: #2a2a1a; color: #fbbf24; border: 1px solid #4a4a1a; }
+  .verdict.low { background: #3a1a1a; color: #f87171; border: 1px solid #5a2a2a; }
+  .missing-list { list-style: none; }
+  .missing-list li { padding: 0.4rem 0; border-bottom: 1px solid #1a1a1a; font-size: 0.85rem; color: #ccc; }
+  .missing-list li::before { content: "⚠ "; color: #fbbf24; }
+  .footer { text-align: center; padding: 2rem; color: #555; font-size: 0.8rem; }
+  .footer a { color: #7c6fff; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Echo VA Claims</h1>
+  <p>Forensic evidence scoring for VA disability claims</p>
+  <span class="badge">Part of Art of Proof — Echo Universe</span>
+</div>
+
+<div class="container">
+  <div class="card">
+    <h2>Evidence Scorer</h2>
+    <p style="color:#888;font-size:0.85rem;margin-bottom:1rem">Enter your evidence below to get FC (Factual Confidence), LRS (Legal Readiness), and FIR (Fraud/Integrity Risk) scores.</p>
+
+    <label>Claim Type</label>
+    <select id="claimType">
+      <option value="va_dependency">VA Service-Connected Dependency</option>
+      <option value="intestate_heirship">Intestate Heirship</option>
+      <option value="property_title">Property Title</option>
+      <option value="probate_kinship">Probate Kinship</option>
+    </select>
+
+    <label>Evidence Items (one per line, format: type | description)</label>
+    <textarea id="evidence" placeholder="certified_copy | DD-214 discharge document
+notarized_affidavit | Buddy statement from Sgt. Williams
+agency_database | VA medical records 2019-2023
+signed_uncertified | Personal statement"></textarea>
+
+    <label>Describe the claim</label>
+    <input type="text" id="claimDesc" placeholder="e.g. PTSD secondary to combat service in Gulf War">
+
+    <button class="btn" onclick="scoreEvidence()">Score Evidence</button>
+  </div>
+
+  <div class="card results" id="results">
+    <h2>Scoring Results</h2>
+    <div class="score-grid">
+      <div class="score-box">
+        <div class="score-val fc" id="fcVal">—</div>
+        <div class="score-label">FC Score<br>Factual Confidence</div>
+      </div>
+      <div class="score-box">
+        <div class="score-val lrs" id="lrsVal">—</div>
+        <div class="score-label">LRS Score<br>Legal Readiness</div>
+      </div>
+      <div class="score-box">
+        <div class="score-val fir" id="firVal">—</div>
+        <div class="score-label">FIR Score<br>Fraud/Integrity Risk</div>
+      </div>
+    </div>
+    <div class="verdict" id="verdictBox"></div>
+
+    <h2 style="margin-top:1rem">Missing Evidence</h2>
+    <ul class="missing-list" id="missingList"></ul>
+
+    <h2 style="margin-top:1rem">Recommendation</h2>
+    <p id="recommendation" style="color:#ccc;font-size:0.9rem;line-height:1.6"></p>
+  </div>
+
+  <div class="card">
+    <h2>About This Tool</h2>
+    <p style="color:#888;font-size:0.85rem;line-height:1.6">
+      The HeirGraph engine scores evidence using deterministic rules — provenance weights, 
+      authentication factors, contradiction detection, and legal sufficiency thresholds. 
+      No AI hallucination. No black box.<br><br>
+      This is a standalone demo. The full Art of Proof platform includes nexus letter generation,
+      timeline analysis, and multi-domain evidence preparation.<br><br>
+      <strong style="color:#7c6fff">For veterans:</strong> 
+      <a href="https://artofproof.com" target="_blank">artofproof.com</a>
+    </p>
+  </div>
+</div>
+
+<div class="footer">
+  Echo VA Claims &mdash; Part of <a href="https://github.com/onlyecho822-source">Echo Universe</a><br>
+  pip install echo-ecp &nbsp;&bull;&nbsp; ECS v1.1-hardened &nbsp;&bull;&nbsp; &nabla;&theta;
+</div>
+
+<script>
+const PROVENANCE_WEIGHTS = {
+  "certified_copy": 1.00, "court_certified": 1.00, "registrar_extract": 1.00,
+  "notarized_affidavit": 0.92, "official_transcript": 0.90, "agency_database": 0.88,
+  "signed_uncertified": 0.65, "obituary": 0.60, "family_bible": 0.58,
+  "user_upload_unsigned": 0.40, "online_tree_unsourced": 0.22, "ai_summary_no_source": 0.15,
+  "unknown": 0.35, "medical_records": 0.90, "buddy_statement": 0.70, "personal_statement": 0.55
+};
+
+const LEGAL_THRESHOLDS = {
+  "va_dependency": { min_fc: 0.60, min_items: 2, required: ["service_record", "medical_evidence"] },
+  "intestate_heirship": { min_fc: 0.75, min_items: 3, required: ["birth_certificate", "death_certificate"] },
+  "property_title": { min_fc: 0.80, min_items: 2, required: ["deed", "title_search"] },
+  "probate_kinship": { min_fc: 0.70, min_items: 3, required: ["birth_records", "witness_statements"] }
+};
+
+function scoreEvidence() {
+  const claimType = document.getElementById('claimType').value;
+  const evidenceText = document.getElementById('evidence').value.trim();
+  const claimDesc = document.getElementById('claimDesc').value.trim();
+
+  if (!evidenceText) { alert('Please enter at least one evidence item'); return; }
+
+  const lines = evidenceText.split('\n').filter(l => l.trim());
+  const items = lines.map(line => {
+    const parts = line.split('|').map(p => p.trim());
+    const type = (parts[0] || 'unknown').toLowerCase().replace(/ /g, '_');
+    const desc = parts[1] || parts[0] || '';
+    return { type, desc, weight: PROVENANCE_WEIGHTS[type] || 0.35 };
+  });
+
+  // FC Score: weighted average of provenance + coverage penalty
+  const avgWeight = items.reduce((s, i) => s + i.weight, 0) / items.length;
+  const coverageFactor = Math.min(1.0, items.length / 4);
+  const fc = Math.round(avgWeight * 0.7 * 100 + coverageFactor * 0.3 * 100) / 100;
+
+  // LRS Score: based on threshold requirements
+  const threshold = LEGAL_THRESHOLDS[claimType];
+  let lrs = fc;
+  if (items.length >= threshold.min_items) lrs = Math.min(1.0, lrs + 0.10);
+  if (fc >= threshold.min_fc) lrs = Math.min(1.0, lrs + 0.05);
+  lrs = Math.round(lrs * 100) / 100;
+
+  // FIR: low provenance = higher risk
+  const lowProvenance = items.filter(i => i.weight < 0.50).length;
+  const fir = Math.round(Math.min(1.0, lowProvenance * 0.25 + (1 - avgWeight) * 0.5) * 100) / 100;
+
+  // Verdict
+  let verdict, verdictClass;
+  if (fc >= 0.75 && lrs >= 0.70 && fir <= 0.30) { verdict = "HIGH CONFIDENCE — Strong evidence package"; verdictClass = "high"; }
+  else if (fc >= 0.55 && lrs >= 0.50) { verdict = "MODERATE — Evidence package needs strengthening"; verdictClass = "moderate"; }
+  else { verdict = "LOW CONFIDENCE — Significant evidence gaps"; verdictClass = "low"; }
+
+  // Missing evidence
+  const missing = [];
+  if (items.length < threshold.min_items) missing.push(`Need at least ${threshold.min_items} evidence items (have ${items.length})`);
+  if (fc < threshold.min_fc) missing.push(`FC score ${fc.toFixed(2)} below threshold ${threshold.min_fc} — add certified documents`);
+  if (!items.some(i => i.weight >= 0.88)) missing.push("No official agency or certified records found — these carry highest weight");
+  if (fir > 0.30) missing.push("High integrity risk — too many low-provenance documents");
+  if (claimType === 'va_dependency' && !items.some(i => i.type.includes('medical') || i.type.includes('agency'))) {
+    missing.push("VA claims require medical evidence from agency database or certified medical records");
+  }
+
+  // Recommendation
+  const recs = [];
+  if (fc < 0.75) recs.push("Obtain certified copies of key documents — they carry maximum weight (1.00).");
+  if (fir > 0.20) recs.push("Replace unsigned statements with notarized affidavits where possible.");
+  if (items.length < 4) recs.push("Add more corroborating evidence — each additional certified item strengthens the package.");
+  recs.push("This score is informational. Consult a VA-accredited attorney before filing.");
+
+  // Display
+  document.getElementById('fcVal').textContent = (fc * 100).toFixed(0) + '%';
+  document.getElementById('lrsVal').textContent = (lrs * 100).toFixed(0) + '%';
+  document.getElementById('firVal').textContent = (fir * 100).toFixed(0) + '%';
+
+  const vBox = document.getElementById('verdictBox');
+  vBox.textContent = verdict;
+  vBox.className = 'verdict ' + verdictClass;
+
+  const mList = document.getElementById('missingList');
+  mList.innerHTML = missing.length ? missing.map(m => '<li>' + m + '</li>').join('') : '<li style="color:#4ade80">No critical gaps found</li>';
+
+  document.getElementById('recommendation').innerHTML = recs.map(r => '• ' + r).join('<br>');
+  document.getElementById('results').style.display = 'block';
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
