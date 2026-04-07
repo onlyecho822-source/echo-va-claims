@@ -4,6 +4,16 @@
 
 # echo-va-claims
 
+## 📊 Repository Analytics
+
+[![RepoBeats](https://repobeats.axiom.co/api/embed/1197859693.svg)](https://github.com/onlyecho822-source/echo-va-claims/pulse)
+
+[![Star History](https://api.star-history.com/svg?repos=onlyecho822-source/echo-va-claims&type=Date)](https://star-history.com/#onlyecho822-source/echo-va-claims&Date)
+
+[![OSS Insight](https://img.shields.io/badge/OSS%20Insight-View%20Analytics-blue)](https://ossinsight.io/analyze/onlyecho822-source/echo-va-claims)
+
+
+
 **VA Disability Claims Evidence Engine — standalone domain module**
 
 Part of the [Art of Proof](https://artofproof.com) ecosystem. Built by a veteran for veterans.
