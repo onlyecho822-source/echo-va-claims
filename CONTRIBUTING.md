@@ -1,30 +1,67 @@
-# Contributing to Echo VA Claims
+# Contributing to Echo Universe
 
-Thank you for helping veterans.
+Thank you for your interest in contributing! This document provides guidelines for contributing to this project.
 
-## How to Contribute
+## Getting Started
 
-1. Open an issue describing the change
-2. Fork, branch: `git checkout -b fix/your-description`
-3. Make your change with tests
-4. Submit a pull request referencing the issue
+1. **Fork the repository** and clone your fork locally
+2. **Create a branch** for your changes: `git checkout -b feature/your-feature-name`
+3. **Make your changes** following our coding standards
+4. **Test your changes** thoroughly
+5. **Commit with clear messages**: `git commit -m "Add feature: description"`
+6. **Push to your fork**: `git push origin feature/your-feature-name`
+7. **Open a Pull Request** with a clear description
 
-## Priority Areas
+## Development Setup
 
-- New evidence object definitions (additional VA form types)
-- Secondary condition mapping improvements
-- Nexus letter template improvements
-- Jurisdiction-specific rule updates
+```bash
+# Clone your fork
+git clone https://github.com/YOUR-USERNAME/REPO-NAME.git
+cd REPO-NAME
 
-## Standards
+# Install dependencies
+pip install -r requirements.txt  # Python projects
+npm install                       # Node.js projects
 
-- All evidence scoring changes need justification (cite VA rating criteria)
-- Keep domain logic in `domains/registry/`
-- No client credentials or PII in commits
+# Run tests
+pytest                           # Python
+npm test                         # Node.js
+```
 
-## Contact
+## Code Standards
 
-echonate@echouniverse.org
+- Follow existing code style and conventions
+- Write clear, descriptive commit messages
+- Add tests for new features
+- Update documentation as needed
+- Ensure all tests pass before submitting PR
+
+## Pull Request Guidelines
+
+**Good PR:**
+- Focused on a single feature/fix
+- Includes tests
+- Updates relevant documentation
+- Has clear description of changes
+- References related issues
+
+**PR Title Format:**
+- `feat: Add new feature`
+- `fix: Resolve bug in module`
+- `docs: Update README`
+- `test: Add coverage for function`
+
+## Code Review Process
+
+1. Maintainers review PRs within 48-72 hours
+2. Address feedback and requested changes
+3. Once approved, PR will be merged
+4. Your contribution will be credited
+
+## Questions?
+
+Open an issue or contact: **contribute@echo-universe.org**
 
 ---
-*Echo VA Claims · Built by a veteran, for veterans · ∇θ*
+
+**∇θ — chain sealed, truth preserved**
