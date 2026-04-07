@@ -1,22 +1,42 @@
 # Security Policy
 
-## Reporting
+## Supported Versions
 
-**Do not open public issues for security vulnerabilities.**
+We release patches for security vulnerabilities. Currently supported versions:
 
-Email: echonate@echouniverse.org  
-Subject: `[SECURITY] echo-va-claims`
+| Version | Supported          |
+| ------- | ------------------ |
+| 1.0.x   | :white_check_mark: |
+| < 1.0   | :x:                |
 
-Or use GitHub Security Advisories: Security tab → Report a vulnerability.
+## Reporting a Vulnerability
 
-Response within 48 hours.
+**DO NOT** create a public GitHub issue for security vulnerabilities.
 
-## Scope
+Please report security vulnerabilities to: **security@echo-universe.org**
 
-- SQL injection / XSS in evidence scoring logic
-- Authentication bypass
-- PII data exposure
-- Dependency vulnerabilities
+Include:
+- Description of the vulnerability
+- Steps to reproduce
+- Potential impact
+- Suggested fix (if any)
+
+We will respond within 48 hours and provide a timeline for fixes.
+
+## Security Best Practices
+
+This project follows:
+- Principle of least privilege
+- Defense in depth
+- Secure by default configurations
+- Regular dependency updates via Dependabot
+
+## Disclosure Policy
+
+- Security issues are handled privately until fixed
+- Fixes are released ASAP with security advisories
+- Credit given to reporters (unless anonymity requested)
 
 ---
-*Echo VA Claims · ECS v1.1-hardened · ∇θ*
+
+**∇θ — chain sealed, truth preserved**
