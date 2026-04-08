@@ -1,49 +1,47 @@
-"""Tests for echo-va-claims (Art of Proof VA platform)."""
+"""Tests for echo-va-claims (Art of Proof VA disability platform)."""
 import pytest
 
 def test_claim_types():
-    types = ["direct_service_connection", "secondary", "aggravation", "presumptive", "tdiu"]
+    types = ["direct_service_connection","secondary_connection","aggravation","tdiu","cue"]
     assert "tdiu" in types
 
-def test_evidence_categories():
-    cats = ["medical_nexus", "buddy_statement", "service_records", "lay_evidence", "dbq"]
-    assert len(cats) == 5
-
-def test_nexus_score():
-    def nexus(medical_strength, service_docs, continuity):
-        return (medical_strength * 0.5 + service_docs * 0.3 + continuity * 0.2)
-    score = nexus(0.9, 0.8, 0.7)
-    assert 0.7 < score < 1.0
-
-def test_rating_percentages():
-    ratings = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-    assert 100 in ratings and 0 in ratings
-
-def test_tdiu_criteria():
-    criteria = {
-        "single_condition_rating": 60,
-        "combined_rating": 70,
-        "unemployability": True
-    }
-    assert criteria["single_condition_rating"] == 60
+def test_rating_combination():
+    # VA combined ratings (whole person remaining method)
+    def combine(r1, r2):
+        remaining = (100 - r1) / 100
+        return round(r1 + r2 * remaining)
+    assert combine(50, 30) == 65
 
 def test_effective_date_logic():
     import datetime
-    filing_date = datetime.date(2024, 1, 15)
-    assert filing_date.year == 2024
+    claim_date = datetime.date(2020, 1, 15)
+    start_date = datetime.date(2020, 1, 1)
+    assert claim_date >= start_date
 
-def test_buddy_statement_fields():
-    stmt = {"name": str, "relationship": str, "observations": str, "signed": bool}
-    assert "relationship" in stmt
+def test_evidence_tiers():
+    tiers = ["buddy_statement","medical_nexus","service_records","lay_statement","ima"]
+    assert len(tiers) == 5
 
-def test_art_of_proof_mission():
-    mission = "universal evidence preparation engine"
-    assert "evidence" in mission
+def test_tdiu_threshold():
+    single_rating = 60
+    assert single_rating >= 60
 
-def test_supplemental_claim():
-    claim = {"type": "supplemental", "new_evidence": True, "prior_denial": True}
-    assert claim["new_evidence"] is True
+def test_nexus_letter_structure():
+    letter = {"diagnosis": "", "service_connection": "", "rationale": "", "confidence": ""}
+    assert all(k in letter for k in ["diagnosis", "rationale"])
 
-def test_stripe_tiers():
-    tiers = {"basic": 29, "pro": 79, "full_service": 299}
-    assert tiers["pro"] > tiers["basic"]
+def test_art_of_proof_sections():
+    sections = ["intake","evidence_prep","claim_build","review","submit","track"]
+    assert len(sections) == 6
+
+def test_dr_based_caregiver():
+    caregiver = {"location": "Dominican Republic", "relationship": "spouse", "statement": True}
+    assert caregiver["statement"] is True
+
+def test_openai_prompt_structure():
+    prompt = {"role": "system", "content": "You are an Art of Proof assistant"}
+    assert prompt["role"] == "system"
+
+def test_rating_schedule_categories():
+    cats = ["musculoskeletal","mental_health","respiratory","cardiovascular","neurological"]
+    assert len(cats) >= 5
