@@ -179,6 +179,12 @@ textarea{min-height:80px;resize:vertical;}
         <label><input type="checkbox" id="req_c_file"> VA Claims File (C-File) — your complete VA claims history</label>
         <label><input type="checkbox" id="req_private"> Private Medical Records (via VA Form 21-4142 release authorization)</label>
         <label><input type="checkbox" id="req_awards_orders"> Award Orders and Deployment Orders from unit records</label>
+        <label><input type="checkbox" id="req_mtr"> Military Training Records — unit-level training files (request via milConnect or your branch)</label>
+        <label><input type="checkbox" id="req_medical_board"> Physical Evaluation Board / Medical Evaluation Board records (if you were medically separated)</label>
+        <label><input type="checkbox" id="req_line_of_duty"> Line of Duty investigation records (if applicable)</label>
+        <label><input type="checkbox" id="req_enlistment"> Original enlistment / accession physical records from MEPS</label>
+        <label><input type="checkbox" id="req_combat_history"> Combat Action Badge / Combat deployments verification (unit historical records)</label>
+        <label><input type="checkbox" id="req_buddy_formal"> Formal buddy statement outreach list (names to contact)</label>
       </div>
     </div>
 
@@ -1042,6 +1048,244 @@ ${window._allDocs ? window._allDocs.map((doc,i)=>`${i+1}. ${doc.title}`).join('\
 Art of Proof™ — ∇θ — chain sealed, truth preserved
 This package is a preparation tool, not legal advice.`
   });
+
+
+  // MEPS ENLISTMENT PHYSICAL REQUEST
+  if (document.getElementById('req_enlistment') && document.getElementById('req_enlistment').checked) {
+    docs.push({
+      title: 'MEPS Enlistment Physical Records Request',
+      type: 'Mail to USMEPCOM',
+      filename: 'MEPS_Physical_Records_Request.txt',
+      content: `MEPS PHYSICAL RECORDS REQUEST
+[Mail to: USMEPCOM, ATTN: FOIA Officer, 2834 Green Bay Road, North Chicago, IL 60064]
+[Fax: 847-688-4038 | Email: MEPCOM-JMC-FOIA@mail.mil]
+Date: ${d.today}
+
+FREEDOM OF INFORMATION ACT REQUEST
+
+FROM:
+Name: ${d.fullName}
+Date of Birth: ${d.dob}
+SSN Last 4: ${d.ssn4}
+Branch Enlisted Into: ${d.branch}
+Approximate MEPS Processing Date: ${d.entryDate}
+MEPS Station (if known): [CITY, STATE]
+
+REQUEST:
+I request complete copies of all MEPS (Military Entrance Processing Station) records pertaining to my pre-induction physical examination, including:
+
+1. Complete pre-induction physical examination report
+2. All medical history questionnaires completed at MEPS
+3. All test results — hearing, vision, blood pressure, orthopedic, psychological screening
+4. Any medical waivers granted at time of enlistment
+5. PULHES profile at time of enlistment
+6. Any disqualifying conditions noted and waived
+7. All documentation completed during my MEPS processing
+
+PURPOSE: Establishing baseline health status for VA disability compensation claim. These records document my pre-service medical condition and are critical to proving service connection or aggravation.
+
+WHY THESE RECORDS MATTER:
+MEPS records establish your physical condition AT ENTRY. If you entered service healthy and left with a condition — that proves the condition was service-connected, not pre-existing.
+
+I certify this request is for my own records and I am the veteran identified above.
+
+Signature: ___________________________  Date: ________________
+Printed Name: ${d.fullName}
+Address: ${d.address}
+Phone: ${d.phone}
+Email: ${d.email}
+
+[Response time: 20 business days under FOIA]
+[If no response in 30 days, follow up with FOIA appeal]`
+    });
+  }
+
+  // MILITARY TREATMENT FACILITY / MEDICAL RECORDS
+  if (document.getElementById('req_str') && document.getElementById('req_str').checked) {
+    docs.push({
+      title: 'Service Treatment Records — Military Hospital Request',
+      type: 'Mail to MTF or NPRC',
+      filename: 'Military_Treatment_Records_Request.txt',
+      content: `SERVICE TREATMENT RECORDS REQUEST
+[Service treatment records filed AFTER 1992 go directly to VA — submit with your claim]
+[Records from BEFORE 1992: request via SF-180 to NPRC]
+[Active duty MTF records: contact the specific military hospital directly]
+Date: ${d.today}
+
+VETERAN: ${d.fullName}  |  DOB: ${d.dob}  |  SSN Last 4: ${d.ssn4}
+
+REQUEST FOR ALL SERVICE TREATMENT RECORDS including:
+
+1. INDUCTION / ENTRY PHYSICAL
+   - Complete physical exam at time of enlistment
+   - All pre-service medical screening
+
+2. SICK CALL AND OUTPATIENT RECORDS
+   - All sick call visits and treatment
+   - All outpatient clinic visits
+   - Physical therapy records
+   - Mental health / behavioral health visits
+
+3. INPATIENT / HOSPITALIZATION RECORDS
+   - All hospital admissions during service
+   - Surgical records
+   - Discharge summaries
+
+4. DENTAL RECORDS
+   - Complete dental records from service
+
+5. SEPARATION PHYSICAL
+   - Complete physical examination at time of discharge
+   - Any conditions noted at separation
+
+SERVICE PERIOD: ${d.servicePeriod}
+UNIT AT TIME OF TREATMENT: ${d.unit}
+DUTY STATION(S): ${d.dutyStation}
+
+CONDITIONS BEING CLAIMED: ${d.condList}
+
+[WHERE TO SEND THIS REQUEST:]
+For service at a specific military hospital, send to:
+  Medical Records Office
+  [Name of Military Hospital / MTF]
+  [Base, State]
+
+For records already transferred to VA:
+  Submit VA Form 21-4142 (included in this package)
+
+For NPRC (pre-1992 or if hospital closed):
+  Use SF-180 (included in this package)
+
+Signature: ___________________________  Date: ________________`
+    });
+  }
+
+  // UNIT RECORDS / COMMAND HISTORY / AWARDS ORDERS
+  docs.push({
+    title: 'Unit Records & Awards Orders Request (Archivist)',
+    type: 'Mail to NARA / Branch Archive',
+    filename: 'Unit_Records_Awards_Request.txt',
+    content: `UNIT RECORDS AND AWARDS VERIFICATION REQUEST
+Date: ${d.today}
+
+[This letter requests unit-level records that NPRC does NOT have]
+[Army: Center of Military History, 102 4th Ave, Fort Lesley J. McNair, Washington DC 20319]
+[Marines: Archives Branch, Marine Corps History Division, Quantico VA 22134]
+[Navy/Coast Guard: Naval History and Heritage Command, Washington DC 20374]
+[Air Force: Air Force Historical Research Agency, Maxwell AFB AL 36112]
+
+FROM:
+Name: ${d.fullName}
+DOB: ${d.dob}  |  SSN Last 4: ${d.ssn4}
+Branch: ${d.branch}
+Unit: ${d.unit}
+Service Period: ${d.servicePeriod}
+Deployments: ${d.deployments || '[LIST DEPLOYMENTS]'}
+
+REQUEST:
+I am requesting copies of unit records and historical documents that may verify my service and support my VA disability compensation claim. Specifically:
+
+1. UNIT AWARDS AND DECORATIONS
+   - Orders and citations for any awards I received: ${d.awards || '[list awards from your DD-214]'}
+   - Any unit citations (Presidential Unit Citation, Meritorious Unit Commendation, etc.)
+   - Combat Action Badge / Combat Infantryman Badge orders
+
+2. UNIT DEPLOYMENT RECORDS
+   - Official unit deployment dates to: ${d.deployments || '[deployment theaters]'}
+   - Unit after-action reports (unclassified) if relevant to in-service incident
+   - Morning reports or muster rolls verifying my presence at duty station
+
+3. INCIDENT DOCUMENTATION
+   - Any unit-level reports related to my claimed conditions
+   - Military police reports (if applicable)
+   - Safety or accident reports
+
+4. PERFORMANCE EVALUATIONS
+   - All evaluation reports (OERs/NCOERs/FITREPs) from my service period
+
+WHY THESE MATTER: Unit records corroborate in-service events when personal records were destroyed or are unavailable (1973 NPRC fire destroyed many Army/AF records from 1912-1964).
+
+I am the veteran named above and request these records for VA claims purposes.
+
+Signature: ___________________________  Date: ________________
+Printed Name: ${d.fullName}
+Address: ${d.address}`
+  });
+
+  // LINE OF DUTY / MEDICAL BOARD
+  if (document.getElementById('req_line_of_duty') && document.getElementById('req_line_of_duty').checked) {
+    docs.push({
+      title: 'Line of Duty Investigation Records Request',
+      type: 'Mail to branch records',
+      filename: 'Line_of_Duty_Records_Request.txt',
+      content: `LINE OF DUTY INVESTIGATION RECORDS REQUEST
+Date: ${d.today}
+
+TO: Records Officer, ${d.branch || '[BRANCH]'} Personnel Command
+
+FROM:
+Name: ${d.fullName}  |  DOB: ${d.dob}  |  SSN Last 4: ${d.ssn4}
+Unit: ${d.unit}  |  Service: ${d.servicePeriod}
+
+REQUEST:
+I request copies of any and all Line of Duty (LOD) investigation records pertaining to any injury, illness, or incident that occurred during my service, specifically related to my claimed conditions: ${d.condList}
+
+RECORDS REQUESTED:
+1. Line of Duty determination memoranda
+2. LOD investigation reports
+3. Any findings of "In Line of Duty" or "Not In Line of Duty"
+4. Medical board proceedings (MEB/PEB) if any
+5. Any commanders' statements regarding in-service incidents
+6. DA Form 2173 (Statement of Medical Examination and Duty Status) if applicable
+
+An LOD determination stating "In Line of Duty" is strong evidence of service connection.
+
+Signature: ___________________________  Date: ________________
+Printed Name: ${d.fullName}
+Address: ${d.address}
+Phone: ${d.phone}`
+    });
+  }
+
+  // SOCIAL SECURITY EARNINGS RECORD (for TDIU)
+  if (d.claimType === 'tdiu' || d.unemployable) {
+    docs.push({
+      title: 'Social Security Earnings Record Request (TDIU Support)',
+      type: 'Request online at SSA.gov',
+      filename: 'SSA_Earnings_Record_Request.txt',
+      content: `SOCIAL SECURITY EARNINGS RECORD REQUEST
+[For TDIU claims — shows employment gaps and income reduction]
+Date: ${d.today}
+
+VETERAN: ${d.fullName}  |  DOB: ${d.dob}  |  SSN Last 4: ${d.ssn4}
+
+HOW TO GET YOUR SSA EARNINGS RECORD (free, takes 5 minutes):
+
+OPTION 1 — ONLINE (fastest):
+1. Go to ssa.gov/myaccount
+2. Create or log into My Social Security account
+3. Click "View Earnings Record"
+4. Print or download the full record
+5. Attach to VA Form 21-8940 (TDIU application)
+
+OPTION 2 — BY MAIL:
+Complete and mail Form SSA-7050-F4 to your local Social Security office.
+Download at: ssa.gov/forms/ssa-7050.pdf
+
+WHAT THIS PROVES FOR TDIU:
+Your SSA earnings record shows:
+- Year-by-year income history
+- Gaps in employment (shows when you stopped working)
+- Income reduction over time
+- This corroborates that your service-connected conditions caused unemployability
+
+The VA specifically asks for this with Form 21-4192 (employer information).
+
+Your earnings record going from [normal income] to near-zero after [discharge date / symptom onset] is powerful evidence for TDIU.
+
+ACTION: Get this record and attach it to your 21-8940 TDIU application.`
+    });
+  }
 
   return docs;
 }
