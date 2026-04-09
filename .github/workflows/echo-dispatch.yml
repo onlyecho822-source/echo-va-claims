@@ -2,20 +2,10 @@ name: echo-dispatch
 
 on:
   repository_dispatch:
-    types: ["*"]
-  workflow_dispatch:
-    inputs:
-      packet_type:
-        description: "Packet type (e.g. SIGNAL, CONTROL, SYNC)"
-        required: false
-        default: "SIGNAL"
-      payload:
-        description: "JSON payload string"
-        required: false
-        default: "{}"
+    types: [echo-packet]
 
 jobs:
-  receive-and-route:
+  receive-packet:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -26,92 +16,46 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Read receptor state
-        id: state
+      - name: Log incoming packet
         run: |
-          if [ -f .echo/state.json ]; then
-            echo "state=$(cat .echo/state.json)" >> $GITHUB_OUTPUT
-          else
-            echo "state={"current":"IDLE"}" >> $GITHUB_OUTPUT
-          fi
+          echo "=== ∇θ ECHO PACKET RECEIVED ==="
+          echo "Event: ${{ github.event.action }}"
+          echo "Sender: ${{ github.event.client_payload.sender }}"
+          echo "Type:   ${{ github.event.client_payload.type }}"
+          echo "Seq:    ${{ github.event.client_payload.seq }}"
+          echo "Payload: ${{ toJson(github.event.client_payload) }}"
 
-      - name: Process packet
+      - name: Update state
         run: |
-          PACKET_TYPE="${{ github.event.action || github.event.inputs.packet_type }}"
-          PAYLOAD='${{ toJson(github.event.client_payload) || github.event.inputs.payload }}'
-          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          python3 - << 'EOF'
+          import json, time, pathlib, hashlib
+          state_file = pathlib.Path(".echo/state.json")
+          if state_file.exists():
+              state = json.loads(state_file.read_text())
+          else:
+              state = {"current": "IDLE", "idempotency_keys": [], "rejection_count": 0}
+          seq = "${{ github.event.client_payload.seq }}"
+          if seq and seq not in state.get("idempotency_keys", []):
+              state.setdefault("idempotency_keys", []).append(seq)
+              if len(state["idempotency_keys"]) > 100:
+                  state["idempotency_keys"] = state["idempotency_keys"][-100:]
+          state["last_packet_ts"] = time.time()
+          state["last_packet_type"] = "${{ github.event.client_payload.type }}"
+          state_file.parent.mkdir(exist_ok=True)
+          state_file.write_text(json.dumps(state, indent=2))
+          print(f"State updated: {state['current']}")
+          EOF
 
-          echo "Packet received: $PACKET_TYPE at $TIMESTAMP"
-          echo "Payload: $PAYLOAD"
-
-          # Update state to RECEPTOR_STIMULATED
-          if [ -f .echo/state.json ]; then
-            python3 -c "
-import json, time
-with open('.echo/state.json') as f:
-    s = json.load(f)
-s['current'] = 'RECEPTOR_STIMULATED'
-s['last_packet'] = {'type': '$PACKET_TYPE', 'ts': '$TIMESTAMP'}
-with open('.echo/state.json','w') as f:
-    json.dump(s, f, indent=2)
-print('State updated to RECEPTOR_STIMULATED')
-"
-          fi
-
-          # Log to coordination ledger
-          echo "{"event":"packet_received","type":"$PACKET_TYPE","ts":"$TIMESTAMP","payload":$PAYLOAD}" >> coordination_log.jsonl || true
-
-      - name: Execute packet action
-        run: |
-          PACKET_TYPE="${{ github.event.action || github.event.inputs.packet_type }}"
-
-          case "$PACKET_TYPE" in
-            CONTROL/REBOOT)
-              echo "REBOOT signal received — resetting state to IDLE"
-              python3 -c "
-import json
-with open('.echo/state.json') as f: s=json.load(f)
-s['current']='IDLE'; s['stalled']=False; s['isolated']=False
-with open('.echo/state.json','w') as f: json.dump(s,f,indent=2)
-"
-              ;;
-            CONTROL/ISOLATE)
-              echo "ISOLATE signal received"
-              python3 -c "
-import json
-with open('.echo/state.json') as f: s=json.load(f)
-s['isolated']=True
-with open('.echo/state.json','w') as f: json.dump(s,f,indent=2)
-"
-              ;;
-            SYNC/*)
-              echo "SYNC packet — updating health"
-              ;;
-            SIGNAL/*)
-              echo "SIGNAL packet — processing"
-              ;;
-            *)
-              echo "Unknown packet type: $PACKET_TYPE — logging and continuing"
-              ;;
-          esac
-
-      - name: Return to IDLE
-        run: |
-          if [ -f .echo/state.json ]; then
-            python3 -c "
-import json
-with open('.echo/state.json') as f: s=json.load(f)
-if s.get('current') == 'RECEPTOR_STIMULATED':
-    s['current'] = 'IDLE'
-with open('.echo/state.json','w') as f: json.dump(s,f,indent=2)
-print('State returned to IDLE')
-"
-          fi
-
-      - name: Commit state changes
+      - name: Commit state
         run: |
           git config user.email "swarm@echo-universe.dev"
           git config user.name "Echo Swarm"
-          git add .echo/state.json coordination_log.jsonl 2>/dev/null || true
-          git diff --cached --quiet || git commit -m "swarm: packet processed — state updated"
+          git add .echo/state.json 2>/dev/null || true
+          git diff --cached --quiet || git commit -m "swarm: packet received [${{ github.event.client_payload.seq }}]"
           git push origin HEAD 2>/dev/null || true
+
+      - name: Echo receipt
+        run: |
+          echo "∇θ — packet absorbed, chain sealed"
+          echo "Repo: ${{ github.repository }}"
+          echo "Time: $(date -u)"
