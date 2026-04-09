@@ -280,12 +280,13 @@ textarea{min-height:80px;resize:vertical;}
     <div id="paymentReveal" style="display:none;"></div>
   <div id="scoresArea" style="margin-bottom:1.5rem;"></div>
 
+    <div id="docSection"></div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;">
       <h2 style="font-size:1.1rem;color:var(--p);">Your Complete Package — <span id="docCount">0</span> Documents</h2>
       <button class="btn btn-green" onclick="downloadAll()">⬇ Download All Documents</button>
     </div>
 
-    <div class="doc-grid" id="docGrid"></div>
+    <div class="doc-grid" id="docGrid" style="scroll-margin-top:1rem" data-section="docs"></div>
 
     <div style="margin-top:2rem;padding:1.5rem;background:var(--bg2);border:1px solid var(--brd);border-radius:12px;">
       <div class="section-label">What to do with these documents</div>
@@ -339,6 +340,7 @@ function addCondition() {
   div.id = id;
   div.style.cssText = 'background:var(--bg3);border:1px solid var(--brd);border-radius:10px;padding:1rem;margin-bottom:.8rem;';
   div.innerHTML = `
+    <div id="docSection"></div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;">
       <strong style="font-size:.85rem;color:var(--p);">Condition ${condCount}</strong>
       ${condCount>1?`<button onclick="document.getElementById('${id}').remove()" style="background:none;border:none;color:var(--mu);cursor:pointer;font-size:.8rem;">Remove</button>`:''}
@@ -379,6 +381,7 @@ function addBuddy() {
   div.id = id;
   div.style.cssText = 'background:var(--bg3);border:1px solid var(--brd);border-radius:10px;padding:1rem;margin-bottom:.8rem;';
   div.innerHTML = `
+    <div id="docSection"></div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;">
       <strong style="font-size:.85rem;color:var(--p);">Buddy ${buddyCount}</strong>
       <button onclick="document.getElementById('${id}').remove()" style="background:none;border:none;color:var(--mu);cursor:pointer;font-size:.8rem;">Remove</button>
@@ -400,6 +403,7 @@ function addProvider() {
   div.id = id;
   div.style.cssText = 'background:var(--bg3);border:1px solid var(--brd);border-radius:10px;padding:1rem;margin-bottom:.8rem;';
   div.innerHTML = `
+    <div id="docSection"></div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;">
       <strong style="font-size:.85rem;color:var(--p);">Provider ${provCount}</strong>
       <button onclick="document.getElementById('${id}').remove()" style="background:none;border:none;color:var(--mu);cursor:pointer;font-size:.8rem;">Remove</button>
@@ -1312,180 +1316,228 @@ function buildGaps(d, sc, items) {
 
 
 
-// ─── PAYMENT MODEL: $25 ADMIN FEE + OPTIONAL DONATION ─────────────────────
-// $25 admin fee = required (covers hosting, processing, maintenance)
-// Donation = optional, veteran chooses their amount
-// Revealed at step 5 — after full intake, maximum intent
-// Framing: transparent, mission-driven, no pressure
 
-const PAYMENT_CONFIG = {
+// ─── PAYMENT MODEL: CASH APP + OPTIONAL DONATION ───────────────────────────
+// $25 admin fee via Cash App
+// Optional donation via Cash App
+// Honor system — send payment, get immediate download access
+// No Stripe, no accounts, no friction
+
+const CASHAPP = {
+  cashtag: '$ArtOfProof',          // Nathan sets this to his real $cashtag
   admin_fee: 25,
-  admin_stripe_link: 'STRIPE_ADMIN_FEE_LINK_HERE',   // $25 one-time payment link
-  donation_links: {
-    10:  'STRIPE_DONATION_10_HERE',
-    25:  'STRIPE_DONATION_25_HERE',
-    50:  'STRIPE_DONATION_50_HERE',
-    100: 'STRIPE_DONATION_100_HERE',
-    custom: 'STRIPE_DONATION_CUSTOM_HERE',            // open amount link
+  // Cash App deep links — open the app pre-filled
+  // Format: https://cash.app/$cashtag/AMOUNT
+  admin_link: function(note) {
+    const tag = CASHAPP.cashtag.replace('$','');
+    return `https://cash.app/$${tag}/25`;
+  },
+  donation_link: function(amount) {
+    const tag = CASHAPP.cashtag.replace('$','');
+    return `https://cash.app/$${tag}/${amount}`;
   }
 };
 
 let selectedDonation = 0;
-let selectedDonationLink = '';
 
-function selectDonation(amount, link, el) {
+function selectDonation(amount, el) {
   selectedDonation = amount;
-  selectedDonationLink = link;
   document.querySelectorAll('.don-btn').forEach(b => {
     b.style.background = '#1a1a2e';
     b.style.borderColor = '#2a2a4e';
     b.style.color = '#7c6fff';
+    b.style.fontWeight = '600';
   });
-  el.style.background = '#7c6fff';
-  el.style.borderColor = '#7c6fff';
-  el.style.color = '#fff';
-  updatePayBtn();
+  if (el) {
+    el.style.background = '#00d632';
+    el.style.borderColor = '#00d632';
+    el.style.color = '#000';
+  }
+  updateCashBtn();
 }
 
-function updatePayBtn() {
-  const btn = document.getElementById('payBtn');
-  const totalEl = document.getElementById('payTotal');
+function updateCashBtn() {
+  const btn = document.getElementById('cashBtn');
+  const totalEl = document.getElementById('cashTotal');
   if (!btn) return;
-  const total = PAYMENT_CONFIG.admin_fee + selectedDonation;
+  const total = CASHAPP.admin_fee + selectedDonation;
   if (totalEl) totalEl.textContent = '$' + total;
-  btn.textContent = selectedDonation > 0
-    ? `Pay $${total} ($25 admin + $${selectedDonation} support) →`
-    : 'Pay $25 Admin Fee →';
-  btn.onclick = handlePayment;
+  const note = encodeURIComponent('Art of Proof admin fee');
+  if (selectedDonation > 0) {
+    btn.textContent = `Send $${total} on Cash App ($25 + $${selectedDonation} donation) →`;
+    btn.onclick = () => {
+      // Open admin fee first, then donation
+      window.open(CASHAPP.admin_link(), '_blank');
+      setTimeout(() => window.open(CASHAPP.donation_link(selectedDonation), '_blank'), 1000);
+      showConfirmation(total);
+    };
+  } else {
+    btn.textContent = `Send $25 on Cash App →`;
+    btn.onclick = () => {
+      window.open(CASHAPP.admin_link(), '_blank');
+      showConfirmation(25);
+    };
+  }
 }
 
-function handlePayment() {
-  const adminLink = PAYMENT_CONFIG.admin_stripe_link;
-  if (adminLink === 'STRIPE_ADMIN_FEE_LINK_HERE') {
-    alert('Payment link not yet configured. Contact artofproof@echo-universe.dev to complete your package.');
-    return;
-  }
-  // Open admin fee payment
-  window.open(adminLink, '_blank');
-  // If donation selected, open donation link too
-  if (selectedDonation > 0 && selectedDonationLink && selectedDonationLink !== 'STRIPE_DONATION_10_HERE') {
-    setTimeout(() => window.open(selectedDonationLink, '_blank'), 800);
-  }
+function showConfirmation(amount) {
+  const conf = document.getElementById('cashConfirm');
+  if (!conf) return;
+  conf.style.display = 'block';
+  conf.innerHTML = `
+    <div style="background:#0d1f0d;border:1px solid #1a3a1a;border-radius:10px;
+      padding:1.2rem;margin-top:1rem;text-align:center;">
+      <div style="color:#4ade80;font-size:1rem;font-weight:700;margin-bottom:.5rem;">
+        ✓ Payment sent? You're all set.
+      </div>
+      <p style="font-size:.82rem;color:#888;line-height:1.7;margin-bottom:.8rem;">
+        Your documents are already generated and ready to download below.
+        Include your email in the Cash App note so we can send you a receipt.
+        <br><br>
+        <strong style="color:#ccc;">${CASHAPP.cashtag}</strong> — Amount: $${amount}
+      </p>
+      <button onclick="document.getElementById('docSection').scrollIntoView({behavior:'smooth'})"
+        style="padding:.6rem 1.2rem;background:#4ade80;color:#000;border:none;
+          border-radius:8px;cursor:pointer;font-size:.88rem;font-weight:700;">
+        Download My Documents ↓
+      </button>
+    </div>`;
+  conf.scrollIntoView({behavior:'smooth'});
 }
 
 function revealPayment() {
   const container = document.getElementById('paymentReveal');
   if (!container) return;
 
+  // Generate QR code URL for the Cash App link (using Google Charts API)
+  const cashUrl = CASHAPP.admin_link();
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent(cashUrl)}&bgcolor=0a0a0a&color=00d632&qzone=2`;
+
   container.innerHTML = `
-    <div style="
-      background:linear-gradient(135deg,#0a0a1f,#0d1020);
-      border:1px solid #2a2a4e;border-radius:16px;padding:2rem;
+    <div style="background:linear-gradient(135deg,#0a0f0a,#0d160d);
+      border:1px solid #1a3a1a;border-radius:16px;padding:2rem;
       margin:1.5rem 0;text-align:center;">
 
-      <div style="font-size:.72rem;color:#7c6fff;text-transform:uppercase;
-        letter-spacing:.1em;margin-bottom:1rem;font-weight:700;">
+      <div style="font-size:.72rem;color:#4ade80;text-transform:uppercase;
+        letter-spacing:.1em;margin-bottom:.8rem;font-weight:700;">
         Your Package Is Ready
       </div>
 
-      <h3 style="font-size:1.3rem;font-weight:700;color:#fff;margin-bottom:.5rem;">
-        $25 Admin Fee
-      </h3>
-      <p style="font-size:.85rem;color:#888;line-height:1.7;max-width:480px;
-        margin:0 auto 1.5rem;">
-        Your complete evidence package is generated and ready to download.
-        A $25 admin fee covers hosting, maintenance, and keeps this tool
-        available for the next veteran who needs it.
-      </p>
+      <div style="display:flex;align-items:center;justify-content:center;gap:.5rem;margin-bottom:1.5rem;">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <rect width="28" height="28" rx="6" fill="#00d632"/>
+          <path d="M14 5L17.5 11H21L17 15.5L19 22L14 18.5L9 22L11 15.5L7 11H10.5L14 5Z" fill="white"/>
+        </svg>
+        <span style="font-size:1.5rem;font-weight:800;color:#fff;">Cash App Payment</span>
+      </div>
 
-      <div style="background:#0d0d0d;border:1px solid #1a1a1a;border-radius:10px;
-        padding:1rem;margin-bottom:1.5rem;text-align:left;max-width:420px;margin-left:auto;margin-right:auto;">
-        <div style="font-size:.78rem;color:#555;margin-bottom:.5rem;">What the $25 covers:</div>
-        <div style="font-size:.82rem;color:#ccc;line-height:1.9;">
-          ✓ All 14+ pre-filled documents<br>
-          ✓ Auto-generated nexus letters, record requests, forms<br>
-          ✓ CFR 38 rating math and TDIU analysis<br>
-          ✓ Lifetime access to your generated package<br>
-          ✓ Helps fund the next veteran's free access
+      <!-- DESKTOP: QR CODE -->
+      <div style="display:flex;gap:2rem;align-items:flex-start;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem;">
+        <div style="text-align:center;">
+          <div style="background:#0d0d0d;border:2px solid #00d632;border-radius:12px;
+            padding:.8rem;display:inline-block;margin-bottom:.5rem;">
+            <img src="${qrUrl}" width="140" height="140" alt="Cash App QR Code"
+              style="display:block;border-radius:6px;"
+              onerror="this.style.display='none';document.getElementById('qrFallback').style.display='block'">
+            <div id="qrFallback" style="display:none;width:140px;height:140px;
+              display:flex;align-items:center;justify-content:center;
+              font-size:.75rem;color:#4ade80;line-height:1.4;">
+              Scan in<br>Cash App
+            </div>
+          </div>
+          <div style="font-size:.75rem;color:#555;">Scan with Cash App camera</div>
+        </div>
+
+        <div style="text-align:left;max-width:280px;">
+          <div style="background:#0d0d0d;border:1px solid #1a1a1a;border-radius:10px;
+            padding:1rem;margin-bottom:1rem;">
+            <div style="font-size:.75rem;color:#555;margin-bottom:.4rem;">Send to:</div>
+            <div style="font-size:1.4rem;font-weight:800;color:#00d632;letter-spacing:.02em;">
+              ${CASHAPP.cashtag}
+            </div>
+            <div style="font-size:.75rem;color:#555;margin-top:.4rem;">
+              Amount: <span style="color:#4ade80;font-weight:700;" id="cashTotal">$25</span><br>
+              Note: <span style="color:#888;">Art of Proof</span>
+            </div>
+          </div>
+
+          <div style="font-size:.8rem;color:#888;line-height:1.7;">
+            ✓ Documents download immediately<br>
+            ✓ No account required<br>
+            ✓ Include email in note for receipt
+          </div>
         </div>
       </div>
+
+      <!-- MOBILE: DIRECT LINK BUTTON -->
+      <a href="${cashUrl}"
+         id="cashBtn"
+         style="display:block;max-width:360px;margin:0 auto 1rem;
+           padding:1rem;background:#00d632;color:#000;border-radius:10px;
+           font-size:1rem;font-weight:800;text-decoration:none;letter-spacing:.02em;
+           cursor:pointer;"
+         target="_blank"
+         onclick="showConfirmation(25)">
+        Send $25 on Cash App →
+      </a>
 
       <!-- OPTIONAL DONATION -->
-      <div style="border-top:1px solid #1a1a1a;padding-top:1.5rem;margin-bottom:1.5rem;">
-        <div style="font-size:.78rem;color:#555;margin-bottom:.8rem;text-transform:uppercase;letter-spacing:.08em;">
+      <div style="border-top:1px solid #1a2a1a;padding-top:1.2rem;margin-top:.5rem;">
+        <div style="font-size:.75rem;color:#3a5a3a;margin-bottom:.6rem;
+          text-transform:uppercase;letter-spacing:.08em;">
           Add a donation? (completely optional)
         </div>
-        <p style="font-size:.8rem;color:#666;margin-bottom:.8rem;line-height:1.6;">
-          100% goes toward keeping Art of Proof free for veterans who can't afford anything.
-          No pressure — the $25 is enough.
-        </p>
         <div style="display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:.5rem;">
-          <button class="don-btn" onclick="selectDonation(0,'',this)"
-            style="padding:.5rem 1rem;border-radius:8px;border:1px solid #2a2a4e;
-              background:#1a1a2e;color:#7c6fff;cursor:pointer;font-size:.85rem;font-weight:600;">
+          <button class="don-btn" onclick="selectDonation(0,null)"
+            style="padding:.45rem .9rem;border-radius:8px;border:1px solid #00d632;
+              background:#00d632;color:#000;cursor:pointer;font-size:.82rem;font-weight:700;">
             $0
           </button>
-          <button class="don-btn" onclick="selectDonation(10,'${PAYMENT_CONFIG.donation_links[10]}',this)"
-            style="padding:.5rem 1rem;border-radius:8px;border:1px solid #2a2a4e;
-              background:#1a1a2e;color:#7c6fff;cursor:pointer;font-size:.85rem;font-weight:600;">
-            $10
+          <button class="don-btn" onclick="selectDonation(10,this)"
+            style="padding:.45rem .9rem;border-radius:8px;border:1px solid #2a2a4e;
+              background:#1a1a2e;color:#7c6fff;cursor:pointer;font-size:.82rem;font-weight:600;">
+            +$10
           </button>
-          <button class="don-btn" onclick="selectDonation(25,'${PAYMENT_CONFIG.donation_links[25]}',this)"
-            style="padding:.5rem 1rem;border-radius:8px;border:1px solid #2a2a4e;
-              background:#1a1a2e;color:#7c6fff;cursor:pointer;font-size:.85rem;font-weight:600;">
-            $25
+          <button class="don-btn" onclick="selectDonation(25,this)"
+            style="padding:.45rem .9rem;border-radius:8px;border:1px solid #2a2a4e;
+              background:#1a1a2e;color:#7c6fff;cursor:pointer;font-size:.82rem;font-weight:600;">
+            +$25
           </button>
-          <button class="don-btn" onclick="selectDonation(50,'${PAYMENT_CONFIG.donation_links[50]}',this)"
-            style="padding:.5rem 1rem;border-radius:8px;border:1px solid #2a2a4e;
-              background:#1a1a2e;color:#7c6fff;cursor:pointer;font-size:.85rem;font-weight:600;">
-            $50
+          <button class="don-btn" onclick="selectDonation(50,this)"
+            style="padding:.45rem .9rem;border-radius:8px;border:1px solid #2a2a4e;
+              background:#1a1a2e;color:#7c6fff;cursor:pointer;font-size:.82rem;font-weight:600;">
+            +$50
           </button>
-          <button class="don-btn" onclick="selectDonation(100,'${PAYMENT_CONFIG.donation_links[100]}',this)"
-            style="padding:.5rem 1rem;border-radius:8px;border:1px solid #2a2a4e;
-              background:#1a1a2e;color:#7c6fff;cursor:pointer;font-size:.85rem;font-weight:600;">
-            $100
+          <button class="don-btn" onclick="selectDonation(100,this)"
+            style="padding:.45rem .9rem;border-radius:8px;border:1px solid #2a2a4e;
+              background:#1a1a2e;color:#7c6fff;cursor:pointer;font-size:.82rem;font-weight:600;">
+            +$100
           </button>
         </div>
-        <div style="font-size:.75rem;color:#444;margin-top:.3rem;">
-          Total: <span id="payTotal" style="color:#7c6fff;font-weight:700;">$25</span>
+        <div style="font-size:.73rem;color:#3a5a3a;">
+          Total: <span id="cashTotal" style="color:#4ade80;font-weight:700;">$25</span>
+          &nbsp;·&nbsp; 100% of donations fund free access for other veterans
         </div>
       </div>
 
-      <!-- PAY BUTTON -->
-      <button id="payBtn"
-        style="display:block;width:100%;max-width:360px;margin:0 auto;
-          padding:1rem;background:#7c6fff;color:#fff;border:none;
-          border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;
-          transition:background .2s;"
-        onmouseover="this.style.background='#6b5ce7'"
-        onmouseout="this.style.background='#7c6fff'">
-        Pay $25 Admin Fee →
-      </button>
+      <div id="cashConfirm"></div>
 
-      <div style="font-size:.75rem;color:#333;margin-top:1rem;line-height:1.6;">
-        Secure payment via Stripe &nbsp;·&nbsp;
+      <div style="margin-top:1.2rem;font-size:.75rem;color:#2a3a2a;line-height:1.7;">
+        Can't afford it?
         <a href="mailto:artofproof@echo-universe.dev"
-           style="color:#444;text-decoration:none;">
-          Questions? Email us
+           style="color:#3a5a3a;text-decoration:none;">
+          Email us
         </a>
-      </div>
-
-      <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid #1a1a1a;
-        font-size:.78rem;color:#333;line-height:1.7;">
-        Can't afford the admin fee? Email
-        <a href="mailto:artofproof@echo-universe.dev" style="color:#555;">
-          artofproof@echo-universe.dev
-        </a>
-        — we'll work something out. No veteran gets left behind.
+        — no veteran gets left behind.
       </div>
     </div>`;
 
   container.style.display = 'block';
   container.scrollIntoView({behavior:'smooth'});
-  updatePayBtn();
 }
 
 // ─── COPY / DOWNLOAD
+
  ─────────────────────────────────────────────────────────
 function copyDoc(btn) {
   const content = btn.closest('.doc-card').querySelector('.doc-body').dataset.content;
