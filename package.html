@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Art of Proof™ — Your Evidence Preparation Package</title>
+<style>
+  :root { --purple:#7c6fff; --green:#4ade80; --blue:#60a5fa; --red:#f87171; --gold:#fbbf24; --bg:#0a0a0a; --bg2:#111; --bg3:#1a1a1a; --border:#222; --text:#e0e0e0; --muted:#888; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:system-ui,-apple-system,sans-serif; background:var(--bg); color:var(--text); }
+  .header { background:linear-gradient(135deg,#0d0d1a,#0a1628); padding:2rem 1rem; text-align:center; border-bottom:1px solid #1a1a2e; }
+  .header h1 { font-size:1.8rem; font-weight:700; color:var(--purple); }
+  .header p { color:var(--muted); margin-top:0.5rem; font-size:0.9rem; }
+  .container { max-width:780px; margin:0 auto; padding:2rem 1rem; }
+  .card { background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:1.5rem; margin-bottom:1.5rem; }
+  .card h2 { font-size:1.05rem; color:var(--purple); margin-bottom:0.8rem; }
+  label { display:block; font-size:0.82rem; color:var(--muted); margin:0.8rem 0 0.3rem; }
+  select,input,textarea { width:100%; padding:0.6rem 0.8rem; background:var(--bg3); border:1px solid #2a2a2a; border-radius:8px; color:var(--text); font-size:0.88rem; outline:none; }
+  select:focus,input:focus,textarea:focus { border-color:var(--purple); }
+  textarea { min-height:85px; resize:vertical; font-family:inherit; }
+  .btn { width:100%; padding:0.85rem; background:var(--purple); color:#fff; border:none; border-radius:10px; cursor:pointer; font-size:1rem; font-weight:600; margin-top:1rem; transition:background 0.2s; }
+  .btn:hover { background:#6b5ce7; }
+  .btn-dl { background:#1a3a1a; color:var(--green); border:1px solid #2d5a2d; margin-top:0.75rem; }
+  .btn-dl:hover { background:#243a24; }
+  .hidden { display:none; }
+  /* Report styles */
+  #report { background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:2rem; margin-top:1.5rem; }
+  .report-header { border-bottom:2px solid var(--purple); padding-bottom:1rem; margin-bottom:1.5rem; }
+  .report-header h2 { font-size:1.4rem; color:var(--purple); }
+  .report-header .meta { font-size:0.78rem; color:var(--muted); margin-top:0.4rem; }
+  .score-row { display:flex; gap:1rem; margin:1rem 0; flex-wrap:wrap; }
+  .s-box { flex:1; min-width:120px; background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:1rem; text-align:center; }
+  .s-val { font-size:2rem; font-weight:800; }
+  .s-lab { font-size:0.7rem; color:var(--muted); margin-top:0.2rem; }
+  .fc{color:var(--green)} .lrs{color:var(--blue)} .fir{color:var(--red)}
+  .verdict { padding:0.8rem 1rem; border-radius:8px; font-weight:700; text-align:center; margin:1rem 0; }
+  .v-high{background:#0d1f0d;color:var(--green);border:1px solid #1a3a1a}
+  .v-mod{background:#1f1f0a;color:var(--gold);border:1px solid #3a3a10}
+  .v-low{background:#1f0d0d;color:var(--red);border:1px solid #3a1a1a}
+  .section-title { font-size:0.85rem; font-weight:700; color:var(--purple); text-transform:uppercase; letter-spacing:0.06em; margin:1.5rem 0 0.6rem; padding-bottom:0.4rem; border-bottom:1px solid var(--border); }
+  .checklist { list-style:none; }
+  .checklist li { padding:0.45rem 0; font-size:0.85rem; border-bottom:1px solid #151515; display:flex; align-items:flex-start; gap:0.5rem; }
+  .check-ok::before { content:"✓"; color:var(--green); font-weight:bold; flex-shrink:0; }
+  .check-warn::before { content:"⚠"; color:var(--gold); flex-shrink:0; }
+  .check-miss::before { content:"✗"; color:var(--red); flex-shrink:0; }
+  .template-box { background:var(--bg3); border:1px solid #2a2a2a; border-radius:8px; padding:1rem; font-size:0.82rem; line-height:1.7; color:#ccc; white-space:pre-wrap; font-family:inherit; margin-top:0.5rem; }
+  .rating-table { width:100%; border-collapse:collapse; font-size:0.82rem; margin-top:0.5rem; }
+  .rating-table th { background:#1a1a2e; color:var(--purple); padding:0.5rem; text-align:left; font-weight:600; }
+  .rating-table td { padding:0.45rem 0.5rem; border-bottom:1px solid #151515; color:#ccc; }
+  .tdiu-box { background:#1a1a2e; border:1px solid #2a2a4e; border-radius:8px; padding:1rem; margin-top:0.5rem; }
+  .tdiu-box h4 { color:var(--blue); font-size:0.9rem; margin-bottom:0.4rem; }
+  .ref-seal { font-size:0.72rem; color:#444; margin-top:2rem; padding-top:1rem; border-top:1px solid #1a1a1a; text-align:center; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Art of Proof™</h1>
+  <p>VA Disability Evidence Preparation Package — Complete Report Generator</p>
+</div>
+
+<div class="container">
+
+  <!-- INTAKE FORM -->
+  <div id="intakeSection">
+    <div class="card">
+      <h2>Step 1 — Your Information</h2>
+      <label>Your Name</label>
+      <input type="text" id="vetName" placeholder="Your full name">
+      <label>Claim Type</label>
+      <select id="claimType">
+        <option value="va_disability">VA Service-Connected Disability</option>
+        <option value="va_tdiu">VA Total Disability (TDIU)</option>
+        <option value="va_secondary">VA Secondary Service Connection</option>
+        <option value="va_increase">VA Rating Increase</option>
+        <option value="workers_comp">Workers Compensation</option>
+        <option value="social_security">Social Security Disability</option>
+      </select>
+      <label>Your Condition / Disability</label>
+      <input type="text" id="condition" placeholder="e.g. PTSD, tinnitus, back injury, hearing loss">
+      <label>How is it connected to your service?</label>
+      <textarea id="nexus" placeholder="e.g. Developed PTSD after combat deployment in Gulf War 1991. Tinnitus from exposure to artillery fire during basic training and deployment."></textarea>
+      <label>Service Period</label>
+      <input type="text" id="service" placeholder="e.g. U.S. Army, 1989–1991, honorable discharge">
+    </div>
+
+    <div class="card">
+      <h2>Step 2 — Your Evidence</h2>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.8rem;line-height:1.6">List each piece of evidence on its own line. Format: <code style="color:var(--purple)">type | description</code><br>
+      Types: <code style="color:#666">certified_copy</code> · <code style="color:#666">medical_records</code> · <code style="color:#666">agency_database</code> · <code style="color:#666">notarized_affidavit</code> · <code style="color:#666">buddy_statement</code> · <code style="color:#666">personal_statement</code> · <code style="color:#666">signed_uncertified</code></p>
+      <textarea id="evidence" rows="7" placeholder="certified_copy | DD-214 honorable discharge, U.S. Army 1989-1991&#10;agency_database | VA medical records from VA.gov MyHealtheVet, 2015-2024&#10;medical_records | Nexus letter from Dr. Sarah Johnson, VA physician, dated 2024&#10;buddy_statement | Buddy statement from Sgt. Marcus Williams, confirmed exposure&#10;personal_statement | My personal statement describing PTSD symptoms and impact on employment"></textarea>
+
+      <label>Current Disability Ratings (if any, for combined/TDIU calculation)</label>
+      <input type="text" id="ratings" placeholder="e.g. 50% PTSD, 10% tinnitus, 10% back — or leave blank if first claim">
+    </div>
+
+    <div class="card">
+      <h2>Step 3 — Filing Information</h2>
+      <label>Have you filed an Intent to File?</label>
+      <select id="itf">
+        <option value="yes">Yes — I have an Intent to File on record</option>
+        <option value="no">No — this will be my first filing</option>
+        <option value="unknown">Not sure</option>
+      </select>
+      <label>Have you been denied before on this condition?</label>
+      <select id="denied">
+        <option value="no">No — first claim</option>
+        <option value="yes_sc">Yes — denied service connection</option>
+        <option value="yes_rating">Yes — denied / low rating</option>
+        <option value="appeal">Currently in appeal</option>
+      </select>
+    </div>
+
+    <button class="btn" onclick="generateReport()">Generate My Evidence Package →</button>
+  </div>
+
+  <!-- REPORT OUTPUT -->
+  <div id="reportSection" class="hidden">
+    <div id="report">
+      <div class="report-header">
+        <h2>Art of Proof™ — Evidence Preparation Report</h2>
+        <div class="meta" id="reportMeta"></div>
+      </div>
+
+      <div class="section-title">Evidence Scores</div>
+      <div class="score-row">
+        <div class="s-box"><div class="s-val fc" id="rFc">—</div><div class="s-lab">FC Score<br>Factual Confidence</div></div>
+        <div class="s-box"><div class="s-val lrs" id="rLrs">—</div><div class="s-lab">LRS Score<br>Legal Readiness</div></div>
+        <div class="s-box"><div class="s-val fir" id="rFir">—</div><div class="s-lab">FIR Score<br>Integrity Risk</div></div>
+      </div>
+      <div class="verdict" id="rVerdict"></div>
+
+      <div class="section-title">Evidence Checklist</div>
+      <ul class="checklist" id="rChecklist"></ul>
+
+      <div class="section-title">Rating & TDIU Analysis</div>
+      <div id="rRating"></div>
+
+      <div class="section-title">Nexus Letter Template</div>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.5rem">Use this template with your treating physician or independent medical examiner. Fill in the bracketed fields.</p>
+      <div class="template-box" id="rNexus"></div>
+
+      <div class="section-title">Records Request Letter Template</div>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.5rem">Send this to the VA or your medical provider to obtain certified copies of your records.</p>
+      <div class="template-box" id="rRequest"></div>
+
+      <div class="section-title">Personal Statement Guide</div>
+      <div id="rStatement"></div>
+
+      <div class="section-title">Gap Analysis — Priority Actions</div>
+      <ul class="checklist" id="rGaps"></ul>
+
+      <div class="section-title">Timeline & Deadlines</div>
+      <div id="rTimeline"></div>
+
+      <div class="ref-seal" id="rSeal"></div>
+    </div>
+
+    <button class="btn btn-dl" onclick="downloadReport()">⬇ Download Report as PDF</button>
+    <button class="btn" onclick="window.print()" style="margin-top:0.5rem;background:#1a1a2e;color:var(--blue);border:1px solid #2a2a4e;">Print Report</button>
+  </div>
+
+</div>
+
+<script>
+const PW = {
+  "certified_copy":1.00,"court_certified":1.00,"registrar_extract":1.00,
+  "notarized_affidavit":0.92,"official_transcript":0.90,"agency_database":0.88,
+  "medical_records":0.90,"buddy_statement":0.70,"personal_statement":0.55,
+  "signed_uncertified":0.65,"lay_statement":0.60,"dbq_form":0.95,
+  "nexus_letter":0.95,"service_records":0.90,"unknown":0.35
+};
+
+const THRESH = {
+  "va_disability":{ min_fc:0.60, min_items:3 },
+  "va_tdiu":{ min_fc:0.70, min_items:4 },
+  "va_secondary":{ min_fc:0.65, min_items:3 },
+  "va_increase":{ min_fc:0.60, min_items:2 },
+  "workers_comp":{ min_fc:0.65, min_items:3 },
+  "social_security":{ min_fc:0.70, min_items:3 }
+};
+
+function combineRatings(arr) {
+  if (!arr.length) return 0;
+  let rem = 100;
+  arr.sort((a,b)=>b-a).forEach(r => rem -= rem*(r/100));
+  const raw = 100 - rem;
+  return raw % 10 >= 5 ? Math.ceil(raw/10)*10 : Math.floor(raw/10)*10;
+}
+
+function tdiuEligible(arr) {
+  if (!arr.length) return false;
+  if (Math.max(...arr) >= 60) return true;
+  return combineRatings(arr) >= 70 && Math.max(...arr) >= 40;
+}
+
+function parseRatings(str) {
+  if (!str.trim()) return [];
+  const nums = str.match(/\d+/g);
+  return nums ? nums.map(Number).filter(n => n > 0 && n <= 100) : [];
+}
+
+function generateReport() {
+  const name = document.getElementById("vetName").value || "Veteran";
+  const claimType = document.getElementById("claimType").value;
+  const condition = document.getElementById("condition").value || "[CONDITION]";
+  const nexusText = document.getElementById("nexus").value || "";
+  const service = document.getElementById("service").value || "[SERVICE PERIOD]";
+  const evidenceText = document.getElementById("evidence").value.trim();
+  const ratingsStr = document.getElementById("ratings").value;
+  const itf = document.getElementById("itf").value;
+  const denied = document.getElementById("denied").value;
+
+  if (!evidenceText) { alert("Please enter at least one evidence item."); return; }
+
+  // Parse evidence
+  const items = evidenceText.split("\n").filter(l=>l.trim()).map(line => {
+    const parts = line.split("|").map(p=>p.trim());
+    const type = (parts[0]||"unknown").toLowerCase().replace(/ /g,"_");
+    return { type, desc: parts[1]||parts[0]||"", weight: PW[type]||0.35 };
+  });
+
+  // Scores
+  const t = THRESH[claimType]||THRESH["va_disability"];
+  const avg = items.reduce((s,i)=>s+i.weight,0)/items.length;
+  const cov = Math.min(1.0, items.length/t.min_items);
+  const fc = Math.round((avg*0.7+cov*0.3)*100)/100;
+  let lrs = fc;
+  if (items.length>=t.min_items) lrs=Math.min(1.0,lrs+0.08);
+  if (fc>=t.min_fc) lrs=Math.min(1.0,lrs+0.05);
+  lrs=Math.round(lrs*100)/100;
+  const lowP=items.filter(i=>i.weight<0.50).length;
+  const fir=Math.round(Math.min(1.0,lowP*0.20+(1-avg)*0.45)*100)/100;
+
+  let verdict,vClass;
+  if (fc>=0.75&&lrs>=0.70&&fir<=0.25){verdict="HIGH CONFIDENCE — Strong evidence package";vClass="v-high";}
+  else if (fc>=0.55&&lrs>=0.50){verdict="MODERATE — Package needs strengthening";vClass="v-mod";}
+  else{verdict="LOW CONFIDENCE — Critical gaps must be addressed before filing";vClass="v-low";}
+
+  // Ratings
+  const ratings = parseRatings(ratingsStr);
+  const combined = ratings.length ? combineRatings(ratings) : null;
+  const tdiu = ratings.length ? tdiuEligible(ratings) : null;
+
+  // Reference
+  const ref = "AOP-" + Date.now().toString(36).toUpperCase();
+  const date = new Date().toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"});
+
+  // Populate report
+  document.getElementById("reportMeta").innerHTML =
+    `Prepared for: <strong>${name}</strong> &nbsp;|&nbsp; Date: ${date} &nbsp;|&nbsp; Ref: ${ref}<br>Claim: ${claimType.replace(/_/g," ").toUpperCase()} — ${condition}`;
+
+  document.getElementById("rFc").textContent = (fc*100).toFixed(0)+"%";
+  document.getElementById("rLrs").textContent = (lrs*100).toFixed(0)+"%";
+  document.getElementById("rFir").textContent = (fir*100).toFixed(0)+"%";
+  const vb = document.getElementById("rVerdict");
+  vb.textContent=verdict; vb.className="verdict "+vClass;
+
+  // Checklist
+  const cl = document.getElementById("rChecklist");
+  cl.innerHTML = items.map(i=>{
+    const pct = Math.round(i.weight*100);
+    const cls = i.weight>=0.88?"check-ok":i.weight>=0.60?"check-warn":"check-miss";
+    return `<li class="${cls}">${i.desc||i.type} <span style="color:var(--muted);font-size:0.78rem;margin-left:auto">${pct}% weight</span></li>`;
+  }).join("");
+
+  // Rating analysis
+  let ratingHtml = "";
+  if (ratings.length) {
+    ratingHtml = `<table class="rating-table"><thead><tr><th>Condition</th><th>Rating</th></tr></thead><tbody>`;
+    ratings.forEach((r,i)=>{ ratingHtml+=`<tr><td>Condition ${i+1}</td><td>${r}%</td></tr>`; });
+    ratingHtml+=`<tr style="font-weight:700"><td>Combined (VA method)</td><td style="color:var(--green)">${combined}%</td></tr></tbody></table>`;
+    if (tdiu) {
+      ratingHtml+=`<div class="tdiu-box"><h4>TDIU Eligible</h4><p style="font-size:0.82rem;color:#ccc;line-height:1.6">Your ratings indicate potential eligibility for Total Disability based on Individual Unemployability (38 CFR 4.16a). This means you may qualify for 100% compensation even with a combined rating below 100%. Include evidence of unemployability — employer statements, medical opinions on work capacity, and earnings records.</p></div>`;
+    }
+  } else {
+    ratingHtml = `<p style="font-size:0.85rem;color:var(--muted)">No existing ratings entered. For new claims, focus on establishing service connection first. The rating percentage is determined after service connection is approved.</p>`;
+  }
+  document.getElementById("rRating").innerHTML = ratingHtml;
+
+  // Nexus letter template
+  const nexusTemplate = `[PHYSICIAN LETTERHEAD]
+[Date]
+
+RE: Nexus Opinion — ${name} — ${condition}
+
+To Whom It May Concern:
+
+I am a licensed physician [specialty] currently treating ${name} for ${condition}. I have reviewed the following records: [list records reviewed].
+
+Based on my examination and review of available evidence, it is my medical opinion that it is at least as likely as not (50% or greater probability) that ${name}'s ${condition} is [directly caused by / a result of / aggravated beyond its natural progression by] their active military service in ${service}.
+
+The basis for this opinion is as follows:
+1. ${nexusText ? nexusText : "[Describe the medical rationale connecting the condition to service]"}
+2. The onset and progression of symptoms is consistent with the mechanism of injury described.
+3. [Any supporting literature or clinical evidence]
+
+This opinion is based on my independent clinical judgment and review of the evidence of record.
+
+Respectfully,
+
+[Physician Name, Credentials]
+[License Number]
+[Contact Information]`;
+
+  document.getElementById("rNexus").textContent = nexusTemplate;
+
+  // Records request template
+  const requestTemplate = `[Your Name]
+[Your Address]
+[Date]
+[Your VA File Number if known]
+
+Records Management / Medical Records Department
+[VA Medical Center or Medical Provider Name]
+[Address]
+
+RE: Request for Certified Copies of Medical Records
+
+Dear Records Department:
+
+I am requesting certified copies of all medical records related to my treatment for ${condition} during the period [START DATE] through [END DATE].
+
+Please provide all of the following:
+• Treatment notes and progress notes
+• Diagnostic test results (labs, imaging, psychological evaluations)
+• Any disability benefit questionnaire (DBQ) forms on file
+• Correspondence related to this condition
+
+This request is made pursuant to [38 U.S.C. § 5701 / HIPAA / state medical records law] and the Privacy Act of 1974.
+
+Please confirm receipt of this request within 10 business days.
+
+Respectfully,
+${name}
+[Address]
+[Phone]
+[Email]
+[Signature]`;
+
+  document.getElementById("rRequest").textContent = requestTemplate;
+
+  // Personal statement guide
+  const stmtGuide = `
+<div style="font-size:0.85rem;color:#ccc;line-height:1.8">
+<p style="margin-bottom:0.8rem">Your personal statement (VA Form 21-4138 or written statement) should cover these five elements:</p>
+<ol style="margin-left:1.2rem;margin-bottom:0.8rem">
+<li><strong style="color:var(--text)">In-service event:</strong> Describe specifically what happened during your service that caused or contributed to ${condition}. Date, location, unit if possible.</li>
+<li><strong style="color:var(--text)">Continuity of symptoms:</strong> Describe how symptoms have been continuous or recurrent from service to present. Any periods of treatment or flare-ups.</li>
+<li><strong style="color:var(--text)">Current severity:</strong> Describe how ${condition} affects your daily life, relationships, and ability to work. Use specific examples.</li>
+<li><strong style="color:var(--text)">Lay evidence:</strong> Describe what others have observed — spouse, family members, coworkers, fellow veterans. Names who can provide buddy statements.</li>
+<li><strong style="color:var(--text)">No attribution:</strong> Do not diagnose yourself or cite percentages. Describe what you experience, not what you think you deserve.</li>
+</ol>
+<p style="color:var(--muted);font-size:0.8rem">Keep your statement to 1–2 pages. Clear, chronological, factual.</p>
+</div>`;
+  document.getElementById("rStatement").innerHTML = stmtGuide;
+
+  // Gap analysis
+  const gaps = [];
+  if (!items.some(i=>["medical_records","agency_database","dbq_form","nexus_letter"].includes(i.type)))
+    gaps.push({cls:"check-miss",text:"CRITICAL: No medical evidence found. Request VA records at VA.gov MyHealtheVet — free, takes 5 minutes to request."});
+  if (!items.some(i=>["certified_copy","court_certified","service_records"].includes(i.type)))
+    gaps.push({cls:"check-miss",text:"CRITICAL: No certified service records. Request DD-214 and service medical records at milConnect (milConnect.dmdc.osd.mil)."});
+  if (!items.some(i=>i.type==="nexus_letter"||i.type==="dbq_form"))
+    gaps.push({cls:"check-warn",text:"IMPORTANT: No nexus letter or DBQ. This is often the deciding factor. Use the template above with your doctor."});
+  if (!items.some(i=>i.type==="buddy_statement"))
+    gaps.push({cls:"check-warn",text:"RECOMMENDED: No buddy statements. Fellow veterans who witnessed the in-service event or current symptoms can provide strong corroboration."});
+  if (fir>0.25)
+    gaps.push({cls:"check-warn",text:"INTEGRITY: Replace unsigned/uncertified documents with notarized versions where possible. Each upgrade raises your score."});
+  if (itf==="no")
+    gaps.push({cls:"check-warn",text:"FILE AN INTENT TO FILE NOW at VA.gov. This locks in your effective date — worth months of back pay if approved."});
+  if (denied==="yes_sc"||denied==="appeal")
+    gaps.push({cls:"check-ok",text:"APPEAL PATH: For denied claims, your strongest move is a new nexus letter addressing the specific reason for denial. Request your decision notice to identify the exact gap."});
+  if (!gaps.length) gaps.push({cls:"check-ok",text:"No critical gaps identified. Your evidence package appears complete for initial filing."});
+
+  const gl = document.getElementById("rGaps");
+  gl.innerHTML = gaps.map(g=>`<li class="${g.cls}">${g.text}</li>`).join("");
+
+  // Timeline
+  const tlHtml = `<div style="font-size:0.85rem;color:#ccc;line-height:2;margin-top:0.5rem">
+${itf==="yes"?"✓ Intent to File on record — effective date protected":"⚠ File Intent to File immediately at VA.gov → Start a Claim"}<br>
+→ Gather all documents per checklist above (2–4 weeks)<br>
+→ Get nexus letter from physician (2–6 weeks)<br>
+→ Complete VA Form 21-526EZ (online at VA.gov or with a VSO)<br>
+→ VA development period: 90–125 days average<br>
+→ Decision issued — if approved, payments begin from effective date<br>
+${denied.startsWith("yes")||denied==="appeal"?"→ If denied: file Notice of Disagreement within 1 year of decision":"→ If denied: you have 1 year to appeal from date of decision"}<br>
+<span style="color:var(--muted);font-size:0.8rem">Free VSO assistance: DAV (dav.org), American Legion, VFW — they file for free</span>
+</div>`;
+  document.getElementById("rTimeline").innerHTML = tlHtml;
+
+  // Seal
+  document.getElementById("rSeal").innerHTML =
+    `Art of Proof™ — Evidence Preparation Report &nbsp;|&nbsp; Ref: ${ref} &nbsp;|&nbsp; ${date}<br>
+This report is informational only and does not constitute legal advice. Consult a VA-accredited attorney before filing.<br>
+∇θ — chain sealed, truth preserved &nbsp;|&nbsp; Echo Universe`;
+
+  document.getElementById("intakeSection").classList.add("hidden");
+  document.getElementById("reportSection").classList.remove("hidden");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function downloadReport() {
+  const report = document.getElementById("report").innerHTML;
+  const name = document.getElementById("vetName").value||"veteran";
+  const safe = name.toLowerCase().replace(/[^a-z0-9]/g,"-");
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Art of Proof Report</title>
+<style>
+  body{font-family:Arial,sans-serif;max-width:750px;margin:0 auto;padding:2rem;color:#111;background:#fff}
+  h2{color:#4a35b5;border-bottom:2px solid #4a35b5;padding-bottom:0.5rem}
+  .section-title{color:#4a35b5;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em;margin:1.5rem 0 0.5rem;border-bottom:1px solid #ddd;padding-bottom:0.3rem}
+  .score-row{display:flex;gap:1rem}
+  .s-box{flex:1;border:1px solid #ddd;border-radius:8px;padding:1rem;text-align:center}
+  .s-val{font-size:2rem;font-weight:800}
+  .fc{color:#16a34a}.lrs{color:#2563eb}.fir{color:#dc2626}
+  .verdict{padding:0.8rem;border-radius:6px;font-weight:700;text-align:center;margin:1rem 0;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0}
+  .template-box{background:#f8f8f8;border:1px solid #ddd;border-radius:6px;padding:1rem;font-size:0.82rem;line-height:1.7;white-space:pre-wrap}
+  .checklist{list-style:none;padding:0}
+  .checklist li{padding:0.4rem 0;border-bottom:1px solid #f0f0f0;font-size:0.85rem}
+  .check-ok::before{content:"✓ ";color:#16a34a;font-weight:bold}
+  .check-warn::before{content:"⚠ ";color:#d97706}
+  .check-miss::before{content:"✗ ";color:#dc2626}
+  .ref-seal{font-size:0.7rem;color:#999;text-align:center;margin-top:2rem;padding-top:1rem;border-top:1px solid #eee}
+  @media print{body{padding:0}}
+</style></head><body>${report}</body></html>`;
+
+  const blob = new Blob([html], {type:"text/html"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href=url; a.download=`art-of-proof-${safe}.html`;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
