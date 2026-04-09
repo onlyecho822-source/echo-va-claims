@@ -277,7 +277,8 @@ textarea{min-height:80px;resize:vertical;}
 
   <!-- ═══ SECTION 5: PACKAGE ═══ -->
   <div class="section" id="sec5">
-    <div id="scoresArea" style="margin-bottom:1.5rem;"></div>
+    <div id="discountReveal" style="display:none;"></div>
+  <div id="scoresArea" style="margin-bottom:1.5rem;"></div>
 
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;">
       <h2 style="font-size:1.1rem;color:var(--p);">Your Complete Package — <span id="docCount">0</span> Documents</h2>
@@ -526,6 +527,7 @@ function generatePackage() {
   const d = getData();
   const sc = scoreEvidence(d);
   go(5);
+  revealDiscount();
 
   // Scores
   let verdict, vClass;
@@ -1306,6 +1308,139 @@ function buildGaps(d, sc, items) {
     gaps.push('NOTE: Submit VA Form 21-4142 (included) for each private provider so VA can request their records');
   if (!gaps.length) gaps.push('No critical gaps identified — proceed with filing after gathering all documents');
   return gaps.map((g,i) => `${i+1}. ${g}`).join('\n');
+}
+
+
+// ─── EARLY ADOPTER DISCOUNT ENGINE ─────────────────────────────────────────
+// First 100 customers only. Revealed only after full intake.
+// Random 50-100% off. Never disclosed until the reveal moment.
+
+const DISCOUNT_CONFIG = {
+  total_slots: 100,
+  min_pct: 50,       // minimum 50% off
+  max_pct: 100,      // could be 100% (free)
+  // Stripe coupon codes Nathan creates — one per discount level
+  // Create these in Stripe dashboard → Coupons
+  coupons: {
+    50:  'FOUNDER50',   // 50% off
+    60:  'FOUNDER60',
+    70:  'FOUNDER70',
+    75:  'FOUNDER75',
+    80:  'FOUNDER80',
+    90:  'FOUNDER90',
+    100: 'FOUNDERFREE', // 100% off — free
+  },
+  // Stripe payment links with coupon pre-applied
+  // Format: https://buy.stripe.com/YOUR_LINK?prefilled_promo_code=FOUNDER50
+  base_payment_url: 'STRIPE_PAYMENT_LINK_HERE',
+  base_monthly_url: 'STRIPE_PAYMENT_LINK_MONTHLY_HERE',
+};
+
+function getDiscount() {
+  // Check if this browser already has a slot
+  let slot = localStorage.getItem('aop_slot');
+  let pct = localStorage.getItem('aop_pct');
+
+  if (!slot || !pct) {
+    // Assign new slot — use timestamp-based pseudo-random slot under 100
+    // In production, replace with server counter. For now, uses time + random.
+    const existing = parseInt(localStorage.getItem('aop_slot_assigned') || '0');
+    if (existing >= DISCOUNT_CONFIG.total_slots) return null; // sold out of discounts
+
+    slot = Math.floor(Math.random() * DISCOUNT_CONFIG.total_slots) + 1;
+
+    // Random discount — weighted toward lower discounts, with rare highs
+    const roll = Math.random();
+    if (roll < 0.40)      pct = 50;   // 40% chance — 50% off
+    else if (roll < 0.65) pct = 60;   // 25% chance — 60% off
+    else if (roll < 0.80) pct = 70;   // 15% chance — 70% off
+    else if (roll < 0.90) pct = 75;   // 10% chance — 75% off
+    else if (roll < 0.96) pct = 80;   //  6% chance — 80% off
+    else if (roll < 0.99) pct = 90;   //  3% chance — 90% off
+    else                  pct = 100;  //  1% chance — FREE
+
+    localStorage.setItem('aop_slot', slot);
+    localStorage.setItem('aop_pct', pct);
+  }
+
+  pct = parseInt(pct);
+  const originalPrice = 99;
+  const discountedPrice = Math.round(originalPrice * (1 - pct/100));
+  const coupon = DISCOUNT_CONFIG.coupons[pct] || 'FOUNDER50';
+  const paymentUrl = DISCOUNT_CONFIG.base_payment_url !== 'STRIPE_PAYMENT_LINK_HERE'
+    ? `${DISCOUNT_CONFIG.base_payment_url}?prefilled_promo_code=${coupon}`
+    : '#';
+
+  return { slot, pct, originalPrice, discountedPrice, coupon, paymentUrl };
+}
+
+function revealDiscount() {
+  const d = getDiscount();
+  if (!d) return null;
+
+  const container = document.getElementById('discountReveal');
+  if (!container) return;
+
+  const isFree = d.pct === 100;
+  const isHigh = d.pct >= 80;
+
+  container.innerHTML = `
+    <div style="
+      background: linear-gradient(135deg, #0a1f0a, #0d1f0d);
+      border: 2px solid ${isFree ? '#4ade80' : isHigh ? '#fbbf24' : '#7c6fff'};
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      margin: 1.5rem 0;
+      position: relative;
+      overflow: hidden;
+    ">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;
+        background:linear-gradient(90deg,transparent,${isFree?'#4ade80':isHigh?'#fbbf24':'#7c6fff'},transparent)"></div>
+
+      <div style="font-size:.75rem;color:${isFree?'#4ade80':isHigh?'#fbbf24':'#a78fff'};
+        text-transform:uppercase;letter-spacing:.12em;margin-bottom:.8rem;font-weight:700">
+        🔒 Early Adopter Reward — Slot #${d.slot} of 100
+      </div>
+
+      <div style="font-size:2.8rem;font-weight:900;
+        color:${isFree?'#4ade80':isHigh?'#fbbf24':'#fff'};line-height:1;margin-bottom:.5rem">
+        ${isFree ? '100% FREE' : d.pct + '% OFF'}
+      </div>
+
+      <div style="font-size:1rem;margin-bottom:1.5rem;">
+        ${isFree
+          ? `<span style="text-decoration:line-through;color:#555">$99</span>
+             <span style="color:#4ade80;font-size:1.4rem;font-weight:800;margin-left:.5rem">$0 — Completely Free</span>`
+          : `<span style="text-decoration:line-through;color:#555;font-size:.9rem">$99</span>
+             <span style="color:${isHigh?'#fbbf24':'#7c6fff'};font-size:1.6rem;font-weight:800;margin-left:.5rem">$${d.discountedPrice}</span>`
+        }
+      </div>
+
+      <p style="font-size:.85rem;color:#888;margin-bottom:1.5rem;line-height:1.6;max-width:420px;margin-left:auto;margin-right:auto">
+        You're one of the first 100 veterans to use Art of Proof. 
+        As a founding member, your discount is locked in. 
+        ${isFree ? "This one's on us." : `You save $${d.originalPrice - d.discountedPrice} today.`}
+      </p>
+
+      <a href="${d.paymentUrl}"
+         style="display:inline-block;padding:1rem 2.5rem;
+           background:${isFree?'#4ade80':isHigh?'#fbbf24':'#7c6fff'};
+           color:${isFree||isHigh?'#000':'#fff'};
+           border-radius:10px;font-size:1rem;font-weight:700;
+           text-decoration:none;letter-spacing:.02em"
+         target="_blank">
+        ${isFree ? 'Get My Free Package →' : `Claim My ${d.pct}% Discount — $${d.discountedPrice} →`}
+      </a>
+
+      <div style="font-size:.72rem;color:#444;margin-top:1rem">
+        Code: ${d.coupon} · This discount expires when you close this page
+      </div>
+    </div>`;
+
+  container.style.display = 'block';
+  container.scrollIntoView({behavior:'smooth'});
+  return d;
 }
 
 // ─── COPY / DOWNLOAD ─────────────────────────────────────────────────────────
