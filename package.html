@@ -277,7 +277,7 @@ textarea{min-height:80px;resize:vertical;}
 
   <!-- ═══ SECTION 5: PACKAGE ═══ -->
   <div class="section" id="sec5">
-    <div id="discountReveal" style="display:none;"></div>
+    <div id="paymentReveal" style="display:none;"></div>
   <div id="scoresArea" style="margin-bottom:1.5rem;"></div>
 
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;">
@@ -527,7 +527,7 @@ function generatePackage() {
   const d = getData();
   const sc = scoreEvidence(d);
   go(5);
-  revealDiscount();
+  revealPayment();
 
   // Scores
   let verdict, vClass;
@@ -1311,139 +1311,182 @@ function buildGaps(d, sc, items) {
 }
 
 
-// ─── EARLY ADOPTER DISCOUNT ENGINE ─────────────────────────────────────────
-// First 100 customers only. Revealed only after full intake.
-// Random 50-100% off. Never disclosed until the reveal moment.
 
-const DISCOUNT_CONFIG = {
-  total_slots: 100,
-  min_pct: 50,       // minimum 50% off
-  max_pct: 100,      // could be 100% (free)
-  // Stripe coupon codes Nathan creates — one per discount level
-  // Create these in Stripe dashboard → Coupons
-  coupons: {
-    50:  'FOUNDER50',   // 50% off
-    60:  'FOUNDER60',
-    70:  'FOUNDER70',
-    75:  'FOUNDER75',
-    80:  'FOUNDER80',
-    90:  'FOUNDER90',
-    100: 'FOUNDERFREE', // 100% off — free
-  },
-  // Stripe payment links with coupon pre-applied
-  // Format: https://buy.stripe.com/YOUR_LINK?prefilled_promo_code=FOUNDER50
-  base_payment_url: 'STRIPE_PAYMENT_LINK_HERE',
-  base_monthly_url: 'STRIPE_PAYMENT_LINK_MONTHLY_HERE',
+// ─── PAYMENT MODEL: $25 ADMIN FEE + OPTIONAL DONATION ─────────────────────
+// $25 admin fee = required (covers hosting, processing, maintenance)
+// Donation = optional, veteran chooses their amount
+// Revealed at step 5 — after full intake, maximum intent
+// Framing: transparent, mission-driven, no pressure
+
+const PAYMENT_CONFIG = {
+  admin_fee: 25,
+  admin_stripe_link: 'STRIPE_ADMIN_FEE_LINK_HERE',   // $25 one-time payment link
+  donation_links: {
+    10:  'STRIPE_DONATION_10_HERE',
+    25:  'STRIPE_DONATION_25_HERE',
+    50:  'STRIPE_DONATION_50_HERE',
+    100: 'STRIPE_DONATION_100_HERE',
+    custom: 'STRIPE_DONATION_CUSTOM_HERE',            // open amount link
+  }
 };
 
-function getDiscount() {
-  // Check if this browser already has a slot
-  let slot = localStorage.getItem('aop_slot');
-  let pct = localStorage.getItem('aop_pct');
+let selectedDonation = 0;
+let selectedDonationLink = '';
 
-  if (!slot || !pct) {
-    // Assign new slot — use timestamp-based pseudo-random slot under 100
-    // In production, replace with server counter. For now, uses time + random.
-    const existing = parseInt(localStorage.getItem('aop_slot_assigned') || '0');
-    if (existing >= DISCOUNT_CONFIG.total_slots) return null; // sold out of discounts
-
-    slot = Math.floor(Math.random() * DISCOUNT_CONFIG.total_slots) + 1;
-
-    // Random discount — weighted toward lower discounts, with rare highs
-    const roll = Math.random();
-    if (roll < 0.40)      pct = 50;   // 40% chance — 50% off
-    else if (roll < 0.65) pct = 60;   // 25% chance — 60% off
-    else if (roll < 0.80) pct = 70;   // 15% chance — 70% off
-    else if (roll < 0.90) pct = 75;   // 10% chance — 75% off
-    else if (roll < 0.96) pct = 80;   //  6% chance — 80% off
-    else if (roll < 0.99) pct = 90;   //  3% chance — 90% off
-    else                  pct = 100;  //  1% chance — FREE
-
-    localStorage.setItem('aop_slot', slot);
-    localStorage.setItem('aop_pct', pct);
-  }
-
-  pct = parseInt(pct);
-  const originalPrice = 99;
-  const discountedPrice = Math.round(originalPrice * (1 - pct/100));
-  const coupon = DISCOUNT_CONFIG.coupons[pct] || 'FOUNDER50';
-  const paymentUrl = DISCOUNT_CONFIG.base_payment_url !== 'STRIPE_PAYMENT_LINK_HERE'
-    ? `${DISCOUNT_CONFIG.base_payment_url}?prefilled_promo_code=${coupon}`
-    : '#';
-
-  return { slot, pct, originalPrice, discountedPrice, coupon, paymentUrl };
+function selectDonation(amount, link, el) {
+  selectedDonation = amount;
+  selectedDonationLink = link;
+  document.querySelectorAll('.don-btn').forEach(b => {
+    b.style.background = '#1a1a2e';
+    b.style.borderColor = '#2a2a4e';
+    b.style.color = '#7c6fff';
+  });
+  el.style.background = '#7c6fff';
+  el.style.borderColor = '#7c6fff';
+  el.style.color = '#fff';
+  updatePayBtn();
 }
 
-function revealDiscount() {
-  const d = getDiscount();
-  if (!d) return null;
+function updatePayBtn() {
+  const btn = document.getElementById('payBtn');
+  const totalEl = document.getElementById('payTotal');
+  if (!btn) return;
+  const total = PAYMENT_CONFIG.admin_fee + selectedDonation;
+  if (totalEl) totalEl.textContent = '$' + total;
+  btn.textContent = selectedDonation > 0
+    ? `Pay $${total} ($25 admin + $${selectedDonation} support) →`
+    : 'Pay $25 Admin Fee →';
+  btn.onclick = handlePayment;
+}
 
-  const container = document.getElementById('discountReveal');
+function handlePayment() {
+  const adminLink = PAYMENT_CONFIG.admin_stripe_link;
+  if (adminLink === 'STRIPE_ADMIN_FEE_LINK_HERE') {
+    alert('Payment link not yet configured. Contact artofproof@echo-universe.dev to complete your package.');
+    return;
+  }
+  // Open admin fee payment
+  window.open(adminLink, '_blank');
+  // If donation selected, open donation link too
+  if (selectedDonation > 0 && selectedDonationLink && selectedDonationLink !== 'STRIPE_DONATION_10_HERE') {
+    setTimeout(() => window.open(selectedDonationLink, '_blank'), 800);
+  }
+}
+
+function revealPayment() {
+  const container = document.getElementById('paymentReveal');
   if (!container) return;
-
-  const isFree = d.pct === 100;
-  const isHigh = d.pct >= 80;
 
   container.innerHTML = `
     <div style="
-      background: linear-gradient(135deg, #0a1f0a, #0d1f0d);
-      border: 2px solid ${isFree ? '#4ade80' : isHigh ? '#fbbf24' : '#7c6fff'};
-      border-radius: 16px;
-      padding: 2rem;
-      text-align: center;
-      margin: 1.5rem 0;
-      position: relative;
-      overflow: hidden;
-    ">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;
-        background:linear-gradient(90deg,transparent,${isFree?'#4ade80':isHigh?'#fbbf24':'#7c6fff'},transparent)"></div>
+      background:linear-gradient(135deg,#0a0a1f,#0d1020);
+      border:1px solid #2a2a4e;border-radius:16px;padding:2rem;
+      margin:1.5rem 0;text-align:center;">
 
-      <div style="font-size:.75rem;color:${isFree?'#4ade80':isHigh?'#fbbf24':'#a78fff'};
-        text-transform:uppercase;letter-spacing:.12em;margin-bottom:.8rem;font-weight:700">
-        🔒 Early Adopter Reward — Slot #${d.slot} of 100
+      <div style="font-size:.72rem;color:#7c6fff;text-transform:uppercase;
+        letter-spacing:.1em;margin-bottom:1rem;font-weight:700;">
+        Your Package Is Ready
       </div>
 
-      <div style="font-size:2.8rem;font-weight:900;
-        color:${isFree?'#4ade80':isHigh?'#fbbf24':'#fff'};line-height:1;margin-bottom:.5rem">
-        ${isFree ? '100% FREE' : d.pct + '% OFF'}
-      </div>
-
-      <div style="font-size:1rem;margin-bottom:1.5rem;">
-        ${isFree
-          ? `<span style="text-decoration:line-through;color:#555">$99</span>
-             <span style="color:#4ade80;font-size:1.4rem;font-weight:800;margin-left:.5rem">$0 — Completely Free</span>`
-          : `<span style="text-decoration:line-through;color:#555;font-size:.9rem">$99</span>
-             <span style="color:${isHigh?'#fbbf24':'#7c6fff'};font-size:1.6rem;font-weight:800;margin-left:.5rem">$${d.discountedPrice}</span>`
-        }
-      </div>
-
-      <p style="font-size:.85rem;color:#888;margin-bottom:1.5rem;line-height:1.6;max-width:420px;margin-left:auto;margin-right:auto">
-        You're one of the first 100 veterans to use Art of Proof. 
-        As a founding member, your discount is locked in. 
-        ${isFree ? "This one's on us." : `You save $${d.originalPrice - d.discountedPrice} today.`}
+      <h3 style="font-size:1.3rem;font-weight:700;color:#fff;margin-bottom:.5rem;">
+        $25 Admin Fee
+      </h3>
+      <p style="font-size:.85rem;color:#888;line-height:1.7;max-width:480px;
+        margin:0 auto 1.5rem;">
+        Your complete evidence package is generated and ready to download.
+        A $25 admin fee covers hosting, maintenance, and keeps this tool
+        available for the next veteran who needs it.
       </p>
 
-      <a href="${d.paymentUrl}"
-         style="display:inline-block;padding:1rem 2.5rem;
-           background:${isFree?'#4ade80':isHigh?'#fbbf24':'#7c6fff'};
-           color:${isFree||isHigh?'#000':'#fff'};
-           border-radius:10px;font-size:1rem;font-weight:700;
-           text-decoration:none;letter-spacing:.02em"
-         target="_blank">
-        ${isFree ? 'Get My Free Package →' : `Claim My ${d.pct}% Discount — $${d.discountedPrice} →`}
-      </a>
+      <div style="background:#0d0d0d;border:1px solid #1a1a1a;border-radius:10px;
+        padding:1rem;margin-bottom:1.5rem;text-align:left;max-width:420px;margin-left:auto;margin-right:auto;">
+        <div style="font-size:.78rem;color:#555;margin-bottom:.5rem;">What the $25 covers:</div>
+        <div style="font-size:.82rem;color:#ccc;line-height:1.9;">
+          ✓ All 14+ pre-filled documents<br>
+          ✓ Auto-generated nexus letters, record requests, forms<br>
+          ✓ CFR 38 rating math and TDIU analysis<br>
+          ✓ Lifetime access to your generated package<br>
+          ✓ Helps fund the next veteran's free access
+        </div>
+      </div>
 
-      <div style="font-size:.72rem;color:#444;margin-top:1rem">
-        Code: ${d.coupon} · This discount expires when you close this page
+      <!-- OPTIONAL DONATION -->
+      <div style="border-top:1px solid #1a1a1a;padding-top:1.5rem;margin-bottom:1.5rem;">
+        <div style="font-size:.78rem;color:#555;margin-bottom:.8rem;text-transform:uppercase;letter-spacing:.08em;">
+          Add a donation? (completely optional)
+        </div>
+        <p style="font-size:.8rem;color:#666;margin-bottom:.8rem;line-height:1.6;">
+          100% goes toward keeping Art of Proof free for veterans who can't afford anything.
+          No pressure — the $25 is enough.
+        </p>
+        <div style="display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:.5rem;">
+          <button class="don-btn" onclick="selectDonation(0,'',this)"
+            style="padding:.5rem 1rem;border-radius:8px;border:1px solid #2a2a4e;
+              background:#1a1a2e;color:#7c6fff;cursor:pointer;font-size:.85rem;font-weight:600;">
+            $0
+          </button>
+          <button class="don-btn" onclick="selectDonation(10,'${PAYMENT_CONFIG.donation_links[10]}',this)"
+            style="padding:.5rem 1rem;border-radius:8px;border:1px solid #2a2a4e;
+              background:#1a1a2e;color:#7c6fff;cursor:pointer;font-size:.85rem;font-weight:600;">
+            $10
+          </button>
+          <button class="don-btn" onclick="selectDonation(25,'${PAYMENT_CONFIG.donation_links[25]}',this)"
+            style="padding:.5rem 1rem;border-radius:8px;border:1px solid #2a2a4e;
+              background:#1a1a2e;color:#7c6fff;cursor:pointer;font-size:.85rem;font-weight:600;">
+            $25
+          </button>
+          <button class="don-btn" onclick="selectDonation(50,'${PAYMENT_CONFIG.donation_links[50]}',this)"
+            style="padding:.5rem 1rem;border-radius:8px;border:1px solid #2a2a4e;
+              background:#1a1a2e;color:#7c6fff;cursor:pointer;font-size:.85rem;font-weight:600;">
+            $50
+          </button>
+          <button class="don-btn" onclick="selectDonation(100,'${PAYMENT_CONFIG.donation_links[100]}',this)"
+            style="padding:.5rem 1rem;border-radius:8px;border:1px solid #2a2a4e;
+              background:#1a1a2e;color:#7c6fff;cursor:pointer;font-size:.85rem;font-weight:600;">
+            $100
+          </button>
+        </div>
+        <div style="font-size:.75rem;color:#444;margin-top:.3rem;">
+          Total: <span id="payTotal" style="color:#7c6fff;font-weight:700;">$25</span>
+        </div>
+      </div>
+
+      <!-- PAY BUTTON -->
+      <button id="payBtn"
+        style="display:block;width:100%;max-width:360px;margin:0 auto;
+          padding:1rem;background:#7c6fff;color:#fff;border:none;
+          border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;
+          transition:background .2s;"
+        onmouseover="this.style.background='#6b5ce7'"
+        onmouseout="this.style.background='#7c6fff'">
+        Pay $25 Admin Fee →
+      </button>
+
+      <div style="font-size:.75rem;color:#333;margin-top:1rem;line-height:1.6;">
+        Secure payment via Stripe &nbsp;·&nbsp;
+        <a href="mailto:artofproof@echo-universe.dev"
+           style="color:#444;text-decoration:none;">
+          Questions? Email us
+        </a>
+      </div>
+
+      <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid #1a1a1a;
+        font-size:.78rem;color:#333;line-height:1.7;">
+        Can't afford the admin fee? Email
+        <a href="mailto:artofproof@echo-universe.dev" style="color:#555;">
+          artofproof@echo-universe.dev
+        </a>
+        — we'll work something out. No veteran gets left behind.
       </div>
     </div>`;
 
   container.style.display = 'block';
   container.scrollIntoView({behavior:'smooth'});
-  return d;
+  updatePayBtn();
 }
 
-// ─── COPY / DOWNLOAD ─────────────────────────────────────────────────────────
+// ─── COPY / DOWNLOAD
+ ─────────────────────────────────────────────────────────
 function copyDoc(btn) {
   const content = btn.closest('.doc-card').querySelector('.doc-body').dataset.content;
   navigator.clipboard.writeText(content).then(() => {
