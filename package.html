@@ -280,7 +280,6 @@ textarea{min-height:80px;resize:vertical;}
     <div id="paymentReveal" style="display:none;"></div>
   <div id="scoresArea" style="margin-bottom:1.5rem;"></div>
 
-    <div id="docSection"></div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;">
       <h2 style="font-size:1.1rem;color:var(--p);">Your Complete Package — <span id="docCount">0</span> Documents</h2>
       <button class="btn btn-green" onclick="downloadAll()">⬇ Download All Documents</button>
@@ -340,7 +339,6 @@ function addCondition() {
   div.id = id;
   div.style.cssText = 'background:var(--bg3);border:1px solid var(--brd);border-radius:10px;padding:1rem;margin-bottom:.8rem;';
   div.innerHTML = `
-    <div id="docSection"></div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;">
       <strong style="font-size:.85rem;color:var(--p);">Condition ${condCount}</strong>
       ${condCount>1?`<button onclick="document.getElementById('${id}').remove()" style="background:none;border:none;color:var(--mu);cursor:pointer;font-size:.8rem;">Remove</button>`:''}
@@ -381,7 +379,6 @@ function addBuddy() {
   div.id = id;
   div.style.cssText = 'background:var(--bg3);border:1px solid var(--brd);border-radius:10px;padding:1rem;margin-bottom:.8rem;';
   div.innerHTML = `
-    <div id="docSection"></div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;">
       <strong style="font-size:.85rem;color:var(--p);">Buddy ${buddyCount}</strong>
       <button onclick="document.getElementById('${id}').remove()" style="background:none;border:none;color:var(--mu);cursor:pointer;font-size:.8rem;">Remove</button>
@@ -403,7 +400,6 @@ function addProvider() {
   div.id = id;
   div.style.cssText = 'background:var(--bg3);border:1px solid var(--brd);border-radius:10px;padding:1rem;margin-bottom:.8rem;';
   div.innerHTML = `
-    <div id="docSection"></div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;">
       <strong style="font-size:.85rem;color:var(--p);">Provider ${provCount}</strong>
       <button onclick="document.getElementById('${id}').remove()" style="background:none;border:none;color:var(--mu);cursor:pointer;font-size:.8rem;">Remove</button>
