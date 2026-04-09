@@ -3,433 +3,1098 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Art of Proof™ — Your Evidence Preparation Package</title>
+<title>Art of Proof™ — Complete VA Claim Package</title>
 <style>
-  :root { --purple:#7c6fff; --green:#4ade80; --blue:#60a5fa; --red:#f87171; --gold:#fbbf24; --bg:#0a0a0a; --bg2:#111; --bg3:#1a1a1a; --border:#222; --text:#e0e0e0; --muted:#888; }
-  * { box-sizing:border-box; margin:0; padding:0; }
-  body { font-family:system-ui,-apple-system,sans-serif; background:var(--bg); color:var(--text); }
-  .header { background:linear-gradient(135deg,#0d0d1a,#0a1628); padding:2rem 1rem; text-align:center; border-bottom:1px solid #1a1a2e; }
-  .header h1 { font-size:1.8rem; font-weight:700; color:var(--purple); }
-  .header p { color:var(--muted); margin-top:0.5rem; font-size:0.9rem; }
-  .container { max-width:780px; margin:0 auto; padding:2rem 1rem; }
-  .card { background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:1.5rem; margin-bottom:1.5rem; }
-  .card h2 { font-size:1.05rem; color:var(--purple); margin-bottom:0.8rem; }
-  label { display:block; font-size:0.82rem; color:var(--muted); margin:0.8rem 0 0.3rem; }
-  select,input,textarea { width:100%; padding:0.6rem 0.8rem; background:var(--bg3); border:1px solid #2a2a2a; border-radius:8px; color:var(--text); font-size:0.88rem; outline:none; }
-  select:focus,input:focus,textarea:focus { border-color:var(--purple); }
-  textarea { min-height:85px; resize:vertical; font-family:inherit; }
-  .btn { width:100%; padding:0.85rem; background:var(--purple); color:#fff; border:none; border-radius:10px; cursor:pointer; font-size:1rem; font-weight:600; margin-top:1rem; transition:background 0.2s; }
-  .btn:hover { background:#6b5ce7; }
-  .btn-dl { background:#1a3a1a; color:var(--green); border:1px solid #2d5a2d; margin-top:0.75rem; }
-  .btn-dl:hover { background:#243a24; }
-  .hidden { display:none; }
-  /* Report styles */
-  #report { background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:2rem; margin-top:1.5rem; }
-  .report-header { border-bottom:2px solid var(--purple); padding-bottom:1rem; margin-bottom:1.5rem; }
-  .report-header h2 { font-size:1.4rem; color:var(--purple); }
-  .report-header .meta { font-size:0.78rem; color:var(--muted); margin-top:0.4rem; }
-  .score-row { display:flex; gap:1rem; margin:1rem 0; flex-wrap:wrap; }
-  .s-box { flex:1; min-width:120px; background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:1rem; text-align:center; }
-  .s-val { font-size:2rem; font-weight:800; }
-  .s-lab { font-size:0.7rem; color:var(--muted); margin-top:0.2rem; }
-  .fc{color:var(--green)} .lrs{color:var(--blue)} .fir{color:var(--red)}
-  .verdict { padding:0.8rem 1rem; border-radius:8px; font-weight:700; text-align:center; margin:1rem 0; }
-  .v-high{background:#0d1f0d;color:var(--green);border:1px solid #1a3a1a}
-  .v-mod{background:#1f1f0a;color:var(--gold);border:1px solid #3a3a10}
-  .v-low{background:#1f0d0d;color:var(--red);border:1px solid #3a1a1a}
-  .section-title { font-size:0.85rem; font-weight:700; color:var(--purple); text-transform:uppercase; letter-spacing:0.06em; margin:1.5rem 0 0.6rem; padding-bottom:0.4rem; border-bottom:1px solid var(--border); }
-  .checklist { list-style:none; }
-  .checklist li { padding:0.45rem 0; font-size:0.85rem; border-bottom:1px solid #151515; display:flex; align-items:flex-start; gap:0.5rem; }
-  .check-ok::before { content:"✓"; color:var(--green); font-weight:bold; flex-shrink:0; }
-  .check-warn::before { content:"⚠"; color:var(--gold); flex-shrink:0; }
-  .check-miss::before { content:"✗"; color:var(--red); flex-shrink:0; }
-  .template-box { background:var(--bg3); border:1px solid #2a2a2a; border-radius:8px; padding:1rem; font-size:0.82rem; line-height:1.7; color:#ccc; white-space:pre-wrap; font-family:inherit; margin-top:0.5rem; }
-  .rating-table { width:100%; border-collapse:collapse; font-size:0.82rem; margin-top:0.5rem; }
-  .rating-table th { background:#1a1a2e; color:var(--purple); padding:0.5rem; text-align:left; font-weight:600; }
-  .rating-table td { padding:0.45rem 0.5rem; border-bottom:1px solid #151515; color:#ccc; }
-  .tdiu-box { background:#1a1a2e; border:1px solid #2a2a4e; border-radius:8px; padding:1rem; margin-top:0.5rem; }
-  .tdiu-box h4 { color:var(--blue); font-size:0.9rem; margin-bottom:0.4rem; }
-  .ref-seal { font-size:0.72rem; color:#444; margin-top:2rem; padding-top:1rem; border-top:1px solid #1a1a1a; text-align:center; }
+:root{--p:#7c6fff;--g:#4ade80;--b:#60a5fa;--r:#f87171;--gold:#fbbf24;
+--bg:#0a0a0a;--bg2:#111;--bg3:#1a1a1a;--brd:#222;--tx:#e0e0e0;--mu:#888;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--tx);}
+.hdr{background:linear-gradient(135deg,#0d0d1a,#0a1628);padding:2rem 1rem;text-align:center;border-bottom:1px solid #1a1a2e;}
+.hdr h1{font-size:1.8rem;font-weight:700;color:var(--p);}
+.hdr p{color:var(--mu);margin-top:.5rem;font-size:.9rem;}
+.wrap{max-width:860px;margin:0 auto;padding:2rem 1rem;}
+/* PROGRESS BAR */
+.progress{display:flex;gap:.5rem;margin-bottom:2rem;align-items:center;}
+.step{flex:1;height:4px;background:#222;border-radius:2px;transition:background .3s;}
+.step.done{background:var(--p);}
+.step.active{background:var(--g);}
+.step-label{font-size:.75rem;color:var(--mu);text-align:center;margin-top:.3rem;}
+/* SECTIONS */
+.section{display:none;}
+.section.active{display:block;}
+.card{background:var(--bg2);border:1px solid var(--brd);border-radius:14px;padding:1.5rem;margin-bottom:1rem;}
+.card-title{font-size:1rem;font-weight:700;color:var(--p);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;}
+.card-title span{background:#1a1a2e;color:var(--p);border:1px solid #2a2a4e;width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0;}
+/* FORM */
+.row{display:grid;gap:1rem;margin-bottom:.5rem;}
+.row-2{grid-template-columns:1fr 1fr;}
+.row-3{grid-template-columns:1fr 1fr 1fr;}
+@media(max-width:560px){.row-2,.row-3{grid-template-columns:1fr;}}
+.field{display:flex;flex-direction:column;gap:.3rem;}
+label{font-size:.8rem;color:var(--mu);}
+label .req{color:var(--r);}
+input,select,textarea{background:var(--bg3);border:1px solid #2a2a2a;border-radius:8px;color:var(--tx);padding:.6rem .8rem;font-size:.88rem;outline:none;width:100%;transition:border-color .2s;font-family:inherit;}
+input:focus,select:focus,textarea:focus{border-color:var(--p);}
+textarea{min-height:80px;resize:vertical;}
+.checkbox-group{display:flex;flex-direction:column;gap:.5rem;margin-top:.3rem;}
+.checkbox-group label{display:flex;align-items:flex-start;gap:.5rem;font-size:.85rem;color:var(--tx);cursor:pointer;}
+.checkbox-group input[type=checkbox]{width:16px;height:16px;flex-shrink:0;margin-top:2px;}
+/* BUTTONS */
+.btn{padding:.8rem 1.5rem;border-radius:10px;border:none;cursor:pointer;font-size:.95rem;font-weight:600;transition:background .2s;}
+.btn-primary{background:var(--p);color:#fff;}
+.btn-primary:hover{background:#6b5ce7;}
+.btn-secondary{background:var(--bg3);color:var(--tx);border:1px solid var(--brd);}
+.btn-secondary:hover{border-color:var(--p);}
+.btn-green{background:#1a3a1a;color:var(--g);border:1px solid #2d5a2d;}
+.btn-green:hover{background:#243a24;}
+.btn-row{display:flex;gap:1rem;justify-content:space-between;margin-top:1.5rem;flex-wrap:wrap;}
+/* DOCUMENTS */
+.doc-grid{display:grid;gap:1rem;}
+.doc-card{background:var(--bg2);border:1px solid var(--brd);border-radius:12px;overflow:hidden;}
+.doc-header{background:#0d0d1f;padding:.8rem 1rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--brd);}
+.doc-title{font-size:.9rem;font-weight:700;color:var(--p);}
+.doc-badge{font-size:.7rem;padding:.2rem .6rem;border-radius:10px;background:#1a3a1a;color:var(--g);border:1px solid #2d5a2d;}
+.doc-body{padding:1rem;background:var(--bg3);font-size:.8rem;line-height:1.8;color:#ccc;white-space:pre-wrap;font-family:"Courier New",monospace;max-height:320px;overflow-y:auto;}
+.doc-actions{padding:.8rem 1rem;display:flex;gap:.5rem;border-top:1px solid var(--brd);}
+.mini-btn{padding:.4rem .8rem;border-radius:6px;border:none;cursor:pointer;font-size:.78rem;font-weight:600;}
+.mini-copy{background:#1a1a2e;color:var(--b);}
+.mini-dl{background:#1a3a1a;color:var(--g);}
+/* SCORES */
+.score-strip{display:flex;gap:1rem;margin:1rem 0;flex-wrap:wrap;}
+.sc{flex:1;min-width:100px;background:var(--bg);border:1px solid var(--brd);border-radius:10px;padding:.8rem;text-align:center;}
+.sc-val{font-size:1.8rem;font-weight:800;}
+.sc-lab{font-size:.68rem;color:var(--mu);margin-top:.2rem;}
+.verdict{padding:.8rem 1rem;border-radius:8px;font-weight:700;text-align:center;margin:.8rem 0;}
+.v-high{background:#0d1f0d;color:var(--g);border:1px solid #1a3a1a;}
+.v-mod{background:#1f1f0a;color:var(--gold);border:1px solid #3a3a10;}
+.v-low{background:#1f0d0d;color:var(--r);border:1px solid #3a1a1a;}
+.fc{color:var(--g)}.lrs{color:var(--b)}.fir{color:var(--r)}
+.gap-list{list-style:none;}
+.gap-list li{padding:.45rem 0;border-bottom:1px solid #151515;font-size:.83rem;}
+.gap-ok::before{content:"✓ ";color:var(--g);font-weight:bold;}
+.gap-warn::before{content:"⚠ ";color:var(--gold);}
+.gap-miss::before{content:"✗ ";color:var(--r);}
+.section-label{font-size:.75rem;color:var(--p);text-transform:uppercase;letter-spacing:.08em;margin:1.5rem 0 .6rem;padding-bottom:.3rem;border-bottom:1px solid var(--brd);}
 </style>
 </head>
 <body>
-
-<div class="header">
+<div class="hdr">
   <h1>Art of Proof™</h1>
-  <p>VA Disability Evidence Preparation Package — Complete Report Generator</p>
+  <p>Complete VA Claim Package — Enter your information once, receive every document auto-filled</p>
 </div>
 
-<div class="container">
-
-  <!-- INTAKE FORM -->
-  <div id="intakeSection">
-    <div class="card">
-      <h2>Step 1 — Your Information</h2>
-      <label>Your Name</label>
-      <input type="text" id="vetName" placeholder="Your full name">
-      <label>Claim Type</label>
-      <select id="claimType">
-        <option value="va_disability">VA Service-Connected Disability</option>
-        <option value="va_tdiu">VA Total Disability (TDIU)</option>
-        <option value="va_secondary">VA Secondary Service Connection</option>
-        <option value="va_increase">VA Rating Increase</option>
-        <option value="workers_comp">Workers Compensation</option>
-        <option value="social_security">Social Security Disability</option>
-      </select>
-      <label>Your Condition / Disability</label>
-      <input type="text" id="condition" placeholder="e.g. PTSD, tinnitus, back injury, hearing loss">
-      <label>How is it connected to your service?</label>
-      <textarea id="nexus" placeholder="e.g. Developed PTSD after combat deployment in Gulf War 1991. Tinnitus from exposure to artillery fire during basic training and deployment."></textarea>
-      <label>Service Period</label>
-      <input type="text" id="service" placeholder="e.g. U.S. Army, 1989–1991, honorable discharge">
+<div class="wrap">
+  <!-- PROGRESS -->
+  <div style="margin-bottom:1.5rem;">
+    <div class="progress">
+      <div class="step active" id="s1"></div>
+      <div class="step" id="s2"></div>
+      <div class="step" id="s3"></div>
+      <div class="step" id="s4"></div>
+      <div class="step" id="s5"></div>
     </div>
-
-    <div class="card">
-      <h2>Step 2 — Your Evidence</h2>
-      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.8rem;line-height:1.6">List each piece of evidence on its own line. Format: <code style="color:var(--purple)">type | description</code><br>
-      Types: <code style="color:#666">certified_copy</code> · <code style="color:#666">medical_records</code> · <code style="color:#666">agency_database</code> · <code style="color:#666">notarized_affidavit</code> · <code style="color:#666">buddy_statement</code> · <code style="color:#666">personal_statement</code> · <code style="color:#666">signed_uncertified</code></p>
-      <textarea id="evidence" rows="7" placeholder="certified_copy | DD-214 honorable discharge, U.S. Army 1989-1991&#10;agency_database | VA medical records from VA.gov MyHealtheVet, 2015-2024&#10;medical_records | Nexus letter from Dr. Sarah Johnson, VA physician, dated 2024&#10;buddy_statement | Buddy statement from Sgt. Marcus Williams, confirmed exposure&#10;personal_statement | My personal statement describing PTSD symptoms and impact on employment"></textarea>
-
-      <label>Current Disability Ratings (if any, for combined/TDIU calculation)</label>
-      <input type="text" id="ratings" placeholder="e.g. 50% PTSD, 10% tinnitus, 10% back — or leave blank if first claim">
+    <div style="display:flex;gap:.5rem;font-size:.72rem;color:var(--mu);text-align:center;">
+      <div style="flex:1">Personal</div>
+      <div style="flex:1">Service</div>
+      <div style="flex:1">Conditions</div>
+      <div style="flex:1">Evidence</div>
+      <div style="flex:1">Package</div>
     </div>
-
-    <div class="card">
-      <h2>Step 3 — Filing Information</h2>
-      <label>Have you filed an Intent to File?</label>
-      <select id="itf">
-        <option value="yes">Yes — I have an Intent to File on record</option>
-        <option value="no">No — this will be my first filing</option>
-        <option value="unknown">Not sure</option>
-      </select>
-      <label>Have you been denied before on this condition?</label>
-      <select id="denied">
-        <option value="no">No — first claim</option>
-        <option value="yes_sc">Yes — denied service connection</option>
-        <option value="yes_rating">Yes — denied / low rating</option>
-        <option value="appeal">Currently in appeal</option>
-      </select>
-    </div>
-
-    <button class="btn" onclick="generateReport()">Generate My Evidence Package →</button>
   </div>
 
-  <!-- REPORT OUTPUT -->
-  <div id="reportSection" class="hidden">
-    <div id="report">
-      <div class="report-header">
-        <h2>Art of Proof™ — Evidence Preparation Report</h2>
-        <div class="meta" id="reportMeta"></div>
+  <!-- ═══ SECTION 1: PERSONAL INFO ═══ -->
+  <div class="section active" id="sec1">
+    <div class="card">
+      <div class="card-title"><span>1</span>Your Personal Information</div>
+      <div class="row row-2">
+        <div class="field"><label>First Name <span class="req">*</span></label><input id="firstName" placeholder="Nathan"></div>
+        <div class="field"><label>Last Name <span class="req">*</span></label><input id="lastName" placeholder="Poinsette"></div>
       </div>
-
-      <div class="section-title">Evidence Scores</div>
-      <div class="score-row">
-        <div class="s-box"><div class="s-val fc" id="rFc">—</div><div class="s-lab">FC Score<br>Factual Confidence</div></div>
-        <div class="s-box"><div class="s-val lrs" id="rLrs">—</div><div class="s-lab">LRS Score<br>Legal Readiness</div></div>
-        <div class="s-box"><div class="s-val fir" id="rFir">—</div><div class="s-lab">FIR Score<br>Integrity Risk</div></div>
+      <div class="row row-3">
+        <div class="field"><label>Social Security # (last 4 only)</label><input id="ssn4" placeholder="XXXX" maxlength="4"></div>
+        <div class="field"><label>Date of Birth</label><input type="date" id="dob"></div>
+        <div class="field"><label>VA File # (if known)</label><input id="vaFile" placeholder="Optional"></div>
       </div>
-      <div class="verdict" id="rVerdict"></div>
-
-      <div class="section-title">Evidence Checklist</div>
-      <ul class="checklist" id="rChecklist"></ul>
-
-      <div class="section-title">Rating & TDIU Analysis</div>
-      <div id="rRating"></div>
-
-      <div class="section-title">Nexus Letter Template</div>
-      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.5rem">Use this template with your treating physician or independent medical examiner. Fill in the bracketed fields.</p>
-      <div class="template-box" id="rNexus"></div>
-
-      <div class="section-title">Records Request Letter Template</div>
-      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.5rem">Send this to the VA or your medical provider to obtain certified copies of your records.</p>
-      <div class="template-box" id="rRequest"></div>
-
-      <div class="section-title">Personal Statement Guide</div>
-      <div id="rStatement"></div>
-
-      <div class="section-title">Gap Analysis — Priority Actions</div>
-      <ul class="checklist" id="rGaps"></ul>
-
-      <div class="section-title">Timeline & Deadlines</div>
-      <div id="rTimeline"></div>
-
-      <div class="ref-seal" id="rSeal"></div>
+      <div class="row row-2">
+        <div class="field"><label>Mailing Address</label><input id="address" placeholder="123 Main St, City, State, ZIP"></div>
+        <div class="field"><label>Phone Number</label><input id="phone" placeholder="(555) 555-5555"></div>
+      </div>
+      <div class="field"><label>Email Address</label><input type="email" id="email" placeholder="your@email.com"></div>
     </div>
-
-    <button class="btn btn-dl" onclick="downloadReport()">⬇ Download Report as PDF</button>
-    <button class="btn" onclick="window.print()" style="margin-top:0.5rem;background:#1a1a2e;color:var(--blue);border:1px solid #2a2a4e;">Print Report</button>
+    <div class="btn-row">
+      <div></div>
+      <button class="btn btn-primary" onclick="go(2)">Next: Service History →</button>
+    </div>
   </div>
 
+  <!-- ═══ SECTION 2: SERVICE INFO ═══ -->
+  <div class="section" id="sec2">
+    <div class="card">
+      <div class="card-title"><span>2</span>Military Service History</div>
+      <div class="row row-3">
+        <div class="field"><label>Branch of Service <span class="req">*</span></label>
+          <select id="branch">
+            <option value="">Select branch</option>
+            <option>Army</option><option>Navy</option><option>Marine Corps</option>
+            <option>Air Force</option><option>Coast Guard</option><option>Space Force</option>
+            <option>Army National Guard</option><option>Air National Guard</option>
+          </select>
+        </div>
+        <div class="field"><label>Entry Date <span class="req">*</span></label><input type="date" id="entryDate"></div>
+        <div class="field"><label>Discharge Date <span class="req">*</span></label><input type="date" id="dischargeDate"></div>
+      </div>
+      <div class="row row-2">
+        <div class="field"><label>Discharge Type <span class="req">*</span></label>
+          <select id="dischargeType">
+            <option value="Honorable">Honorable</option>
+            <option value="General Under Honorable Conditions">General Under Honorable Conditions</option>
+            <option value="Other Than Honorable">Other Than Honorable</option>
+            <option value="Bad Conduct Discharge">Bad Conduct Discharge</option>
+            <option value="Dishonorable">Dishonorable</option>
+          </select>
+        </div>
+        <div class="field"><label>Military Occupation / MOS</label><input id="mos" placeholder="e.g. 11B Infantry, HM Hospital Corpsman"></div>
+      </div>
+      <div class="row row-2">
+        <div class="field"><label>Unit / Company (at time of injury/exposure)</label><input id="unit" placeholder="e.g. B Co, 1-7 Cav, 1st Cav Div"></div>
+        <div class="field"><label>Duty Station(s)</label><input id="dutyStation" placeholder="e.g. Ft. Hood TX, then Kuwait/Iraq"></div>
+      </div>
+      <div class="field"><label>Deployment(s) — Theater, Dates, Unit</label>
+        <textarea id="deployments" placeholder="e.g. Operation Desert Storm, Aug 1990 – Mar 1991, B Co 1-7 CAV&#10;e.g. Operation Iraqi Freedom, Mar 2003 – Oct 2003, 2nd BN 5th Marines"></textarea>
+      </div>
+      <div class="field" style="margin-top:.8rem"><label>Awards, Decorations, and Commendations</label>
+        <textarea id="awards" placeholder="e.g. Combat Infantryman Badge, Army Commendation Medal w/V Device, Purple Heart&#10;These are relevant evidence — the VA considers them when evaluating service exposure"></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>2b</span>Records to Request (check all that apply)</div>
+      <p style="font-size:.82rem;color:var(--mu);margin-bottom:.8rem;line-height:1.6">We will generate request letters for everything you check. You enter your information once — every letter is pre-filled.</p>
+      <div class="checkbox-group">
+        <label><input type="checkbox" id="req_dd214" checked> DD-214 (Report of Separation) — certified copy from NPRC</label>
+        <label><input type="checkbox" id="req_ompf" checked> Official Military Personnel File (OMPF) — duty stations, assignments, awards, disciplinary record</label>
+        <label><input type="checkbox" id="req_str"> Service Treatment Records (STR) — medical records from active duty</label>
+        <label><input type="checkbox" id="req_meps"> MEPS Physical Records — pre-induction physical and MEPS exam results</label>
+        <label><input type="checkbox" id="req_va_medical" checked> VA Medical Records (from VA.gov MyHealtheVet)</label>
+        <label><input type="checkbox" id="req_c_file"> VA Claims File (C-File) — your complete VA claims history</label>
+        <label><input type="checkbox" id="req_private"> Private Medical Records (via VA Form 21-4142 release authorization)</label>
+        <label><input type="checkbox" id="req_awards_orders"> Award Orders and Deployment Orders from unit records</label>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="go(1)">← Back</button>
+      <button class="btn btn-primary" onclick="go(3)">Next: Your Conditions →</button>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION 3: CONDITIONS ═══ -->
+  <div class="section" id="sec3">
+    <div class="card">
+      <div class="card-title"><span>3</span>Your Claimed Conditions</div>
+      <p style="font-size:.82rem;color:var(--mu);margin-bottom:1rem;line-height:1.6">List each condition separately. Every field here flows into your nexus letters, personal statement, and Form 21-0781 automatically.</p>
+
+      <div id="conditionList"></div>
+      <button class="btn btn-secondary" onclick="addCondition()" style="margin-top:.8rem;width:100%;padding:.6rem;">+ Add Another Condition</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>3b</span>Claim Type</div>
+      <div class="row row-2">
+        <div class="field"><label>Primary Claim Type</label>
+          <select id="claimTypeMain">
+            <option value="new">New Claim — first time filing this condition</option>
+            <option value="increase">Rating Increase — condition has worsened</option>
+            <option value="secondary">Secondary Service Connection — caused by service-connected condition</option>
+            <option value="tdiu">TDIU — Total Disability based on Unemployability</option>
+            <option value="supplemental">Supplemental Claim — new evidence after denial</option>
+          </select>
+        </div>
+        <div class="field"><label>Intent to File Status</label>
+          <select id="itfStatus">
+            <option value="not_filed">Not yet filed — I need to file immediately</option>
+            <option value="filed">Filed — I have an active Intent to File</option>
+            <option value="unknown">Not sure</option>
+          </select>
+        </div>
+      </div>
+      <div class="field" style="margin-top:.8rem"><label>Previous Denials (if any)</label>
+        <textarea id="denials" placeholder="e.g. Denied service connection for PTSD, May 2022, reason: insufficient nexus evidence&#10;Leave blank if this is a new claim"></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>3c</span>TDIU Information (if applicable)</div>
+      <div class="row row-2">
+        <div class="field"><label>Last Employer</label><input id="lastEmployer" placeholder="Company name"></div>
+        <div class="field"><label>Last Date Worked</label><input type="date" id="lastWorked"></div>
+      </div>
+      <div class="field"><label>Why can't you work? (how your service-connected conditions prevent employment)</label>
+        <textarea id="unemployable" placeholder="e.g. My PTSD causes severe panic attacks in workplace settings, inability to concentrate, and frequent absences. My back injury prevents me from standing or sitting for more than 20 minutes."></textarea>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="go(2)">← Back</button>
+      <button class="btn btn-primary" onclick="go(4)">Next: Your Evidence →</button>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION 4: EVIDENCE ═══ -->
+  <div class="section" id="sec4">
+    <div class="card">
+      <div class="card-title"><span>4</span>Your Evidence Inventory</div>
+      <p style="font-size:.82rem;color:var(--mu);margin-bottom:.8rem;line-height:1.6">List what you have. Format: <code style="color:var(--p)">type | description</code><br>
+      Types: <code style="color:#666">certified_copy</code> · <code style="color:#666">medical_records</code> · <code style="color:#666">agency_database</code> · <code style="color:#666">notarized_affidavit</code> · <code style="color:#666">buddy_statement</code> · <code style="color:#666">personal_statement</code> · <code style="color:#666">nexus_letter</code> · <code style="color:#666">dbq_form</code> · <code style="color:#666">signed_uncertified</code></p>
+      <textarea id="evidence" rows="8" placeholder="certified_copy | DD-214 honorable discharge&#10;agency_database | VA medical records 2015-2024 from MyHealtheVet&#10;medical_records | Nexus letter from Dr. Sarah Johnson, July 2024&#10;buddy_statement | Buddy statement from Sgt. Marcus Williams&#10;personal_statement | My personal statement describing symptoms"></textarea>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>4b</span>Buddy Statement Contacts</div>
+      <p style="font-size:.82rem;color:var(--mu);margin-bottom:.8rem">We'll generate a buddy statement template pre-filled for each person you list.</p>
+      <div id="buddyList"></div>
+      <button class="btn btn-secondary" onclick="addBuddy()" style="margin-top:.8rem;width:100%;padding:.6rem;">+ Add Buddy Statement Contact</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>4c</span>Private Medical Providers</div>
+      <p style="font-size:.82rem;color:var(--mu);margin-bottom:.8rem">For each private provider, we generate a pre-filled VA Form 21-4142 release authorization.</p>
+      <div id="providerList"></div>
+      <button class="btn btn-secondary" onclick="addProvider()" style="margin-top:.8rem;width:100%;padding:.6rem;">+ Add Medical Provider</button>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="go(3)">← Back</button>
+      <button class="btn btn-primary" onclick="generatePackage()">Generate Complete Package →</button>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION 5: PACKAGE ═══ -->
+  <div class="section" id="sec5">
+    <div id="scoresArea" style="margin-bottom:1.5rem;"></div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;">
+      <h2 style="font-size:1.1rem;color:var(--p);">Your Complete Package — <span id="docCount">0</span> Documents</h2>
+      <button class="btn btn-green" onclick="downloadAll()">⬇ Download All Documents</button>
+    </div>
+
+    <div class="doc-grid" id="docGrid"></div>
+
+    <div style="margin-top:2rem;padding:1.5rem;background:var(--bg2);border:1px solid var(--brd);border-radius:12px;">
+      <div class="section-label">What to do with these documents</div>
+      <ol style="font-size:.85rem;color:#ccc;line-height:2.2;margin-left:1.2rem;">
+        <li><strong style="color:var(--tx)">File Intent to File NOW</strong> at VA.gov if you haven't — locks in your effective date for back pay</li>
+        <li><strong style="color:var(--tx)">Submit SF-180 and NPRC requests</strong> — mail or fax to get your military records</li>
+        <li><strong style="color:var(--tx)">Submit VA Form 21-4142</strong> — release forms so VA can pull your private medical records</li>
+        <li><strong style="color:var(--tx)">Take nexus letter template to your doctor</strong> — ask them to complete and sign it on their letterhead</li>
+        <li><strong style="color:var(--tx)">Have buddies sign their statements</strong> — notarized if possible</li>
+        <li><strong style="color:var(--tx)">File VA Form 21-526EZ</strong> — attach everything once you have it all</li>
+      </ol>
+      <p style="font-size:.78rem;color:#555;margin-top:1rem;">This package is a preparation tool, not legal advice. A VSO (DAV, American Legion, VFW) will file for free and can review your complete package before submission.</p>
+    </div>
+  </div>
 </div>
 
 <script>
+// ─── DATA STORE ─────────────────────────────────────────────────────────────
+let conditions = [];
+let buddies = [];
+let providers = [];
+let condCount = 0;
+let buddyCount = 0;
+let provCount = 0;
+
+// ─── PROVENANCE WEIGHTS ─────────────────────────────────────────────────────
 const PW = {
   "certified_copy":1.00,"court_certified":1.00,"registrar_extract":1.00,
   "notarized_affidavit":0.92,"official_transcript":0.90,"agency_database":0.88,
-  "medical_records":0.90,"buddy_statement":0.70,"personal_statement":0.55,
-  "signed_uncertified":0.65,"lay_statement":0.60,"dbq_form":0.95,
-  "nexus_letter":0.95,"service_records":0.90,"unknown":0.35
+  "medical_records":0.90,"nexus_letter":0.95,"dbq_form":0.95,
+  "buddy_statement":0.70,"personal_statement":0.55,
+  "signed_uncertified":0.65,"service_records":0.90,"unknown":0.35
 };
 
-const THRESH = {
-  "va_disability":{ min_fc:0.60, min_items:3 },
-  "va_tdiu":{ min_fc:0.70, min_items:4 },
-  "va_secondary":{ min_fc:0.65, min_items:3 },
-  "va_increase":{ min_fc:0.60, min_items:2 },
-  "workers_comp":{ min_fc:0.65, min_items:3 },
-  "social_security":{ min_fc:0.70, min_items:3 }
-};
-
-function combineRatings(arr) {
-  if (!arr.length) return 0;
-  let rem = 100;
-  arr.sort((a,b)=>b-a).forEach(r => rem -= rem*(r/100));
-  const raw = 100 - rem;
-  return raw % 10 >= 5 ? Math.ceil(raw/10)*10 : Math.floor(raw/10)*10;
+// ─── NAVIGATION ──────────────────────────────────────────────────────────────
+function go(n) {
+  for (let i=1;i<=5;i++) {
+    document.getElementById('sec'+i).classList.toggle('active',i===n);
+    const s = document.getElementById('s'+i);
+    s.classList.toggle('done', i<n);
+    s.classList.toggle('active', i===n);
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function tdiuEligible(arr) {
-  if (!arr.length) return false;
-  if (Math.max(...arr) >= 60) return true;
-  return combineRatings(arr) >= 70 && Math.max(...arr) >= 40;
+// ─── DYNAMIC INPUTS ─────────────────────────────────────────────────────────
+function addCondition() {
+  condCount++;
+  const id = 'cond_'+condCount;
+  const div = document.createElement('div');
+  div.id = id;
+  div.style.cssText = 'background:var(--bg3);border:1px solid var(--brd);border-radius:10px;padding:1rem;margin-bottom:.8rem;';
+  div.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;">
+      <strong style="font-size:.85rem;color:var(--p);">Condition ${condCount}</strong>
+      ${condCount>1?`<button onclick="document.getElementById('${id}').remove()" style="background:none;border:none;color:var(--mu);cursor:pointer;font-size:.8rem;">Remove</button>`:''}
+    </div>
+    <div class="row row-2">
+      <div class="field"><label>Condition Name <span class="req">*</span></label>
+        <input class="cond-name" data-id="${condCount}" placeholder="e.g. PTSD, Tinnitus, Lumbar strain"></div>
+      <div class="field"><label>Type</label>
+        <select class="cond-type" data-id="${condCount}">
+          <option value="direct">Direct service connection</option>
+          <option value="secondary">Secondary (caused by service-connected condition)</option>
+          <option value="aggravated">Pre-existing, aggravated by service</option>
+          <option value="presumptive">Presumptive (Gulf War, Agent Orange, etc.)</option>
+        </select>
+      </div>
+    </div>
+    <div class="field"><label>How is this connected to your service?</label>
+      <textarea class="cond-nexus" data-id="${condCount}" rows="2"
+        placeholder="Describe the in-service event, exposure, or injury that caused this condition. Be specific: date, location, what happened."></textarea>
+    </div>
+    <div class="row row-2">
+      <div class="field"><label>When did symptoms start?</label>
+        <input class="cond-onset" data-id="${condCount}" placeholder="e.g. During deployment 1991, or since discharge"></div>
+      <div class="field"><label>Current Disability Rating (if any)</label>
+        <input class="cond-rating" data-id="${condCount}" type="number" min="0" max="100" placeholder="e.g. 50 (for 50%)"></div>
+    </div>
+    <div class="field"><label>How does this affect your daily life and ability to work?</label>
+      <textarea class="cond-impact" data-id="${condCount}" rows="2"
+        placeholder="Describe specific limitations: sleep, concentration, relationships, physical activities, work capacity..."></textarea>
+    </div>`;
+  document.getElementById('conditionList').appendChild(div);
 }
 
-function parseRatings(str) {
-  if (!str.trim()) return [];
-  const nums = str.match(/\d+/g);
-  return nums ? nums.map(Number).filter(n => n > 0 && n <= 100) : [];
+function addBuddy() {
+  buddyCount++;
+  const id = 'buddy_'+buddyCount;
+  const div = document.createElement('div');
+  div.id = id;
+  div.style.cssText = 'background:var(--bg3);border:1px solid var(--brd);border-radius:10px;padding:1rem;margin-bottom:.8rem;';
+  div.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;">
+      <strong style="font-size:.85rem;color:var(--p);">Buddy ${buddyCount}</strong>
+      <button onclick="document.getElementById('${id}').remove()" style="background:none;border:none;color:var(--mu);cursor:pointer;font-size:.8rem;">Remove</button>
+    </div>
+    <div class="row row-3">
+      <div class="field"><label>Full Name</label><input class="buddy-name" data-id="${buddyCount}" placeholder="Sgt. Marcus Williams"></div>
+      <div class="field"><label>Relationship / Rank</label><input class="buddy-rank" data-id="${buddyCount}" placeholder="Served together, B Co 1-7 CAV"></div>
+      <div class="field"><label>Contact (optional)</label><input class="buddy-contact" data-id="${buddyCount}" placeholder="Phone or email"></div>
+    </div>
+    <div class="field"><label>What can they attest to?</label>
+      <input class="buddy-attest" data-id="${buddyCount}" placeholder="e.g. Witnessed IED explosion near Nathan on 15 Mar 2003, has seen PTSD symptoms since discharge"></div>`;
+  document.getElementById('buddyList').appendChild(div);
 }
 
-function generateReport() {
-  const name = document.getElementById("vetName").value || "Veteran";
-  const claimType = document.getElementById("claimType").value;
-  const condition = document.getElementById("condition").value || "[CONDITION]";
-  const nexusText = document.getElementById("nexus").value || "";
-  const service = document.getElementById("service").value || "[SERVICE PERIOD]";
-  const evidenceText = document.getElementById("evidence").value.trim();
-  const ratingsStr = document.getElementById("ratings").value;
-  const itf = document.getElementById("itf").value;
-  const denied = document.getElementById("denied").value;
+function addProvider() {
+  provCount++;
+  const id = 'prov_'+provCount;
+  const div = document.createElement('div');
+  div.id = id;
+  div.style.cssText = 'background:var(--bg3);border:1px solid var(--brd);border-radius:10px;padding:1rem;margin-bottom:.8rem;';
+  div.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;">
+      <strong style="font-size:.85rem;color:var(--p);">Provider ${provCount}</strong>
+      <button onclick="document.getElementById('${id}').remove()" style="background:none;border:none;color:var(--mu);cursor:pointer;font-size:.8rem;">Remove</button>
+    </div>
+    <div class="row row-2">
+      <div class="field"><label>Provider / Facility Name</label><input class="prov-name" data-id="${provCount}" placeholder="Dr. Sarah Johnson / Metro Medical Center"></div>
+      <div class="field"><label>Address</label><input class="prov-addr" data-id="${provCount}" placeholder="123 Medical Blvd, City, State ZIP"></div>
+    </div>
+    <div class="row row-2">
+      <div class="field"><label>Treatment Period</label><input class="prov-dates" data-id="${provCount}" placeholder="2019 – present"></div>
+      <div class="field"><label>Condition Treated</label><input class="prov-cond" data-id="${provCount}" placeholder="PTSD, back pain, etc."></div>
+    </div>`;
+  document.getElementById('providerList').appendChild(div);
+}
 
-  if (!evidenceText) { alert("Please enter at least one evidence item."); return; }
+// Initialize with one condition, one buddy slot
+addCondition();
 
-  // Parse evidence
-  const items = evidenceText.split("\n").filter(l=>l.trim()).map(line => {
-    const parts = line.split("|").map(p=>p.trim());
-    const type = (parts[0]||"unknown").toLowerCase().replace(/ /g,"_");
-    return { type, desc: parts[1]||parts[0]||"", weight: PW[type]||0.35 };
+// ─── GATHER DATA ─────────────────────────────────────────────────────────────
+function getData() {
+  const fullName = (document.getElementById('firstName').value + ' ' + document.getElementById('lastName').value).trim() || '[VETERAN NAME]';
+  const today = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  const ssn4 = document.getElementById('ssn4').value || 'XXXX';
+  const dob = document.getElementById('dob').value || '[DATE OF BIRTH]';
+  const vaFile = document.getElementById('vaFile').value || '[VA FILE #]';
+  const address = document.getElementById('address').value || '[ADDRESS]';
+  const phone = document.getElementById('phone').value || '[PHONE]';
+  const email = document.getElementById('email').value || '[EMAIL]';
+  const branch = document.getElementById('branch').value || '[BRANCH]';
+  const entryDate = document.getElementById('entryDate').value || '[ENTRY DATE]';
+  const dischargeDate = document.getElementById('dischargeDate').value || '[DISCHARGE DATE]';
+  const dischargeType = document.getElementById('dischargeType').value || 'Honorable';
+  const mos = document.getElementById('mos').value || '[MOS/RATE]';
+  const unit = document.getElementById('unit').value || '[UNIT]';
+  const dutyStation = document.getElementById('dutyStation').value || '[DUTY STATION]';
+  const deployments = document.getElementById('deployments').value || '[DEPLOYMENT HISTORY]';
+  const awards = document.getElementById('awards').value || '';
+  const claimType = document.getElementById('claimTypeMain').value;
+  const itf = document.getElementById('itfStatus').value;
+  const denials = document.getElementById('denials').value || '';
+  const lastEmployer = document.getElementById('lastEmployer').value || '[LAST EMPLOYER]';
+  const lastWorked = document.getElementById('lastWorked').value || '[LAST DATE WORKED]';
+  const unemployable = document.getElementById('unemployable').value || '';
+
+  const condNames = document.querySelectorAll('.cond-name');
+  const condTypes = document.querySelectorAll('.cond-type');
+  const condNexus = document.querySelectorAll('.cond-nexus');
+  const condOnsets = document.querySelectorAll('.cond-onset');
+  const condRatings = document.querySelectorAll('.cond-rating');
+  const condImpacts = document.querySelectorAll('.cond-impact');
+  const conds = [];
+  condNames.forEach((n,i) => {
+    if (n.value.trim()) conds.push({
+      name: n.value.trim(),
+      type: condTypes[i]?.value || 'direct',
+      nexus: condNexus[i]?.value || '',
+      onset: condOnsets[i]?.value || '',
+      rating: condRatings[i]?.value || '',
+      impact: condImpacts[i]?.value || ''
+    });
   });
 
-  // Scores
-  const t = THRESH[claimType]||THRESH["va_disability"];
+  const buddyNames = document.querySelectorAll('.buddy-name');
+  const buddyRanks = document.querySelectorAll('.buddy-rank');
+  const buddyAttests = document.querySelectorAll('.buddy-attest');
+  const buddyContacts = document.querySelectorAll('.buddy-contact');
+  const buds = [];
+  buddyNames.forEach((n,i) => {
+    if (n.value.trim()) buds.push({
+      name: n.value.trim(),
+      rank: buddyRanks[i]?.value || '',
+      attest: buddyAttests[i]?.value || '',
+      contact: buddyContacts[i]?.value || ''
+    });
+  });
+
+  const provNames = document.querySelectorAll('.prov-name');
+  const provAddrs = document.querySelectorAll('.prov-addr');
+  const provDates = document.querySelectorAll('.prov-dates');
+  const provConds = document.querySelectorAll('.prov-cond');
+  const provs = [];
+  provNames.forEach((n,i) => {
+    if (n.value.trim()) provs.push({
+      name: n.value.trim(),
+      addr: provAddrs[i]?.value || '',
+      dates: provDates[i]?.value || '',
+      cond: provConds[i]?.value || ''
+    });
+  });
+
+  const condList = conds.map(c=>c.name).join(', ') || '[CONDITIONS]';
+  const servicePeriod = branch && entryDate ? `${branch}, ${entryDate} – ${dischargeDate}` : '[SERVICE PERIOD]';
+  const ratings = conds.map(c=>parseInt(c.rating)||0).filter(r=>r>0);
+
+  return { fullName, today, ssn4, dob, vaFile, address, phone, email,
+           branch, entryDate, dischargeDate, dischargeType, mos, unit,
+           dutyStation, deployments, awards, claimType, itf, denials,
+           lastEmployer, lastWorked, unemployable, conds, buds, provs,
+           condList, servicePeriod, ratings };
+}
+
+// ─── SCORE EVIDENCE ──────────────────────────────────────────────────────────
+function scoreEvidence(d) {
+  const ev = document.getElementById('evidence').value.trim();
+  if (!ev) return {fc:0,lrs:0,fir:0,items:[]};
+  const items = ev.split('\n').filter(l=>l.trim()).map(line=>{
+    const parts = line.split('|').map(p=>p.trim());
+    const type = (parts[0]||'unknown').toLowerCase().replace(/ /g,'_');
+    return {type, desc:parts[1]||parts[0]||'', weight:PW[type]||0.35};
+  });
   const avg = items.reduce((s,i)=>s+i.weight,0)/items.length;
-  const cov = Math.min(1.0, items.length/t.min_items);
+  const cov = Math.min(1.0, items.length/4);
   const fc = Math.round((avg*0.7+cov*0.3)*100)/100;
   let lrs = fc;
-  if (items.length>=t.min_items) lrs=Math.min(1.0,lrs+0.08);
-  if (fc>=t.min_fc) lrs=Math.min(1.0,lrs+0.05);
+  if (items.length>=3) lrs=Math.min(1.0,lrs+0.08);
+  if (fc>=0.60) lrs=Math.min(1.0,lrs+0.05);
   lrs=Math.round(lrs*100)/100;
   const lowP=items.filter(i=>i.weight<0.50).length;
   const fir=Math.round(Math.min(1.0,lowP*0.20+(1-avg)*0.45)*100)/100;
+  return {fc,lrs,fir,items};
+}
 
-  let verdict,vClass;
-  if (fc>=0.75&&lrs>=0.70&&fir<=0.25){verdict="HIGH CONFIDENCE — Strong evidence package";vClass="v-high";}
-  else if (fc>=0.55&&lrs>=0.50){verdict="MODERATE — Package needs strengthening";vClass="v-mod";}
-  else{verdict="LOW CONFIDENCE — Critical gaps must be addressed before filing";vClass="v-low";}
+// ─── GENERATE PACKAGE ────────────────────────────────────────────────────────
+function generatePackage() {
+  const d = getData();
+  const sc = scoreEvidence(d);
+  go(5);
 
-  // Ratings
-  const ratings = parseRatings(ratingsStr);
-  const combined = ratings.length ? combineRatings(ratings) : null;
-  const tdiu = ratings.length ? tdiuEligible(ratings) : null;
+  // Scores
+  let verdict, vClass;
+  if (sc.fc>=0.75&&sc.lrs>=0.70&&sc.fir<=0.25){verdict="HIGH CONFIDENCE — Strong evidence package";vClass="v-high";}
+  else if (sc.fc>=0.55&&sc.lrs>=0.50){verdict="MODERATE — Needs strengthening";vClass="v-mod";}
+  else{verdict="LOW CONFIDENCE — Critical gaps";vClass="v-low";}
+  document.getElementById('scoresArea').innerHTML = `
+    <div class="card">
+      <div class="section-label">Evidence Scores</div>
+      <div class="score-strip">
+        <div class="sc"><div class="sc-val fc">${(sc.fc*100).toFixed(0)}%</div><div class="sc-lab">FC Score<br>Factual Confidence</div></div>
+        <div class="sc"><div class="sc-val lrs">${(sc.lrs*100).toFixed(0)}%</div><div class="sc-lab">LRS Score<br>Legal Readiness</div></div>
+        <div class="sc"><div class="sc-val fir">${(sc.fir*100).toFixed(0)}%</div><div class="sc-lab">FIR Score<br>Integrity Risk</div></div>
+      </div>
+      <div class="verdict ${vClass}">${verdict}</div>
+    </div>`;
 
-  // Reference
-  const ref = "AOP-" + Date.now().toString(36).toUpperCase();
-  const date = new Date().toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"});
+  // Build all documents
+  const docs = buildDocs(d, sc);
+  document.getElementById('docCount').textContent = docs.length;
+  const grid = document.getElementById('docGrid');
+  grid.innerHTML = '';
+  docs.forEach(doc => {
+    const el = document.createElement('div');
+    el.className = 'doc-card';
+    el.innerHTML = `
+      <div class="doc-header">
+        <div class="doc-title">${doc.title}</div>
+        <div class="doc-badge">${doc.type}</div>
+      </div>
+      <div class="doc-body">${doc.content}</div>
+      <div class="doc-actions">
+        <button class="mini-btn mini-copy" onclick="copyDoc(this)">Copy</button>
+        <button class="mini-btn mini-dl" onclick="dlDoc('${encodeURIComponent(doc.filename)}', this)">Download</button>
+      </div>`;
+    el.querySelector('.doc-body').dataset.content = doc.content;
+    el.querySelector('.mini-dl').dataset.content = doc.content;
+    grid.appendChild(el);
+  });
+  window._allDocs = docs;
+}
 
-  // Populate report
-  document.getElementById("reportMeta").innerHTML =
-    `Prepared for: <strong>${name}</strong> &nbsp;|&nbsp; Date: ${date} &nbsp;|&nbsp; Ref: ${ref}<br>Claim: ${claimType.replace(/_/g," ").toUpperCase()} — ${condition}`;
+function buildDocs(d, sc) {
+  const docs = [];
 
-  document.getElementById("rFc").textContent = (fc*100).toFixed(0)+"%";
-  document.getElementById("rLrs").textContent = (lrs*100).toFixed(0)+"%";
-  document.getElementById("rFir").textContent = (fir*100).toFixed(0)+"%";
-  const vb = document.getElementById("rVerdict");
-  vb.textContent=verdict; vb.className="verdict "+vClass;
+  // 1. SF-180 REQUEST LETTER (NPRC)
+  const reqDD214 = document.getElementById('req_dd214').checked;
+  const reqOMPF = document.getElementById('req_ompf').checked;
+  const reqSTR = document.getElementById('req_str').checked;
+  const reqMEPS = document.getElementById('req_meps').checked;
+  const reqAwards = document.getElementById('req_awards_orders').checked;
 
-  // Checklist
-  const cl = document.getElementById("rChecklist");
-  cl.innerHTML = items.map(i=>{
-    const pct = Math.round(i.weight*100);
-    const cls = i.weight>=0.88?"check-ok":i.weight>=0.60?"check-warn":"check-miss";
-    return `<li class="${cls}">${i.desc||i.type} <span style="color:var(--muted);font-size:0.78rem;margin-left:auto">${pct}% weight</span></li>`;
-  }).join("");
+  if (reqDD214 || reqOMPF || reqSTR || reqMEPS || reqAwards) {
+    const items = [];
+    if (reqDD214) items.push('- DD Form 214 (Report of Separation), UNDELETED copy');
+    if (reqOMPF) items.push('- Complete Official Military Personnel File (OMPF) including:\n  • All duty station and assignment records\n  • Award orders and decoration citations\n  • Evaluation reports\n  • Training records and qualifications');
+    if (reqSTR) items.push('- Service Treatment Records (all medical records from active duty service)');
+    if (reqMEPS) items.push('- MEPS pre-induction physical examination records and results');
+    if (reqAwards) items.push('- All award orders, commendation orders, and deployment orders');
+    docs.push({
+      title: 'SF-180 — Military Records Request (NPRC)',
+      type: 'Mail to NPRC',
+      filename: 'SF180_NPRC_Request.txt',
+      content: `STANDARD FORM 180 — REQUEST PERTAINING TO MILITARY RECORDS
+[Submit to: National Personnel Records Center, 1 Archives Drive, St. Louis, MO 63138]
+[Fax: 314-801-9195 | Online: vetrecs.archives.gov]
+Date: ${d.today}
 
-  // Rating analysis
-  let ratingHtml = "";
-  if (ratings.length) {
-    ratingHtml = `<table class="rating-table"><thead><tr><th>Condition</th><th>Rating</th></tr></thead><tbody>`;
-    ratings.forEach((r,i)=>{ ratingHtml+=`<tr><td>Condition ${i+1}</td><td>${r}%</td></tr>`; });
-    ratingHtml+=`<tr style="font-weight:700"><td>Combined (VA method)</td><td style="color:var(--green)">${combined}%</td></tr></tbody></table>`;
-    if (tdiu) {
-      ratingHtml+=`<div class="tdiu-box"><h4>TDIU Eligible</h4><p style="font-size:0.82rem;color:#ccc;line-height:1.6">Your ratings indicate potential eligibility for Total Disability based on Individual Unemployability (38 CFR 4.16a). This means you may qualify for 100% compensation even with a combined rating below 100%. Include evidence of unemployability — employer statements, medical opinions on work capacity, and earnings records.</p></div>`;
-    }
-  } else {
-    ratingHtml = `<p style="font-size:0.85rem;color:var(--muted)">No existing ratings entered. For new claims, focus on establishing service connection first. The rating percentage is determined after service connection is approved.</p>`;
+VETERAN INFORMATION:
+Full Name: ${d.fullName}
+Date of Birth: ${d.dob}
+Social Security Number: XXX-XX-${d.ssn4}
+Branch of Service: ${d.branch}
+Service Entry Date: ${d.entryDate}
+Discharge Date: ${d.dischargeDate}
+Discharge Type: ${d.dischargeType}
+Last Unit of Assignment: ${d.unit}
+
+RECORDS REQUESTED:
+${items.join('\n')}
+
+PURPOSE: Applying for VA disability compensation benefits.
+
+I certify that the information provided is accurate to the best of my knowledge. I understand that a willful false statement is a criminal offense.
+
+Signature: ___________________________  Date: ________________
+Printed Name: ${d.fullName}
+Address: ${d.address}
+Phone: ${d.phone}
+Email: ${d.email}`
+    });
   }
-  document.getElementById("rRating").innerHTML = ratingHtml;
 
-  // Nexus letter template
-  const nexusTemplate = `[PHYSICIAN LETTERHEAD]
+  // 2. VA MEDICAL RECORDS REQUEST (VA Form 10-5345 style)
+  if (document.getElementById('req_va_medical').checked) {
+    docs.push({
+      title: 'VA Medical Records Request (VA Form 10-5345)',
+      type: 'Submit to VA',
+      filename: 'VA_Medical_Records_Request.txt',
+      content: `REQUEST FOR AND AUTHORIZATION TO RELEASE HEALTH INFORMATION
+[VA Form 10-5345 equivalent — Submit to your VA Medical Center Medical Records Office]
+Date: ${d.today}
+
+PATIENT INFORMATION:
+Full Name: ${d.fullName}
+Date of Birth: ${d.dob}
+Last 4 SSN: ${d.ssn4}
+VA File #: ${d.vaFile}
+Address: ${d.address}
+Phone: ${d.phone}
+
+REQUEST: I request complete copies of all medical records related to my treatment for:
+${d.conds.map(c=>`- ${c.name}`).join('\n') || '- All conditions on file'}
+
+PERIOD REQUESTED: All records from [START DATE] through present date.
+
+RECORDS TO INCLUDE:
+- All outpatient treatment notes and progress notes
+- All inpatient/hospitalization records
+- All diagnostic results (lab work, imaging, X-rays, MRI, CT)
+- All psychological/psychiatric evaluations
+- All Disability Benefit Questionnaire (DBQ) forms
+- All therapy/counseling notes
+- All referral letters and specialist reports
+- All correspondence regarding my conditions
+
+PURPOSE: Supporting VA disability compensation claim.
+
+I authorize release of this information to myself and to the Department of Veterans Affairs (VBA) for claims processing purposes.
+
+Signature: ___________________________  Date: ________________
+Printed Name: ${d.fullName}
+
+[Submit this request by:]
+- In person with your VA Health ID Card at the Medical Records Office
+- By fax to your VA facility's Medical Records number
+- Online at VA.gov → Health Records → Download My Data`
+    });
+  }
+
+  // 3. VA C-FILE REQUEST (VA Form 20-10206)
+  if (document.getElementById('req_c_file').checked) {
+    docs.push({
+      title: 'VA Claims File Request (VA Form 20-10206)',
+      type: 'Submit to VA',
+      filename: 'VA_CFile_FOIA_Request.txt',
+      content: `FREEDOM OF INFORMATION ACT / PRIVACY ACT REQUEST
+[VA Form 20-10206 — Mailing address: Your Regional VA Office]
+Date: ${d.today}
+
+TO: Department of Veterans Affairs, Veterans Benefits Administration
+[Submit at VA.gov → Records → Request Personal Records, or mail to your Regional Office]
+
+FROM:
+Name: ${d.fullName}
+Date of Birth: ${d.dob}
+Last 4 SSN: ${d.ssn4}
+VA File #: ${d.vaFile}
+Address: ${d.address}
+Phone: ${d.phone}
+
+REQUEST:
+Pursuant to the Freedom of Information Act (5 U.S.C. § 552) and the Privacy Act (5 U.S.C. § 552a), I hereby request a complete copy of my VA Claims File (C-File), including:
+
+1. All claims filed and their supporting documentation
+2. All rating decisions and decision letters
+3. All examination results (C&P exams)
+4. All VA medical records in my file
+5. All service records transferred to VA
+6. All correspondence to and from VA regarding my claims
+7. All denial letters and explanation of ratings
+8. All appeals and supplemental claim records
+
+I am the veteran named above and am entitled to access my own records under the Privacy Act.
+
+Please respond within 20 business days as required by FOIA.
+
+Signature: ___________________________  Date: ________________
+Printed Name: ${d.fullName}
+
+[IMPORTANT: Your C-File reveals exactly what the VA has — and has NOT — on you. Review it before filing any claim or appeal.]`
+    });
+  }
+
+  // 4. VA FORM 21-4142 for each private provider
+  d.provs.forEach((prov, i) => {
+    docs.push({
+      title: `VA Form 21-4142 — Release Authorization: ${prov.name}`,
+      type: 'Submit with 526EZ',
+      filename: `VA_Form_21-4142_${(prov.name||'Provider').replace(/[^a-z0-9]/gi,'_')}.txt`,
+      content: `VA FORM 21-4142 — AUTHORIZATION TO RELEASE INFORMATION TO THE DEPARTMENT OF VETERANS AFFAIRS
+[Attach to VA Form 21-526EZ when filing your claim]
+Date: ${d.today}
+
+VETERAN:
+Name: ${d.fullName}
+Date of Birth: ${d.dob}
+Last 4 SSN: ${d.ssn4}
+VA File #: ${d.vaFile}
+
+PROVIDER TO RELEASE RECORDS:
+Provider / Facility: ${prov.name}
+Address: ${prov.addr || '[PROVIDER ADDRESS]'}
+Treatment Period: ${prov.dates || '[TREATMENT DATES]'}
+Condition(s) Treated: ${prov.cond || d.condList}
+
+AUTHORIZATION:
+I, ${d.fullName}, hereby authorize the above-named provider to release to the Department of Veterans Affairs all medical records, reports, and information pertaining to my treatment for ${prov.cond || d.condList} during the period ${prov.dates || '[DATES]'}.
+
+This information is being requested for the purpose of substantiating my VA disability compensation claim.
+
+I understand that I have the right to revoke this authorization at any time by notifying the provider in writing, except to the extent that disclosure has already been made.
+
+Signature: ___________________________  Date: ________________
+Printed Name: ${d.fullName}
+Address: ${d.address}
+Phone: ${d.phone}
+
+[IMPORTANT: Submit the ORIGINAL signed form with your 21-526EZ. Keep a copy for your records.]`
+    });
+  });
+
+  // 5. NEXUS LETTER TEMPLATE for each condition
+  d.conds.forEach(cond => {
+    docs.push({
+      title: `Nexus Letter Template — ${cond.name}`,
+      type: 'Take to your doctor',
+      filename: `Nexus_Letter_${(cond.name||'Condition').replace(/[^a-z0-9]/gi,'_')}.txt`,
+      content: `[PHYSICIAN / PROVIDER LETTERHEAD]
 [Date]
 
-RE: Nexus Opinion — ${name} — ${condition}
+RE: Medical Nexus Opinion — ${d.fullName} — ${cond.name}
+VA File #: ${d.vaFile}
+DOB: ${d.dob}
 
 To Whom It May Concern:
 
-I am a licensed physician [specialty] currently treating ${name} for ${condition}. I have reviewed the following records: [list records reviewed].
+I am a licensed [physician/psychologist/specialist, specify credentials] currently providing treatment to ${d.fullName} for ${cond.name}. I have reviewed the following records pertaining to this veteran: [list specific records reviewed — service treatment records, VA medical records, private records, etc.].
 
-Based on my examination and review of available evidence, it is my medical opinion that it is at least as likely as not (50% or greater probability) that ${name}'s ${condition} is [directly caused by / a result of / aggravated beyond its natural progression by] their active military service in ${service}.
+CURRENT DIAGNOSIS:
+${d.fullName} has been diagnosed with ${cond.name}. This diagnosis is consistent with the history of [describe symptoms and clinical findings].
 
-The basis for this opinion is as follows:
-1. ${nexusText ? nexusText : "[Describe the medical rationale connecting the condition to service]"}
-2. The onset and progression of symptoms is consistent with the mechanism of injury described.
-3. [Any supporting literature or clinical evidence]
+MEDICAL NEXUS OPINION:
+Based on my clinical evaluation, review of available records, and medical expertise, it is my professional opinion that it is at least as likely as not (a 50% or greater degree of probability) that ${d.fullName}'s ${cond.name} is [CHOOSE ONE]:
+□ Directly caused by their active military service in ${d.servicePeriod}
+□ The result of an in-service injury/event that occurred on approximately [DATE] at [LOCATION]
+□ Aggravated beyond its natural progression by their military service
+□ A residual of [service-connected condition], for which they are already service-connected
 
-This opinion is based on my independent clinical judgment and review of the evidence of record.
+BASIS FOR OPINION:
+1. In-service events: ${cond.nexus || '[Describe the in-service event or exposure]'}
+2. Onset of symptoms: ${cond.onset || '[When symptoms began]'}
+3. Medical literature supports the connection between [in-service exposure/event] and [condition] because [cite relevant medical literature if available]
+4. [Additional clinical reasoning specific to this veteran's case]
 
-Respectfully,
+CURRENT SEVERITY:
+${cond.impact || '[Describe how the condition affects the veteran\'s daily functioning, work capacity, and quality of life]'}
 
-[Physician Name, Credentials]
-[License Number]
-[Contact Information]`;
+This opinion is rendered to a reasonable degree of medical certainty based on my independent clinical judgment, training, and experience.
 
-  document.getElementById("rNexus").textContent = nexusTemplate;
+Respectfully submitted,
 
-  // Records request template
-  const requestTemplate = `[Your Name]
-[Your Address]
+_________________________________
+[Physician Full Name, MD/DO/PhD/LCSW/etc.]
+[Specialty]
+[License Number: ]
+[NPI Number: ]
+[Practice Name]
+[Address]
+[Phone / Fax]
 [Date]
-[Your VA File Number if known]
 
-Records Management / Medical Records Department
-[VA Medical Center or Medical Provider Name]
-[Address]
+[IMPORTANT NOTES FOR PHYSICIAN:
+- "At least as likely as not" means 50% or greater probability — this is the legal standard
+- The VA needs this opinion on official letterhead, signed and dated
+- The more specific you are about the causal mechanism, the stronger the nexus
+- Cite any relevant medical literature or studies if available
+- A DBQ (Disability Benefits Questionnaire) form can supplement this letter — ask the veteran for the applicable DBQ for their condition]`
+    });
+  });
 
-RE: Request for Certified Copies of Medical Records
+  // 6. BUDDY STATEMENT for each buddy
+  d.buds.forEach(bud => {
+    docs.push({
+      title: `Buddy Statement — ${bud.name}`,
+      type: 'Have buddy sign',
+      filename: `Buddy_Statement_${(bud.name||'Buddy').replace(/[^a-z0-9]/gi,'_')}.txt`,
+      content: `VA FORM 21-10210 — LAY/WITNESS STATEMENT
+[Attach to VA Form 21-526EZ when filing claim]
+Date: ${d.today}
 
-Dear Records Department:
+REGARDING VETERAN:
+Name: ${d.fullName}
+Date of Birth: ${d.dob}
+VA File #: ${d.vaFile}
+Conditions Claimed: ${d.condList}
 
-I am requesting certified copies of all medical records related to my treatment for ${condition} during the period [START DATE] through [END DATE].
+WITNESS STATEMENT:
 
-Please provide all of the following:
-• Treatment notes and progress notes
-• Diagnostic test results (labs, imaging, psychological evaluations)
-• Any disability benefit questionnaire (DBQ) forms on file
-• Correspondence related to this condition
+I, ${bud.name}, ${bud.rank ? `(${bud.rank})` : ''} make the following statement in support of ${d.fullName}'s VA disability compensation claim.
 
-This request is made pursuant to [38 U.S.C. § 5701 / HIPAA / state medical records law] and the Privacy Act of 1974.
+[${bud.name.toUpperCase()}, PLEASE COMPLETE IN YOUR OWN WORDS:]
 
-Please confirm receipt of this request within 10 business days.
+My relationship to ${d.fullName}: [Describe how you know them — served together, unit, dates, current relationship]
 
-Respectfully,
-${name}
-[Address]
-[Phone]
-[Email]
-[Signature]`;
+What I personally witnessed or observed:
+${bud.attest || '[Describe specifically what you witnessed — in-service events, injuries, symptoms during service and/or after discharge. Be as specific as possible about dates, locations, and what you saw.]'}
 
-  document.getElementById("rRequest").textContent = requestTemplate;
+How I know about ${d.fullName}'s current condition(s):
+[Describe what you have personally observed about their symptoms, limitations, or behavior since service — be specific with examples]
 
-  // Personal statement guide
-  const stmtGuide = `
-<div style="font-size:0.85rem;color:#ccc;line-height:1.8">
-<p style="margin-bottom:0.8rem">Your personal statement (VA Form 21-4138 or written statement) should cover these five elements:</p>
-<ol style="margin-left:1.2rem;margin-bottom:0.8rem">
-<li><strong style="color:var(--text)">In-service event:</strong> Describe specifically what happened during your service that caused or contributed to ${condition}. Date, location, unit if possible.</li>
-<li><strong style="color:var(--text)">Continuity of symptoms:</strong> Describe how symptoms have been continuous or recurrent from service to present. Any periods of treatment or flare-ups.</li>
-<li><strong style="color:var(--text)">Current severity:</strong> Describe how ${condition} affects your daily life, relationships, and ability to work. Use specific examples.</li>
-<li><strong style="color:var(--text)">Lay evidence:</strong> Describe what others have observed — spouse, family members, coworkers, fellow veterans. Names who can provide buddy statements.</li>
-<li><strong style="color:var(--text)">No attribution:</strong> Do not diagnose yourself or cite percentages. Describe what you experience, not what you think you deserve.</li>
-</ol>
-<p style="color:var(--muted);font-size:0.8rem">Keep your statement to 1–2 pages. Clear, chronological, factual.</p>
-</div>`;
-  document.getElementById("rStatement").innerHTML = stmtGuide;
+Additional information:
+[Any other relevant information that might support this claim]
 
-  // Gap analysis
-  const gaps = [];
-  if (!items.some(i=>["medical_records","agency_database","dbq_form","nexus_letter"].includes(i.type)))
-    gaps.push({cls:"check-miss",text:"CRITICAL: No medical evidence found. Request VA records at VA.gov MyHealtheVet — free, takes 5 minutes to request."});
-  if (!items.some(i=>["certified_copy","court_certified","service_records"].includes(i.type)))
-    gaps.push({cls:"check-miss",text:"CRITICAL: No certified service records. Request DD-214 and service medical records at milConnect (milConnect.dmdc.osd.mil)."});
-  if (!items.some(i=>i.type==="nexus_letter"||i.type==="dbq_form"))
-    gaps.push({cls:"check-warn",text:"IMPORTANT: No nexus letter or DBQ. This is often the deciding factor. Use the template above with your doctor."});
-  if (!items.some(i=>i.type==="buddy_statement"))
-    gaps.push({cls:"check-warn",text:"RECOMMENDED: No buddy statements. Fellow veterans who witnessed the in-service event or current symptoms can provide strong corroboration."});
-  if (fir>0.25)
-    gaps.push({cls:"check-warn",text:"INTEGRITY: Replace unsigned/uncertified documents with notarized versions where possible. Each upgrade raises your score."});
-  if (itf==="no")
-    gaps.push({cls:"check-warn",text:"FILE AN INTENT TO FILE NOW at VA.gov. This locks in your effective date — worth months of back pay if approved."});
-  if (denied==="yes_sc"||denied==="appeal")
-    gaps.push({cls:"check-ok",text:"APPEAL PATH: For denied claims, your strongest move is a new nexus letter addressing the specific reason for denial. Request your decision notice to identify the exact gap."});
-  if (!gaps.length) gaps.push({cls:"check-ok",text:"No critical gaps identified. Your evidence package appears complete for initial filing."});
+I certify that the statements on this form are true and correct to the best of my knowledge and belief.
 
-  const gl = document.getElementById("rGaps");
-  gl.innerHTML = gaps.map(g=>`<li class="${g.cls}">${g.text}</li>`).join("");
+Witness Signature: ___________________________
+Printed Name: ${bud.name}
+Date: ________________
+Address: ____________________________
+Phone: ${bud.contact || '____________________________'}
 
-  // Timeline
-  const tlHtml = `<div style="font-size:0.85rem;color:#ccc;line-height:2;margin-top:0.5rem">
-${itf==="yes"?"✓ Intent to File on record — effective date protected":"⚠ File Intent to File immediately at VA.gov → Start a Claim"}<br>
-→ Gather all documents per checklist above (2–4 weeks)<br>
-→ Get nexus letter from physician (2–6 weeks)<br>
-→ Complete VA Form 21-526EZ (online at VA.gov or with a VSO)<br>
-→ VA development period: 90–125 days average<br>
-→ Decision issued — if approved, payments begin from effective date<br>
-${denied.startsWith("yes")||denied==="appeal"?"→ If denied: file Notice of Disagreement within 1 year of decision":"→ If denied: you have 1 year to appeal from date of decision"}<br>
-<span style="color:var(--muted);font-size:0.8rem">Free VSO assistance: DAV (dav.org), American Legion, VFW — they file for free</span>
-</div>`;
-  document.getElementById("rTimeline").innerHTML = tlHtml;
+[NOTARIZATION OPTIONAL BUT INCREASES WEIGHT:
+State of ________, County of ________
+Subscribed and sworn to before me this ___ day of ________, 20___
+Notary Public: _________________ My commission expires: _________]
 
-  // Seal
-  document.getElementById("rSeal").innerHTML =
-    `Art of Proof™ — Evidence Preparation Report &nbsp;|&nbsp; Ref: ${ref} &nbsp;|&nbsp; ${date}<br>
-This report is informational only and does not constitute legal advice. Consult a VA-accredited attorney before filing.<br>
-∇θ — chain sealed, truth preserved &nbsp;|&nbsp; Echo Universe`;
+[Note to ${bud.name}: A notarized statement carries higher evidentiary weight (0.92) vs. signed-uncertified (0.65). Consider notarizing at a bank, UPS Store, or library for free or minimal cost.]`
+    });
+  });
 
-  document.getElementById("intakeSection").classList.add("hidden");
-  document.getElementById("reportSection").classList.remove("hidden");
-  window.scrollTo({top:0,behavior:"smooth"});
+  // 7. PERSONAL STATEMENT
+  docs.push({
+    title: 'Personal Statement (VA Form 21-4138 equivalent)',
+    type: 'Write & sign',
+    filename: 'Personal_Statement_21-4138.txt',
+    content: `PERSONAL STATEMENT IN SUPPORT OF VA DISABILITY CLAIM
+[Complete in your own words — use as a guide and customize]
+Date: ${d.today}
+
+VETERAN: ${d.fullName}
+DOB: ${d.dob}  |  VA File #: ${d.vaFile}
+Service: ${d.servicePeriod}
+Unit: ${d.unit}
+
+CONDITIONS CLAIMED: ${d.condList}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[WRITE YOUR STATEMENT BELOW — these 5 elements are essential:]
+
+1. IN-SERVICE EVENT(S):
+[Describe specifically what happened during your service that caused or contributed to your condition(s). Include: date, location, your unit, what happened, who was present. Example:]
+
+"On or about [DATE], while serving with ${d.unit || '[YOUR UNIT]'} in ${d.dutyStation || '[LOCATION]'}, I [describe the specific incident, exposure, injury, or event in detail]."
+
+${d.conds.map(c => c.nexus ? `For ${c.name}: ${c.nexus}` : '').filter(Boolean).join('\n\n')}
+
+2. CONTINUITY OF SYMPTOMS:
+[Describe how your symptoms have continued from service to present. Include any periods of treatment, flare-ups, and how the condition has affected you over time.]
+
+"Since [leaving service / the incident in service], I have experienced continuous / recurring symptoms of [describe symptoms]. I have sought treatment at [describe treatment history]."
+
+3. CURRENT SEVERITY:
+[Describe your current symptoms and how they affect your daily life, relationships, employment, and overall functioning.]
+
+${d.conds.map(c => c.impact ? `${c.name}: ${c.impact}` : '').filter(Boolean).join('\n\n') || '[Describe current symptoms and limitations for each condition]'}
+
+4. IMPACT ON EMPLOYMENT:
+[Describe how your conditions affect your ability to work. Be specific.]
+
+${d.unemployable || '[Describe how your service-connected conditions affect your ability to maintain employment]'}
+
+5. WITNESSES / CORROBORATING EVIDENCE:
+[Name anyone who can support your claim — fellow veterans, family members, employers, treating physicians.]
+
+${d.buds.map(b => `- ${b.name} (${b.rank || 'witness'}): ${b.attest || 'Can provide buddy statement'}`).join('\n') || '[List any witnesses who can corroborate your account]'}
+${d.awards ? `\nAwards and decorations supporting in-service events:\n${d.awards}` : ''}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+I certify that the statements on this form are true and correct to the best of my knowledge and belief.
+
+Signature: ___________________________  Date: ________________
+Printed Name: ${d.fullName}
+Address: ${d.address}
+Phone: ${d.phone}`
+  });
+
+  // 8. FORM 21-0781 (PTSD/Mental Health) if applicable
+  const hasPTSD = d.conds.some(c => c.name.toLowerCase().includes('ptsd') ||
+    c.name.toLowerCase().includes('mental health') ||
+    c.name.toLowerCase().includes('anxiety') ||
+    c.name.toLowerCase().includes('depression') ||
+    c.name.toLowerCase().includes('trauma'));
+  if (hasPTSD) {
+    docs.push({
+      title: 'VA Form 21-0781 — PTSD/Mental Health Support Statement',
+      type: 'Submit with 526EZ',
+      filename: 'VA_Form_21-0781_PTSD.txt',
+      content: `VA FORM 21-0781 — STATEMENT IN SUPPORT OF CLAIM FOR PTSD / MENTAL HEALTH
+[Attach to VA Form 21-526EZ]
+Date: ${d.today}
+
+VETERAN: ${d.fullName}  |  DOB: ${d.dob}  |  VA File #: ${d.vaFile}
+Service: ${d.servicePeriod}  |  Unit: ${d.unit}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SECTION A — IN-SERVICE TRAUMATIC EVENT(S)
+
+[Describe each traumatic event that caused or contributed to your PTSD / mental health condition]
+
+Event 1:
+Date: [DATE OF EVENT]
+Location: [BASE / COUNTRY / UNIT]
+Description: [Describe the traumatic event in as much detail as you are comfortable providing. The VA does not require you to re-traumatize yourself — provide what you can.]
+Witnesses / Unit members present: [Names if known]
+
+${d.conds.filter(c => c.name.toLowerCase().includes('ptsd') || c.name.toLowerCase().includes('trauma')).map(c => c.nexus ? `Additional nexus information: ${c.nexus}` : '').filter(Boolean).join('\n')}
+
+SECTION B — SOURCES THAT MAY HAVE INFORMATION ABOUT THE EVENT
+[List any sources that may have documentation of the event — unit records, military police records, medical records, etc.]
+
+SECTION C — CURRENT SYMPTOMS
+[Describe your current PTSD/mental health symptoms]
+${d.conds.filter(c => c.name.toLowerCase().includes('ptsd') || c.name.toLowerCase().includes('mental')).map(c => c.impact || '').filter(Boolean).join('\n') || '[Describe intrusive thoughts, nightmares, hypervigilance, avoidance behaviors, emotional numbing, relationship difficulties, etc.]'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+NOTE: If your PTSD is related to Military Sexual Trauma (MST), use VA Form 21-0781a instead.
+
+I certify that the statements made are true and correct to the best of my knowledge.
+
+Signature: ___________________________  Date: ________________
+Printed Name: ${d.fullName}`
+    });
+  }
+
+  // 9. FORM 21-8940 (TDIU) if applicable
+  if (d.claimType === 'tdiu' || d.unemployable) {
+    docs.push({
+      title: 'VA Form 21-8940 — TDIU Application',
+      type: 'Submit with 526EZ',
+      filename: 'VA_Form_21-8940_TDIU.txt',
+      content: `VA FORM 21-8940 — VETERAN'S APPLICATION FOR INCREASED COMPENSATION BASED ON UNEMPLOYABILITY (TDIU)
+[Attach to VA Form 21-526EZ]
+Date: ${d.today}
+
+VETERAN: ${d.fullName}  |  DOB: ${d.dob}  |  VA File #: ${d.vaFile}
+
+SERVICE-CONNECTED CONDITIONS CAUSING UNEMPLOYABILITY:
+${d.conds.map((c,i) => `${i+1}. ${c.name} (${c.rating ? c.rating+'%' : 'pending rating'})`).join('\n')}
+
+EMPLOYMENT HISTORY:
+Last Employer: ${d.lastEmployer}
+Last Date of Full-Time Employment: ${d.lastWorked}
+Reason Unable to Work: ${d.unemployable || '[Explain how service-connected conditions prevent substantially gainful employment]'}
+
+EDUCATION:
+[Highest level completed — VA uses this to determine work capacity]
+
+WORK HISTORY (past 5 years):
+[List any jobs held, dates, reason for leaving each]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ELIGIBILITY REQUIREMENTS (38 CFR 4.16a):
+You may qualify for TDIU if you have:
+• A single service-connected disability rated 60% or more, OR
+• Multiple service-connected disabilities with at least one rated 40% or more and combined rating of 70% or more
+
+Current ratings: ${d.ratings.length ? d.ratings.join('%, ')+'%' : '[Enter your current ratings in Section 3 — Conditions]'}
+Combined rating estimate: ${d.ratings.length ? (()=>{let r=100;d.ratings.sort((a,b)=>b-a).forEach(x=>r-=r*(x/100));const raw=100-r;return (raw%10>=5?Math.ceil(raw/10)*10:Math.floor(raw/10)*10)+'%'})() : '[See your combined rating in score section]'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Also submit VA Form 21-4192 to your last employer (employer completes and returns to VA).
+
+Signature: ___________________________  Date: ________________
+Printed Name: ${d.fullName}`
+    });
+  }
+
+  // 10. EVIDENCE SUMMARY SHEET
+  const evidenceText = document.getElementById('evidence').value.trim();
+  const items = evidenceText ? evidenceText.split('\n').filter(l=>l.trim()).map(line=>{
+    const parts = line.split('|').map(p=>p.trim());
+    const type = (parts[0]||'unknown').toLowerCase().replace(/ /g,'_');
+    return {type,desc:parts[1]||parts[0]||'',weight:PW[type]||0.35};
+  }) : [];
+  docs.push({
+    title: 'Evidence Summary & Gap Analysis',
+    type: 'Review first',
+    filename: 'Evidence_Summary.txt',
+    content: `ART OF PROOF™ — EVIDENCE SUMMARY
+${d.fullName}  |  ${d.today}  |  Ref: AOP-${Date.now().toString(36).toUpperCase()}
+
+FC Score: ${(sc.fc*100).toFixed(0)}%  |  LRS: ${(sc.lrs*100).toFixed(0)}%  |  FIR: ${(sc.fir*100).toFixed(0)}%
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CURRENT EVIDENCE INVENTORY:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${items.map(i => `[${(i.weight*100).toFixed(0)}%] ${i.type.toUpperCase()}\n  ${i.desc}`).join('\n\n') || '[No evidence entered yet]'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PRIORITY ACTIONS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${buildGaps(d, sc, items)}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RATING ANALYSIS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${d.ratings.length ? `Current ratings: ${d.ratings.join('%, ')+'%'}
+Combined (VA method): ${(()=>{let r=100;d.ratings.sort((a,b)=>b-a).forEach(x=>r-=r*(x/100));const raw=100-r;return (raw%10>=5?Math.ceil(raw/10)*10:Math.floor(raw/10)*10)+'%'})()}
+TDIU eligible: ${(()=>{const max=Math.max(...d.ratings);const combined=(()=>{let r=100;d.ratings.sort((a,b)=>b-a).forEach(x=>r-=r*(x/100));const raw=100-r;return raw%10>=5?Math.ceil(raw/10)*10:Math.floor(raw/10)*10;})();return (max>=60||(combined>=70&&max>=40))?'YES — Consider filing VA Form 21-8940':'Not yet based on current ratings';})()}` : 'No existing ratings entered — new claim'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DOCUMENTS INCLUDED IN THIS PACKAGE:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${window._allDocs ? window._allDocs.map((doc,i)=>`${i+1}. ${doc.title}`).join('\n') : '[Package being generated...]'}
+
+Art of Proof™ — ∇θ — chain sealed, truth preserved
+This package is a preparation tool, not legal advice.`
+  });
+
+  return docs;
 }
 
-function downloadReport() {
-  const report = document.getElementById("report").innerHTML;
-  const name = document.getElementById("vetName").value||"veteran";
-  const safe = name.toLowerCase().replace(/[^a-z0-9]/g,"-");
-  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Art of Proof Report</title>
-<style>
-  body{font-family:Arial,sans-serif;max-width:750px;margin:0 auto;padding:2rem;color:#111;background:#fff}
-  h2{color:#4a35b5;border-bottom:2px solid #4a35b5;padding-bottom:0.5rem}
-  .section-title{color:#4a35b5;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em;margin:1.5rem 0 0.5rem;border-bottom:1px solid #ddd;padding-bottom:0.3rem}
-  .score-row{display:flex;gap:1rem}
-  .s-box{flex:1;border:1px solid #ddd;border-radius:8px;padding:1rem;text-align:center}
-  .s-val{font-size:2rem;font-weight:800}
-  .fc{color:#16a34a}.lrs{color:#2563eb}.fir{color:#dc2626}
-  .verdict{padding:0.8rem;border-radius:6px;font-weight:700;text-align:center;margin:1rem 0;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0}
-  .template-box{background:#f8f8f8;border:1px solid #ddd;border-radius:6px;padding:1rem;font-size:0.82rem;line-height:1.7;white-space:pre-wrap}
-  .checklist{list-style:none;padding:0}
-  .checklist li{padding:0.4rem 0;border-bottom:1px solid #f0f0f0;font-size:0.85rem}
-  .check-ok::before{content:"✓ ";color:#16a34a;font-weight:bold}
-  .check-warn::before{content:"⚠ ";color:#d97706}
-  .check-miss::before{content:"✗ ";color:#dc2626}
-  .ref-seal{font-size:0.7rem;color:#999;text-align:center;margin-top:2rem;padding-top:1rem;border-top:1px solid #eee}
-  @media print{body{padding:0}}
-</style></head><body>${report}</body></html>`;
+function buildGaps(d, sc, items) {
+  const gaps = [];
+  if (!items.some(i=>['certified_copy','service_records'].includes(i.type)))
+    gaps.push('CRITICAL: Request your DD-214 and OMPF from NPRC (SF-180 included in this package)');
+  if (!items.some(i=>['medical_records','agency_database','dbq_form'].includes(i.type)))
+    gaps.push('CRITICAL: No medical evidence. Request VA records at VA.gov/health-care/get-medical-records');
+  if (!items.some(i=>['nexus_letter','dbq_form'].includes(i.type)))
+    gaps.push('HIGH: No nexus letter. Take the nexus letter template(s) in this package to your doctor');
+  if (d.conds.length > 0 && !items.some(i=>i.type==='buddy_statement') && d.buds.length===0)
+    gaps.push('RECOMMENDED: Buddy statements from fellow veterans carry 0.70 weight and corroborate in-service events');
+  if (d.itf === 'not_filed')
+    gaps.push('IMMEDIATE: File Intent to File NOW at VA.gov — protects your effective date for back pay');
+  if (d.provs.length > 0 && !items.some(i=>i.type==='signed_uncertified'||i.type==='personal_statement'))
+    gaps.push('NOTE: Submit VA Form 21-4142 (included) for each private provider so VA can request their records');
+  if (!gaps.length) gaps.push('No critical gaps identified — proceed with filing after gathering all documents');
+  return gaps.map((g,i) => `${i+1}. ${g}`).join('\n');
+}
 
-  const blob = new Blob([html], {type:"text/html"});
+// ─── COPY / DOWNLOAD ─────────────────────────────────────────────────────────
+function copyDoc(btn) {
+  const content = btn.closest('.doc-card').querySelector('.doc-body').dataset.content;
+  navigator.clipboard.writeText(content).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(()=>btn.textContent='Copy', 2000);
+  });
+}
+
+function dlDoc(filename, btn) {
+  const content = btn.dataset.content;
+  const blob = new Blob([content], {type:'text/plain'});
   const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href=url; a.download=`art-of-proof-${safe}.html`;
+  const a = document.createElement('a');
+  a.href=url; a.download=decodeURIComponent(filename);
   document.body.appendChild(a); a.click();
   document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+
+function downloadAll() {
+  if (!window._allDocs) return;
+  window._allDocs.forEach((doc, i) => {
+    setTimeout(() => {
+      const blob = new Blob([doc.content], {type:'text/plain'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href=url; a.download=doc.filename;
+      document.body.appendChild(a); a.click();
+      document.body.removeChild(a); URL.revokeObjectURL(url);
+    }, i * 300);
+  });
 }
 </script>
 </body>
