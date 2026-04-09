@@ -1,0 +1,10 @@
+name: Feature request
+description: Suggest
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: p
+    attributes:
+      label: Problem
+    validations:
+      required: true
