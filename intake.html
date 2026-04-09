@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Art of Proof™ — Master Intake & Document Generator</title>
+<style>
+:root{--purple:#7c6fff;--green:#4ade80;--blue:#60a5fa;--red:#f87171;--gold:#fbbf24;
+--bg:#0a0a0a;--bg2:#111;--bg3:#1a1a1a;--border:#222;--text:#e0e0e0;--muted:#888;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);}
+.hdr{background:linear-gradient(135deg,#0d0d1a,#0a1628);padding:2rem 1rem;text-align:center;border-bottom:1px solid #1a1a2e;}
+.hdr h1{font-size:1.6rem;font-weight:700;color:var(--purple);}
+.hdr p{color:var(--muted);font-size:0.85rem;margin-top:0.4rem;}
+.prog{display:flex;gap:0;margin:1.5rem auto;max-width:700px;padding:0 1rem;}
+.prog-step{flex:1;padding:0.5rem;text-align:center;font-size:0.72rem;color:var(--muted);
+border-bottom:2px solid var(--border);cursor:pointer;transition:all 0.2s;}
+.prog-step.active{color:var(--purple);border-bottom-color:var(--purple);font-weight:600;}
+.prog-step.done{color:var(--green);border-bottom-color:var(--green);}
+.wrap{max-width:720px;margin:0 auto;padding:1.5rem 1rem;}
+.section{display:none;} .section.active{display:block;}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.2rem;}
+.card h2{font-size:1rem;color:var(--purple);margin-bottom:0.8rem;}
+.card .hint{font-size:0.78rem;color:var(--muted);margin-bottom:1rem;line-height:1.6;}
+label{display:block;font-size:0.8rem;color:var(--muted);margin:0.8rem 0 0.3rem;}
+input,select,textarea{width:100%;padding:0.6rem 0.8rem;background:var(--bg3);
+border:1px solid #2a2a2a;border-radius:7px;color:var(--text);font-size:0.87rem;outline:none;transition:border-color 0.2s;}
+input:focus,select:focus,textarea:focus{border-color:var(--purple);}
+textarea{min-height:80px;resize:vertical;font-family:inherit;}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+@media(max-width:540px){.row{grid-template-columns:1fr;}}
+.cond-row{display:flex;gap:0.5rem;margin-bottom:0.5rem;align-items:start;}
+.cond-row input{flex:1;}
+.cond-row button{padding:0.6rem 0.8rem;background:#1a1a2e;color:var(--purple);
+border:1px solid #2a2a4e;border-radius:7px;cursor:pointer;font-size:0.8rem;white-space:nowrap;}
+.nav{display:flex;gap:0.75rem;margin-top:1.5rem;}
+.btn{flex:1;padding:0.8rem;border:none;border-radius:9px;cursor:pointer;font-size:0.95rem;font-weight:600;transition:background 0.2s;}
+.btn-next{background:var(--purple);color:#fff;} .btn-next:hover{background:#6b5ce7;}
+.btn-back{background:var(--bg3);color:var(--text);border:1px solid var(--border);}
+.btn-gen{background:var(--green);color:#0a0a0a;} .btn-gen:hover{background:#22c55e;}
+/* DOCUMENTS OUTPUT */
+.doc-grid{display:flex;flex-direction:column;gap:1rem;}
+.doc-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.doc-header{padding:1rem 1.2rem;background:var(--bg3);border-bottom:1px solid var(--border);
+display:flex;justify-content:space-between;align-items:center;cursor:pointer;}
+.doc-title{font-size:0.9rem;font-weight:600;color:var(--text);}
+.doc-subtitle{font-size:0.75rem;color:var(--muted);}
+.doc-badge{font-size:0.7rem;padding:0.2rem 0.6rem;border-radius:20px;font-weight:600;}
+.badge-form{background:#1a1a2e;color:var(--purple);border:1px solid #2a2a4e;}
+.badge-letter{background:#1a2a1a;color:var(--green);border:1px solid #2a4a2a;}
+.badge-template{background:#2a1a0a;color:var(--gold);border:1px solid #4a3a0a;}
+.doc-body{padding:1.2rem;display:none;}
+.doc-body.open{display:block;}
+.doc-text{background:var(--bg);border:1px solid var(--border);border-radius:7px;
+padding:1rem;font-size:0.8rem;line-height:1.8;color:#ccc;white-space:pre-wrap;font-family:inherit;}
+.doc-actions{display:flex;gap:0.5rem;margin-top:0.8rem;}
+.doc-btn{padding:0.5rem 1rem;border-radius:7px;font-size:0.8rem;font-weight:600;cursor:pointer;border:none;}
+.btn-copy{background:#1a1a2e;color:var(--purple);}
+.btn-dl{background:#1a2a1a;color:var(--green);}
+.summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.8rem;margin-bottom:1.2rem;}
+.sum-box{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:0.8rem;text-align:center;}
+.sum-val{font-size:1.6rem;font-weight:800;color:var(--green);}
+.sum-lab{font-size:0.7rem;color:var(--muted);}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <h1>Art of Proof™ — Master Intake</h1>
+  <p>Fill in once. Get every form, letter, and request auto-generated.</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog">
+  <div class="prog-step active" id="p0" onclick="goTo(0)">1. Identity</div>
+  <div class="prog-step" id="p1" onclick="goTo(1)">2. Service</div>
+  <div class="prog-step" id="p2" onclick="goTo(2)">3. Conditions</div>
+  <div class="prog-step" id="p3" onclick="goTo(3)">4. Evidence</div>
+  <div class="prog-step" id="p4" onclick="goTo(4)">5. Documents</div>
+</div>
+
+<div class="wrap">
+
+<!-- ── SECTION 0: IDENTITY ── -->
+<div class="section active" id="s0">
+  <div class="card">
+    <h2>Your Information</h2>
+    <div class="hint">This fills into every form and letter automatically. You type it once.</div>
+    <div class="row">
+      <div><label>First Name</label><input id="firstName" placeholder="Nathan"></div>
+      <div><label>Last Name</label><input id="lastName" placeholder="Poinsette"></div>
+    </div>
+    <div class="row">
+      <div><label>Social Security Number (last 4 only)</label><input id="ssn4" placeholder="XXXX" maxlength="4"></div>
+      <div><label>Date of Birth</label><input type="date" id="dob"></div>
+    </div>
+    <div class="row">
+      <div><label>VA File Number (if known)</label><input id="vaFile" placeholder="Leave blank if unknown"></div>
+      <div><label>Phone Number</label><input id="phone" placeholder="(555) 555-5555"></div>
+    </div>
+    <label>Mailing Address</label>
+    <input id="address" placeholder="Street address">
+    <div class="row" style="margin-top:0.5rem">
+      <input id="city" placeholder="City">
+      <input id="stateZip" placeholder="State, ZIP">
+    </div>
+    <label>Email Address</label>
+    <input type="email" id="email" placeholder="your@email.com">
+  </div>
+  <div class="nav"><button class="btn btn-next" onclick="goTo(1)">Next: Service History →</button></div>
+</div>
+
+<!-- ── SECTION 1: SERVICE ── -->
+<div class="section" id="s1">
+  <div class="card">
+    <h2>Military Service</h2>
+    <div class="row">
+      <div>
+        <label>Branch of Service</label>
+        <select id="branch">
+          <option>U.S. Army</option><option>U.S. Marine Corps</option>
+          <option>U.S. Navy</option><option>U.S. Air Force</option>
+          <option>U.S. Coast Guard</option><option>National Guard</option>
+          <option>Army Reserve</option><option>Navy Reserve</option>
+        </select>
+      </div>
+      <div>
+        <label>Discharge Type</label>
+        <select id="discharge">
+          <option>Honorable</option><option>General Under Honorable</option>
+          <option>Other Than Honorable</option><option>Medical Discharge</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div><label>Entry Date</label><input type="date" id="entryDate"></div>
+      <div><label>Separation Date</label><input type="date" id="sepDate"></div>
+    </div>
+    <div class="row">
+      <div><label>MOS / Rate / AFSC (Job Code)</label><input id="mos" placeholder="e.g. 11B, 0311, BM"></div>
+      <div><label>Highest Rank Achieved</label><input id="rank" placeholder="e.g. Specialist, Sergeant"></div>
+    </div>
+    <label>Unit(s) Served In</label>
+    <input id="unit" placeholder="e.g. 1st Cavalry Division, 3rd Battalion, 82nd Airborne">
+    <label>Duty Stations / Deployments</label>
+    <textarea id="deployments" placeholder="e.g. Fort Bragg NC 1989-1990; Kuwait/Iraq 1990-1991 (Desert Storm); Fort Campbell KY 1991"></textarea>
+    <div class="row">
+      <div>
+        <label>Combat Service?</label>
+        <select id="combat">
+          <option value="yes">Yes — combat zone / hazardous duty</option>
+          <option value="no">No — stateside / non-combat</option>
+        </select>
+      </div>
+      <div>
+        <label>Did you receive a MEPS physical?</label>
+        <select id="meps">
+          <option value="yes">Yes</option><option value="no">No / Unknown</option>
+        </select>
+      </div>
+    </div>
+    <label>Awards & Decorations (list what you know)</label>
+    <textarea id="awards" placeholder="e.g. Army Service Ribbon, National Defense Service Medal, Southwest Asia Service Medal, Combat Infantryman Badge"></textarea>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="goTo(0)">← Back</button>
+    <button class="btn btn-next" onclick="goTo(2)">Next: Conditions →</button>
+  </div>
+</div>
+
+<!-- ── SECTION 2: CONDITIONS ── -->
+<div class="section" id="s2">
+  <div class="card">
+    <h2>Conditions & Disabilities</h2>
+    <div class="hint">Add each condition you're claiming. We'll generate separate documents for each one.</div>
+    <div id="condList"></div>
+    <button onclick="addCondition()" style="margin-top:0.5rem;padding:0.5rem 1rem;background:#1a1a2e;color:var(--purple);border:1px solid #2a2a4e;border-radius:7px;cursor:pointer;font-size:0.82rem;">+ Add Condition</button>
+  </div>
+  <div class="card">
+    <h2>Current Treatment</h2>
+    <label>Are you currently treated at a VA medical facility?</label>
+    <select id="vaHealth">
+      <option value="yes">Yes — enrolled in VA health care</option>
+      <option value="no">No — using private / community care</option>
+      <option value="both">Both VA and private</option>
+    </select>
+    <label>VA Medical Center (if applicable)</label>
+    <input id="vamc" placeholder="e.g. James A. Haley VA Medical Center, Tampa FL">
+    <label>Private Doctor / Specialist (if applicable)</label>
+    <input id="privateMD" placeholder="e.g. Dr. Sarah Johnson, MD — Tampa Internal Medicine">
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="goTo(1)">← Back</button>
+    <button class="btn btn-next" onclick="goTo(3)">Next: Evidence →</button>
+  </div>
+</div>
+
+<!-- ── SECTION 3: EVIDENCE ── -->
+<div class="section" id="s3">
+  <div class="card">
+    <h2>Evidence You Have</h2>
+    <div class="hint">Check everything you currently have. This determines which documents we generate and what priority to assign.</div>
+    <div id="evidenceChecks"></div>
+  </div>
+  <div class="card">
+    <h2>Previous VA History</h2>
+    <div class="row">
+      <div>
+        <label>Filed a claim before?</label>
+        <select id="prevClaim">
+          <option value="none">No — first claim</option>
+          <option value="denied">Yes — denied</option>
+          <option value="approved_low">Yes — approved but rating too low</option>
+          <option value="appeal">Yes — currently in appeal</option>
+        </select>
+      </div>
+      <div>
+        <label>Intent to File on record?</label>
+        <select id="itf">
+          <option value="no">No — not filed</option>
+          <option value="yes">Yes — filed</option>
+          <option value="unknown">Not sure</option>
+        </select>
+      </div>
+    </div>
+    <label>If previously denied — reason given (optional)</label>
+    <textarea id="denialReason" rows="3" placeholder="e.g. Denied service connection — VA said no in-service event documented. / Denied — insufficient medical evidence of nexus."></textarea>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="goTo(2)">← Back</button>
+    <button class="btn btn-gen" onclick="generateAll()">Generate All Documents →</button>
+  </div>
+</div>
+
+<!-- ── SECTION 4: DOCUMENTS ── -->
+<div class="section" id="s4">
+  <div class="summary-grid">
+    <div class="sum-box"><div class="sum-val" id="docCount">0</div><div class="sum-lab">Documents<br>Generated</div></div>
+    <div class="sum-box"><div class="sum-val" id="formCount" style="color:var(--purple)">0</div><div class="sum-lab">VA Forms<br>Pre-filled</div></div>
+    <div class="sum-box"><div class="sum-val" id="letterCount" style="color:var(--blue)">0</div><div class="sum-lab">Request<br>Letters</div></div>
+  </div>
+  <div class="doc-grid" id="docGrid"></div>
+  <div style="margin-top:1.5rem;display:flex;gap:0.75rem;">
+    <button class="btn btn-back" onclick="goTo(3)">← Back</button>
+    <button class="btn btn-gen" onclick="downloadAll()">⬇ Download All Documents</button>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+// ── STATE ──────────────────────────────────────────────────────────────────
+let conditionCount = 0;
+const CONDITIONS_STORE = [];
+
+const EVIDENCE_ITEMS = [
+  {id:"dd214", label:"DD-214 (Certificate of Release / Discharge)", weight:1.00},
+  {id:"ompf", label:"Official Military Personnel File (OMPF)", weight:0.95},
+  {id:"str", label:"Service Treatment Records (STR / medical from service)", weight:0.92},
+  {id:"va_records", label:"VA Medical Records (from VA.gov / MyHealtheVet)", weight:0.90},
+  {id:"private_records", label:"Private Medical Records", weight:0.85},
+  {id:"nexus", label:"Nexus Letter from a Doctor", weight:0.95},
+  {id:"dbq", label:"Disability Benefits Questionnaire (DBQ)", weight:0.95},
+  {id:"buddy", label:"Buddy Statement (from fellow veteran)", weight:0.70},
+  {id:"personal", label:"Personal Statement (your own)", weight:0.55},
+  {id:"awards_docs", label:"Awards / Decorations documents", weight:0.80},
+  {id:"meps_records", label:"MEPS Physical / Entrance Records", weight:0.85},
+  {id:"da_form_2", label:"Personnel Qualification Record (DA Form 2)", weight:0.80},
+  {id:"incident_report", label:"Incident / Accident Report from service", weight:0.88},
+  {id:"line_of_duty", label:"Line of Duty (LOD) Investigation", weight:0.92},
+];
+
+// Build evidence checkboxes
+const ec = document.getElementById("evidenceChecks");
+EVIDENCE_ITEMS.forEach(item => {
+  const div = document.createElement("div");
+  div.style.cssText = "display:flex;align-items:center;gap:0.6rem;padding:0.45rem 0;border-bottom:1px solid #151515;";
+  div.innerHTML = `<input type="checkbox" id="ev_${item.id}" style="width:auto;cursor:pointer;">
+    <label for="ev_${item.id}" style="margin:0;cursor:pointer;font-size:0.85rem;color:var(--text)">
+      ${item.label} <span style="color:var(--muted);font-size:0.72rem">(${Math.round(item.weight*100)}% weight)</span>
+    </label>`;
+  ec.appendChild(div);
+});
+
+// Add initial condition row
+addCondition();
+
+function addCondition() {
+  conditionCount++;
+  const id = conditionCount;
+  const div = document.createElement("div");
+  div.className = "cond-row"; div.id = "cond_"+id;
+  div.innerHTML = `
+    <div style="flex:1">
+      <input placeholder="Condition #${id}: e.g. PTSD, Tinnitus, Lumbar strain, Hearing loss" id="condName_${id}">
+      <textarea style="margin-top:0.4rem;min-height:60px" placeholder="How is this connected to your service? What happened?" id="condNexus_${id}"></textarea>
+    </div>
+    <button onclick="removeCond(${id})" style="padding:0.4rem 0.6rem;background:#1f0d0d;color:var(--red);border:1px solid #3a1a1a;border-radius:7px;cursor:pointer;align-self:start">✕</button>`;
+  document.getElementById("condList").appendChild(div);
+}
+
+function removeCond(id) {
+  const el = document.getElementById("cond_"+id);
+  if (el) el.remove();
+}
+
+// ── NAVIGATION ─────────────────────────────────────────────────────────────
+function goTo(n) {
+  for(let i=0;i<5;i++){
+    document.getElementById("s"+i).classList.toggle("active", i===n);
+    const p = document.getElementById("p"+i);
+    p.classList.toggle("active", i===n);
+    p.classList.toggle("done", i<n);
+  }
+}
+
+// ── HELPERS ────────────────────────────────────────────────────────────────
+function g(id){ return (document.getElementById(id)||{}).value||""; }
+function d(){ return {
+  firstName: g("firstName"), lastName: g("lastName"),
+  name: (g("firstName")+" "+g("lastName")).trim()||"[VETERAN NAME]",
+  ssn4: g("ssn4"), dob: g("dob"), vaFile: g("vaFile")||"[VA FILE NUMBER]",
+  phone: g("phone"), address: g("address"), city: g("city"), stateZip: g("stateZip"),
+  email: g("email"), branch: g("branch"), discharge: g("discharge"),
+  entryDate: g("entryDate"), sepDate: g("sepDate"), mos: g("mos"),
+  rank: g("rank"), unit: g("unit"), deployments: g("deployments"),
+  combat: g("combat"), meps: g("meps"), awards: g("awards"),
+  vamc: g("vamc"), privateMD: g("privateMD"), vaHealth: g("vaHealth"),
+  prevClaim: g("prevClaim"), itf: g("itf"), denialReason: g("denialReason"),
+  date: new Date().toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"}),
+};}
+
+function getConditions() {
+  const conds = [];
+  for(let i=1;i<=conditionCount;i++){
+    const nm = document.getElementById("condName_"+i);
+    const nx = document.getElementById("condNexus_"+i);
+    if(nm && nm.value.trim()) conds.push({name:nm.value.trim(), nexus:nx?nx.value.trim():""});
+  }
+  return conds;
+}
+
+function getEvidenceHeld() {
+  return EVIDENCE_ITEMS.filter(item => {
+    const el = document.getElementById("ev_"+item.id);
+    return el && el.checked;
+  });
+}
+
+// ── DOCUMENT GENERATORS ────────────────────────────────────────────────────
+function genSF180(data) {
+  return `STANDARD FORM 180 — REQUEST PERTAINING TO MILITARY RECORDS
+Rev. 3/2024 | OMB No. 3095-0029
+
+SECTION I — INFORMATION NEEDED TO LOCATE RECORDS
+
+1. NAME (Last, First, Middle)
+   ${data.lastName}, ${data.firstName}
+
+2. SOCIAL SECURITY NUMBER
+   XXX-XX-${data.ssn4}
+
+3. DATE OF BIRTH
+   ${data.dob}
+
+4. PLACE OF BIRTH
+   [CITY, STATE]
+
+5. MILITARY SERVICE
+   Branch: ${data.branch}
+   Entry Date: ${data.entryDate}
+   Separation Date: ${data.sepDate}
+   Service Number / SSN: XXX-XX-${data.ssn4}
+   Component: [ ] Active  [ ] Reserve  [ ] National Guard
+
+6. IS THE VETERAN DECEASED?
+   [ ] No  [ ] Yes — Date of Death: ___________
+
+SECTION II — REQUEST
+
+I request the following records (check all that apply):
+
+[X] Report of Separation (DD Form 214 or equivalent)
+    [ ] I want an UNDELETED copy (includes reason for separation)
+    [ ] I want a DELETED copy
+
+[X] Official Military Personnel File (OMPF)
+    Include: Duty stations and assignments, training and qualifications,
+    awards and decorations, administrative remarks, discharge information
+
+[X] Medical Records / Service Treatment Records (STR)
+    Dates requested: ${data.entryDate} through ${data.sepDate}
+    Include: All inpatient, outpatient, dental records
+
+[X] Awards and Decorations documentation
+    Awards known: ${data.awards||"[LIST ALL KNOWN AWARDS]"}
+
+[X] Performance Evaluations (NCOER, OER, FITREP)
+
+[X] Training Records and Qualifications
+
+SECTION III — RETURN ADDRESS
+
+${data.name}
+${data.address}
+${data.city}, ${data.stateZip}
+Phone: ${data.phone}
+Email: ${data.email}
+
+PURPOSE OF REQUEST: VA Disability Claim — Service Connection
+
+Signature: ___________________________  Date: ${data.date}
+
+MAIL TO: National Personnel Records Center
+         1 Archives Drive, St. Louis, MO 63138
+FAX TO:  314-801-9195
+ONLINE:  vetrecs.archives.gov
+
+NOTE: Allow 90+ days before following up. This is a free service.`;
+}
+
+function genVA4142(data, condition) {
+  return `VA FORM 21-4142 — AUTHORIZATION TO DISCLOSE INFORMATION TO THE VA
+(Consent to Release of Information)
+
+VETERAN INFORMATION:
+Name: ${data.name}
+VA File No.: ${data.vaFile}
+SSN (last 4): XXX-XX-${data.ssn4}
+Date of Birth: ${data.dob}
+Address: ${data.address}, ${data.city}, ${data.stateZip}
+Phone: ${data.phone}
+
+AUTHORIZATION:
+I hereby authorize the release of information from my records to the
+Department of Veterans Affairs in connection with my claim for benefits.
+
+PROVIDER TO RELEASE RECORDS:
+Name of Provider/Facility: ${data.vamc||data.privateMD||"[PROVIDER NAME AND ADDRESS]"}
+Address: [PROVIDER ADDRESS]
+Phone: [PROVIDER PHONE]
+
+RECORDS REQUESTED:
+All medical records related to: ${condition.name}
+Dates of treatment: [START DATE] through [END DATE]
+Include: Treatment notes, diagnostic tests, lab results, imaging,
+         all records pertaining to ${condition.name}
+
+This authorization is valid for one year from the date signed.
+
+Signature: ___________________________  Date: ${data.date}
+Print Name: ${data.name}
+
+SUBMIT WITH YOUR VA CLAIM (VA Form 21-526EZ)`;
+}
+
+function genVA4138(data, condition) {
+  return `VA FORM 21-4138 — STATEMENT IN SUPPORT OF CLAIM
+(Buddy Statement / Personal Statement)
+
+VETERAN INFORMATION:
+Name: ${data.name}
+VA File No.: ${data.vaFile}
+SSN (last 4): XXX-XX-${data.ssn4}
+
+STATEMENT:
+
+I, ${data.name}, do hereby certify that the following is true and correct
+to the best of my knowledge and belief:
+
+1. IN-SERVICE EVENT / INCURRENCE:
+   During my service with ${data.unit}, ${data.branch},
+   from ${data.entryDate} to ${data.sepDate}:
+
+   ${condition.nexus||"[DESCRIBE SPECIFICALLY WHAT HAPPENED DURING SERVICE THAT CAUSED OR CONTRIBUTED TO "+condition.name.toUpperCase()+". INCLUDE DATE, LOCATION, AND CIRCUMSTANCES.]"}
+
+2. CONTINUITY OF SYMPTOMS:
+   [DESCRIBE HOW SYMPTOMS HAVE BEEN CONTINUOUS OR RECURRING FROM
+    TIME OF SERVICE INCIDENT TO PRESENT DATE. INCLUDE ANY PERIODS
+    OF TREATMENT, FLARE-UPS, OR IMPACT ON DAILY LIFE.]
+
+3. CURRENT SYMPTOMS AND FUNCTIONAL IMPACT:
+   [DESCRIBE HOW ${condition.name.toUpperCase()} CURRENTLY AFFECTS YOUR:
+    - Daily activities and self-care
+    - Employment and ability to work  
+    - Personal relationships and social functioning
+    - Sleep and physical health
+    USE SPECIFIC EXAMPLES AND FREQUENCY]
+
+4. LAY EVIDENCE / WITNESSES:
+   [NAME ANYONE WHO HAS OBSERVED YOUR SYMPTOMS — FAMILY MEMBERS,
+    FRIENDS, COWORKERS, FELLOW VETERANS. THEY CAN PROVIDE SEPARATE
+    BUDDY STATEMENTS ON THIS SAME FORM.]
+
+I certify that the statements on this form are true and correct to the
+best of my knowledge and belief.
+
+Signature: ___________________________  Date: ${data.date}
+Print Name: ${data.name}
+Address: ${data.address}, ${data.city}, ${data.stateZip}
+Phone: ${data.phone}`;
+}
+
+function genNexusTemplate(data, condition) {
+  return `NEXUS LETTER TEMPLATE — FOR YOUR PHYSICIAN
+[Print and bring to your doctor. Ask them to put it on their letterhead.]
+
+[PHYSICIAN LETTERHEAD]
+[Date]
+
+Department of Veterans Affairs
+[Regional Office Address]
+
+RE: Medical Nexus Opinion
+    Veteran: ${data.name}
+    DOB: ${data.dob}
+    Condition: ${condition.name}
+
+To Whom It May Concern:
+
+I am [DR. NAME, CREDENTIALS], a licensed [SPECIALTY] physician
+currently treating ${data.name} for ${condition.name}.
+
+I have reviewed the following medical records and evidence:
+• [List all records reviewed]
+• ${data.name}'s service records showing service with ${data.branch},
+  ${data.entryDate} to ${data.sepDate}
+
+MEDICAL OPINION:
+
+Based on my clinical examination, review of available medical and service
+records, and medical knowledge and training, it is my professional medical
+opinion that it is at least as likely as not (50% or greater probability)
+that ${data.name}'s current ${condition.name} is:
+
+[ ] Directly caused by active military service
+[ ] A result of an in-service injury, disease, or event
+[ ] Aggravated beyond its natural progression by military service
+
+RATIONALE:
+
+${condition.nexus
+  ? "The veteran has reported: "+condition.nexus+"
+
+This is consistent with the clinical presentation because:"
+  : "[STATE MEDICAL RATIONALE — EXPLAIN WHY THE CONDITION IS LINKED TO SERVICE. REFERENCE ANY SUPPORTING MEDICAL LITERATURE IF AVAILABLE.]"}
+
+[DESCRIBE CLINICAL FINDINGS, DIAGNOSIS, AND PROGNOSIS]
+
+CURRENT DIAGNOSIS AND SEVERITY:
+Diagnosis: ${condition.name}
+[DESCRIBE CURRENT SYMPTOMS, LIMITATIONS, AND HOW THEY AFFECT
+DAILY FUNCTIONING AND EMPLOYABILITY]
+
+This opinion is based on my independent clinical judgment.
+
+Respectfully submitted,
+
+_______________________________
+[Physician Name, MD/DO/PhD]
+[Medical License Number]
+[NPI Number]
+[Address and Contact Information]
+[Date]`;
+}
+
+function genMEPSRequest(data) {
+  return `RECORDS REQUEST — MEPS / ENTRANCE EXAMINATION RECORDS
+${data.date}
+
+Military Entrance Processing Station Records
+[Your MEPS location at entry: typically the one closest to your hometown]
+OR:
+National Personnel Records Center
+1 Archives Drive
+St. Louis, MO 63138
+
+RE: Request for MEPS Entrance Physical Examination Records
+
+To Whom It May Concern:
+
+I am requesting a complete copy of my Military Entrance Processing
+Station (MEPS) physical examination records conducted prior to my
+entry into military service.
+
+VETERAN INFORMATION:
+Name: ${data.name}
+Date of Birth: ${data.dob}
+SSN (last 4): XXX-XX-${data.ssn4}
+Branch Entered: ${data.branch}
+Approximate Entry Date: ${data.entryDate}
+Approximate MEPS Date: [ESTIMATED DATE — TYPICALLY 1-3 MONTHS BEFORE ENTRY DATE]
+
+RECORDS REQUESTED:
+• Complete MEPS physical examination report (DD Form 2808)
+• Report of Medical History completed at MEPS (DD Form 2807)
+• All medical screening results from entry examination
+• Any waivers or conditions noted at time of entry
+• Audiogram / hearing test results
+• Vision test results
+• Any psychological screening results
+
+PURPOSE: VA Disability Benefits Claim — establishing baseline
+pre-service health status and any documented in-service conditions.
+
+These records are critical for establishing what conditions existed
+before service versus what conditions arose during service.
+
+I authorize release of these records to myself or my authorized
+VA representative.
+
+Signature: ___________________________  Date: ${data.date}
+Print Name: ${data.name}
+Address: ${data.address}
+         ${data.city}, ${data.stateZip}
+Phone: ${data.phone}
+Email: ${data.email}
+
+NOTE: MEPS records may also be available through:
+• milConnect: https://milConnect.dmdc.osd.mil
+• eVetRecs online portal: https://vetrecs.archives.gov
+• Your specific MEPS location`;
+}
+
+function genAwardsRequest(data) {
+  return `RECORDS REQUEST — AWARDS, DECORATIONS & UNIT RECORDS
+${data.date}
+
+National Personnel Records Center
+1 Archives Drive
+St. Louis, MO 63138
+
+RE: Request for Awards, Decorations, and Unit Records
+
+VETERAN INFORMATION:
+Name: ${data.name}
+Date of Birth: ${data.dob}
+SSN (last 4): XXX-XX-${data.ssn4}
+Branch: ${data.branch}
+Service Dates: ${data.entryDate} to ${data.sepDate}
+Unit(s): ${data.unit||"[YOUR UNIT DESIGNATION]"}
+Rank at Discharge: ${data.rank}
+MOS / Rate: ${data.mos}
+
+RECORDS REQUESTED:
+
+1. AWARDS AND DECORATIONS
+   All awards, decorations, commendations, and citations
+   Known awards on record: ${data.awards||"[LIST ALL KNOWN AWARDS]"}
+
+2. UNIT RECORDS
+   • Morning Reports / Daily Strength Accountability Records
+   • Unit Duty Rosters
+   • After Action Reports (if applicable)
+   • Unit Deployment Orders
+
+3. TRAINING RECORDS
+   • Training transcripts and qualifications
+   • Specialty school completion records
+   • Weapons qualifications
+
+4. PERSONNEL QUALIFICATION RECORD
+   • DA Form 2 / DA Form 2-1 (Army)
+   • Service Record (other branches)
+
+5. PERFORMANCE EVALUATIONS
+   All NCOERs, OERs, or equivalent performance reports
+
+PURPOSE: VA Disability Claim — corroborating service history,
+establishing deployment dates, confirming in-service events,
+and verifying service-connected conditions.
+
+I certify I am the veteran named above and authorize release of
+these records to myself.
+
+Signature: ___________________________  Date: ${data.date}
+Print Name: ${data.name}
+Address: ${data.address}
+         ${data.city}, ${data.stateZip}
+Phone: ${data.phone}
+Email: ${data.email}`;
+}
+
+function genCompanyRecordsRequest(data) {
+  return `RECORDS REQUEST — UNIT / COMPANY RECORDS
+(Through Freedom of Information Act / Privacy Act)
+${data.date}
+
+[UNIT S-1 / PERSONNEL OFFICER]
+[UNIT ADDRESS — obtain from VA or milConnect]
+OR National Archives: archives.gov/foia
+
+RE: FOIA / Privacy Act Request for Unit Records
+
+VETERAN INFORMATION:
+Name: ${data.name}
+Date of Birth: ${data.dob}
+SSN (last 4): XXX-XX-${data.ssn4}
+Unit: ${data.unit||"[UNIT DESIGNATION]"}
+Service Dates: ${data.entryDate} to ${data.sepDate}
+Deployments: ${data.deployments||"[DUTY STATIONS AND DEPLOYMENTS]"}
+
+This is a request under the Freedom of Information Act (5 U.S.C. § 552)
+and the Privacy Act of 1974 (5 U.S.C. § 552a) for records pertaining
+to my military service.
+
+RECORDS REQUESTED:
+1. Morning Reports / Personnel accountability records for my unit
+   during the period [SPECIFIC DATES OF INCIDENT OR SERVICE]
+
+2. Unit Deployment Orders and Movement Records
+   Confirming my unit's presence at: ${data.deployments||"[LOCATIONS]"}
+
+3. Incident Reports, Accident Reports, Line of Duty Investigations
+   Any records documenting injuries or incidents involving my service
+   during the period [DATES OF INCIDENTS]
+
+4. Commander's Log / Unit Journal entries relevant to my service
+
+5. Medical Evacuation Records (MEDEVAC) if applicable
+
+PURPOSE: I am filing a claim for VA disability benefits and need
+these records to corroborate the in-service events that caused or
+contributed to my current disabilities.
+
+If any responsive records are withheld, please provide a Vaughn index
+identifying the specific exemptions claimed for each withheld record.
+
+I expect a response within 20 business days per FOIA requirements.
+
+Signature: ___________________________  Date: ${data.date}
+Print Name: ${data.name}
+Address: ${data.address}, ${data.city}, ${data.stateZip}
+Phone: ${data.phone} | Email: ${data.email}`;
+}
+
+function genIntentToFile(data) {
+  return `VA FORM 21-0966 — INTENT TO FILE A CLAIM
+(File online at VA.gov — this is for your records)
+
+IMPORTANT: File this IMMEDIATELY at VA.gov to lock in today's date
+as your effective date. This protects months of back pay.
+
+HOW TO FILE INTENT TO FILE (2 minutes):
+1. Go to VA.gov → Sign in
+2. Search "Intent to File" OR go directly to:
+   va.gov/decision-reviews/intent-to-file/
+3. Select "Disability Compensation" as claim type
+4. Submit
+
+WHAT IT DOES:
+• Locks in today (${data.date}) as your effective date
+• Gives you 1 year to gather evidence and file 21-526EZ
+• If approved, your back pay starts from this date
+• Filing costs you nothing — you have nothing to lose
+
+YOUR INFORMATION FOR ONLINE FILING:
+Name: ${data.name}
+VA File: ${data.vaFile}
+SSN: XXX-XX-${data.ssn4}
+Date of Birth: ${data.dob}
+
+TYPE OF CLAIM: Compensation (disability)
+
+---
+If you cannot file online, mail to:
+Department of Veterans Affairs
+Claims Intake Center
+PO Box 4444
+Janesville, WI 53547-4444`;
+}
+
+function genVA526EZ_checklist(data, conditions) {
+  const condList = conditions.map((c,i) => `   ${i+1}. ${c.name}`).join("\n");
+  return `VA FORM 21-526EZ — PRE-FILL CHECKLIST
+Application for Disability Compensation and Related Benefits
+
+This checklist guides you through filling out 21-526EZ online at VA.gov.
+All your information is pre-filled below — copy directly into the form.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION I — PERSONAL INFORMATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+First Name: ${data.firstName}
+Last Name: ${data.lastName}
+Date of Birth: ${data.dob}
+Social Security Number: XXX-XX-${data.ssn4}
+VA File Number: ${data.vaFile}
+Mailing Address: ${data.address}
+City/State/ZIP: ${data.city}, ${data.stateZip}
+Phone: ${data.phone}
+Email: ${data.email}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION II — MILITARY SERVICE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Branch of Service: ${data.branch}
+Service Entry Date: ${data.entryDate}
+Service Separation Date: ${data.sepDate}
+Character of Discharge: ${data.discharge}
+Service Number: [FROM DD-214]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION IV — EXPOSURE INFORMATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Deployments / Duty Stations:
+${data.deployments}
+
+Combat Service: ${data.combat==="yes" ? "YES — Check applicable exposure boxes" : "No"}
+Gulf War Service: ${data.deployments.toLowerCase().includes("gulf") || data.deployments.toLowerCase().includes("kuwait") || data.deployments.toLowerCase().includes("iraq") || data.deployments.toLowerCase().includes("desert") ? "YES — check Gulf War box" : "Check if applicable"}
+PACT Act / Burn Pit: [Check if served in post-9/11 era with burn pit exposure]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION V — CONDITIONS BEING CLAIMED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${condList}
+
+For EACH condition, be prepared to provide:
+• Date condition began
+• Date first treated
+• Name and location of treating facility
+• How condition is connected to service
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DOCUMENTS TO ATTACH TO YOUR 21-526EZ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[ ] DD-214 (certified copy)
+[ ] VA Form 21-4142 (one per medical provider)
+[ ] VA Form 21-4138 (personal statement for each condition)
+[ ] Nexus letter(s) from physician(s)
+[ ] Private medical records
+[ ] Buddy statements (VA Form 21-4138 completed by others)
+[ ] SF-180 submission confirmation (records requested)
+
+FILE ONLINE: va.gov/disability/file-disability-claim-form-21-526ez/
+OR with a FREE VSO: DAV (dav.org), American Legion, VFW`;
+}
+
+// ── GENERATE ALL DOCUMENTS ──────────────────────────────────────────────────
+function generateAll() {
+  const data = d();
+  const conditions = getConditions();
+  const evidenceHeld = getEvidenceHeld();
+
+  if (!conditions.length) {
+    alert("Please add at least one condition before generating documents.");
+    return;
+  }
+
+  const docs = [];
+
+  // Always generate
+  docs.push({title:"SF-180 — Military Records Request", subtitle:"National Personnel Records Center", badge:"badge-letter", content:genSF180(data)});
+  docs.push({title:"MEPS Entrance Records Request", subtitle:"Pre-service physical / baseline health", badge:"badge-letter", content:genMEPSRequest(data)});
+  docs.push({title:"Awards & Decorations Request", subtitle:"All medals, citations, unit records", badge:"badge-letter", content:genAwardsRequest(data)});
+  docs.push({title:"Unit / Company Records Request (FOIA)", subtitle:"Morning reports, incident reports, deployment orders", badge:"badge-letter", content:genCompanyRecordsRequest(data)});
+  docs.push({title:"Intent to File — Action Required", subtitle:"FILE THIS FIRST — locks in your effective date", badge:"badge-form", content:genIntentToFile(data)});
+  docs.push({title:"VA Form 21-526EZ — Pre-Fill Checklist", subtitle:"Application for Disability Compensation", badge:"badge-form", content:genVA526EZ_checklist(data, conditions)});
+
+  // Per condition
+  conditions.forEach(cond => {
+    docs.push({title:`VA Form 21-4142 — Release Authorization: ${cond.name}`, subtitle:"Authorize VA to request your medical records", badge:"badge-form", content:genVA4142(data, cond)});
+    docs.push({title:`VA Form 21-4138 — Personal Statement: ${cond.name}`, subtitle:"Your statement supporting service connection", badge:"badge-form", content:genVA4138(data, cond)});
+    docs.push({title:`Nexus Letter Template: ${cond.name}`, subtitle:"For your doctor — establish medical link to service", badge:"badge-template", content:genNexusTemplate(data, cond)});
+  });
+
+  // Build output
+  const grid = document.getElementById("docGrid");
+  grid.innerHTML = "";
+  let formCount = 0, letterCount = 0;
+
+  docs.forEach((doc, i) => {
+    if (doc.badge==="badge-form") formCount++;
+    if (doc.badge==="badge-letter") letterCount++;
+    const card = document.createElement("div");
+    card.className = "doc-card";
+    card.innerHTML = `
+      <div class="doc-header" onclick="toggleDoc(${i})">
+        <div>
+          <div class="doc-title">${doc.title}</div>
+          <div class="doc-subtitle">${doc.subtitle}</div>
+        </div>
+        <span class="doc-badge ${doc.badge}">${doc.badge==="badge-form"?"VA Form":doc.badge==="badge-letter"?"Request Letter":"Template"}</span>
+      </div>
+      <div class="doc-body" id="db${i}">
+        <div class="doc-text" id="dt${i}">${doc.content.replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>
+        <div class="doc-actions">
+          <button class="doc-btn btn-copy" onclick="copyDoc(${i})">Copy Text</button>
+          <button class="doc-btn btn-dl" onclick="dlDoc(${i},'${doc.title.replace(/[^a-z0-9]/gi,"-").toLowerCase()}')">Download</button>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+
+  document.getElementById("docCount").textContent = docs.length;
+  document.getElementById("formCount").textContent = formCount;
+  document.getElementById("letterCount").textContent = letterCount;
+
+  window._allDocs = docs;
+  goTo(4);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function toggleDoc(i) {
+  const b = document.getElementById("db"+i);
+  b.classList.toggle("open");
+}
+
+function copyDoc(i) {
+  const text = document.getElementById("dt"+i).textContent;
+  navigator.clipboard.writeText(text).then(()=>alert("Copied to clipboard!"));
+}
+
+function dlDoc(i, slug) {
+  const text = document.getElementById("dt"+i).textContent;
+  const blob = new Blob([text], {type:"text/plain"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "aop-"+slug+".txt";
+  a.click();
+}
+
+function downloadAll() {
+  if (!window._allDocs) return;
+  const data = d();
+  let combined = `ART OF PROOF™ — COMPLETE DOCUMENT PACKAGE
+Generated: ${data.date}
+Veteran: ${data.name}
+VA File: ${data.vaFile}
+═══════════════════════════════════════════════════════
+${"═".repeat(55)}
+
+`;
+  window._allDocs.forEach((doc,i) => {
+    combined += `${"═".repeat(55)}
+DOCUMENT ${i+1}: ${doc.title}
+${doc.subtitle}
+${"═".repeat(55)}
+
+${document.getElementById("dt"+i).textContent}
+
+`;
+  });
+  combined += `
+
+∇θ — chain sealed, truth preserved | Art of Proof™`;
+  const blob = new Blob([combined], {type:"text/plain"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "art-of-proof-complete-package-"+data.lastName.toLowerCase()+".txt";
+  a.click();
+}
+</script>
+</body>
+</html>
