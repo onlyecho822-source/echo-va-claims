@@ -1,42 +1,33 @@
-# Dependencies
-node_modules/
-.pnp
-.pnp.js
-
-# Build output
-dist/
+# Echo Universe — canonical .gitignore
+__pycache__/
+*.py[cod]
+*.so
+.Python
 build/
-.next/
-out/
-client/dist/
-
-# Environment
+dist/
+*.egg-info/
+.eggs/
+.venv/
+venv/
+env/
 .env
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# Editor
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Coverage
-coverage/
-.nyc_output/
-
-# Misc
-*.pem
+.env.*.local
+node_modules/
+.next/
+.nuxt/
 .cache/
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+.idea/
+.vscode/
+*.swp
+.DS_Store
+*.log
+logs/
+*.pem
+*.key
+secrets.json
+# ∇θ — chain sealed, truth preserved
